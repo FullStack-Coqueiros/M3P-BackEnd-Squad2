@@ -4,6 +4,7 @@ namespace MedicalCare.Enum
 {
     public enum ETipoDieta
     {
+
         lowcarb = 0,
         dash = 1,
         paleolitica = 2,
@@ -11,6 +12,8 @@ namespace MedicalCare.Enum
         dukan = 4,
         mediterranea = 5,
         outra = 6
+
+
     }
 }
 
