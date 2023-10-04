@@ -5,6 +5,7 @@
         //Creio que será uma relação n x n, visto que um tipo de exercicio pode estar presente em varios prontuarios,
         //e um paciente pode ter varios tipos de exercicios prescritos
 
+        public int Id { get; set; }
         public string NomeDaSerieDeExercicios { get; set; }
         public DateOnly Data { get; set; }
         public TimeOnly Hora { get; set; }
