@@ -15,7 +15,7 @@ namespace MedicalCare.Models
     public int Id { get; set; }
 
     [Required]
-    [StringLength(100, MinimumLength = 5]
+    [StringLength(100, MinimumLength = 5)]
     [Column(TypeName = "VARCHAR")]
     public string NomeDaDieta { get; set; }
 

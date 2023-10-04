@@ -9,7 +9,7 @@ namespace ExameModel
         public int Id { get; set; }
 
         [Required]
-        [StringLength(64, MinimumLength = 8]
+        [StringLength(64, MinimumLength = 8)]
         [Column(TypeName = "VARCHAR")]
         public string NomeDoExame { get; set; }
 
