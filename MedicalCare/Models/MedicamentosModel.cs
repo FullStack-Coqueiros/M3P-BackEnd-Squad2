@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalCare.Models
 {
@@ -16,40 +18,36 @@ namespace MedicalCare.Models
 
         [Column ("Data")]
         [Required(ErrorMessage = "A data é obrigatória")]
-        public DateTime {get; set;}
-
-        [Column ("Hora")]
-        [Required(ErrorMessage = "A hora é obrigatória")]
-        public DateTime.Now {get; set;}
+        public DateTime Data {get; set;}
 
         [Column ("Tipo")] 
         [Required(ErrorMessage = "O tipo de medicamento é obrigatório")]
         public string Tipo {get;set;}
 
         [Column ("Opções")]
-        public enum Opcoes {get; set}
+        public string Opcoes {get; set;}
 
         [Column ("Quantidade")] 
         [Required(ErrorMessage = "A quantidade é obrigatória")]
-        public number Quantidade {get; set}
+        public int Quantidade {get; set;}
 
         [Column ("Unidade")]
         [Required(ErrorMessage = "A unidade é obrigatória")]
-        public enum Unidade {get; set}
+        public string Unidade {get; set;}
 
         [Column ("Observações")]
         [StringLength(1000, MinimumLength = 10, ErrorMessage = "Observações devem ter entre 10 e 1000 caracteres.")]
         [Required(ErrorMessage = "As observações são obrigatórias")]  
-        public string Observacoes {get; set}
+        public string Observacoes {get; set;}
 
         [Column ("Status do Sistema")]
         [Required(ErrorMessage = "O Status é obrigatório")]
-        public bool StatusDoSistema {get; set}
+        public bool StatusDoSistema {get; set;}
 
         [Column ("PacienteId")]
-        public number PacienteId {get; set}
+        public int PacienteId {get; set;}
 
         [Column ("UsuarioId")] 
-        public number UsuarioId {get; set}
+        public int UsuarioId {get; set;}
     }
 }
