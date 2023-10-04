@@ -10,7 +10,7 @@ namespace MedicalCare.Models
     public class MedicamentosModel
     {
         [Column ("Nome do Medicamento")]
-        [Maxlenght(100), Minilenght(5)]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "Nome deve ter entre 5 e 100 caracteres.")]
         [Required(ErrorMessage = "O nome do medicamento é obrigatório")]
         public string NomeDoMedicamento {get; set;}
 
@@ -19,7 +19,7 @@ namespace MedicalCare.Models
         public DateTime {get; set;}
 
         [Column ("Hora")]
-         [Required(ErrorMessage = "A hora é obrigatória")]
+        [Required(ErrorMessage = "A hora é obrigatória")]
         public DateTime.Now {get; set;}
 
         [Column ("Tipo")] 
@@ -38,7 +38,7 @@ namespace MedicalCare.Models
         public enum Unidade {get; set}
 
         [Column ("Observações")]
-        [Maxlenght (1000), Minlenght (10)]
+        [StringLength(1000, MinimumLength = 10, ErrorMessage = "Observações devem ter entre 10 e 1000 caracteres.")]
         [Required(ErrorMessage = "As observações são obrigatórias")]  
         public string Observacoes {get; set}
 
