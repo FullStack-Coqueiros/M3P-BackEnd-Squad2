@@ -7,6 +7,7 @@ namespace MedicalCare.Models
 {
     public class MedicamentosModel
     {
+        public string NomeDoMedicamento {get; set;}
         
     }
 }
