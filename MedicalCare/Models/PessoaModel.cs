@@ -11,7 +11,7 @@ namespace MedicalCare.Models
 
         [Required]
         [StringLength(64, MinimumLength = 8, ErrorMessage = "Deve possuir entre 8 e 64 caracteres.")]
-        [Column ("nome_completo")]
+        [Column ("Nome_completo")]
         public string NomeCompleto { get; set; }
 
         [Required]
@@ -26,7 +26,7 @@ namespace MedicalCare.Models
         [Required (ErrorMessage = "Email é obrigatório")]  
         public string Email { get; set; }
 
-        [Column("Status do Sistema")]
+        [Column("Status_do_Sistema")]
         [Required(ErrorMessage = "O Status é obrigatório")]
         public bool StatusNoSistema { get; set; }
     }
