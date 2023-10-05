@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalCare.Models
 {
@@ -7,9 +9,11 @@ namespace MedicalCare.Models
     public class ConsultaModel
     {
         [Key]
-        public int ConsultaId { get; set; }
+        public int Id { get; set; }
 
-        [Required(ErrorMessage = "Favor inserir o motivo da consulta!"), MinLength(8),MaxLength(64)]
+        [Required(ErrorMessage = "Favor inserir o motivo da consulta!")]
+        [StringLength(64, MinimumLength = 8)]
+        [Column(TypeName = "VARCHAR")]
         public string MotivoDaConsulta { get; set; }
 
         [Required(ErrorMessage = "Favor inserir a data da consulta!")]
@@ -18,23 +22,31 @@ namespace MedicalCare.Models
         [Required(ErrorMessage = "Favor inserir o horário da consulta!")]
         public DateTime HorarioDaConsulta { get; set; }
 
-        [Required(ErrorMessage = "Favor inserir a descrição do problema!"), MinLength(16), MaxLength(1024)]
+        [Required(ErrorMessage = "Favor inserir a descrição do problema!")]
+        [StringLength(1024, MinimumLength = 16)]
+        [Column(TypeName = "VARCHAR")]
         public string DescricaoDoProblema { get; set; }
 
         public string MedicacaoReceitada { get; set; }
 
-        [Required(ErrorMessage = "Favor inserir a dosagem e preocupações!"), MinLength(16), MaxLength(256)]
+        [Required(ErrorMessage = "Favor inserir a dosagem e preocupações!")]
+        [StringLength(256, MinimumLength = 16)]
+        [Column(TypeName = "VARCHAR")]
         public string DosagemEPrecaucoes { get; set; }
 
         [Required(ErrorMessage = "Favor inserir o status do sistema!")]
         public bool StatusDoSistema { get; set; }
 
-        [ForeignKey("Paciente")]
+        //[ForeignKey("Paciente")]
+        [Required]
+        [DisplayName("Id do Paciente")]
         public int PacienteId { get; set; }
-        public PacienteModel Paciente { get; set; }
+        // public PacienteModel Paciente { get; set; }
 
-        [ForeignKey("Usuario")]
+        //[ForeignKey("Usuario")]
+        [Required]
+        [DisplayName("Id do Médico/Enfermeiro")]
         public int UsuarioId { get; set; }
-        public UsuarioModel Usuario { get; set; }
+        // public UsuarioModel Usuario { get; set; }
     }
 }
