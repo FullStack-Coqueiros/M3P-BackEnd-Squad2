@@ -15,6 +15,8 @@ namespace MedicalCare.Models
         public string NomeCompleto { get; set; }
 
         [Required]
+        [StringLength(32)]
+        [Column(TypeName = "VARCHAR")]
         public  Egenero Genero{ get; set; } 
 
         [Required(ErrorMessage = "CPF é obrigatório.")]
