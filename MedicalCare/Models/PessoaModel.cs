@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MedicalCare.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalCare.Models
@@ -14,7 +15,7 @@ namespace MedicalCare.Models
         public string NomeCompleto { get; set; }
 
         [Required]
-        public string Genero { get; set; } // mudar para Enum
+        public  Egenero Genero{ get; set; } 
 
         [Required(ErrorMessage = "CPF é obrigatório.")]
         [StringLength(11, MinimumLength = 11, ErrorMessage = "CPF deve conter 11 caracteres.")]
