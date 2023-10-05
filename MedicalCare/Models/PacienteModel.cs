@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MedicalCare.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalCare.Models
@@ -12,7 +13,7 @@ namespace MedicalCare.Models
         public string Rg { get; set; }
 
         [Required]
-        public string EstadoCivil { get; set; } // mudar para enum
+        public EestadoCivil EstadoCivil { get; set; } 
 
         [Required, StringLength(64, MinimumLength = 8, ErrorMessage = "Deve conter entre 8 e 64 caracteres.")]
         public string Naturalidade { get; set; }
