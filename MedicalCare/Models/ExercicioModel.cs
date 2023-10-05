@@ -1,4 +1,6 @@
-﻿namespace MedicalCare.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MedicalCare.Models
 {
     public class ExercicioModel
     {
@@ -6,10 +8,11 @@
         //e um paciente pode ter varios tipos de exercicios prescritos
 
         public int Id { get; set; }
+        // [MinLength(5)], possivelmente terei que usar esta dataAnnotation, pois o IEntityTypeConfiguration não possui método minLength.
         public string NomeDaSerieDeExercicios { get; set; }
         public DateOnly Data { get; set; }
         public TimeOnly Hora { get; set; }
-        public string Tipo { get; set; } //Possível enum
+        public string Tipo { get; set; } //Mudar para enum
         public int QuantidadePorSemana { get; set; }
         public string Descricao { get; set; }
         public bool StatusNoSistema { get; set; }

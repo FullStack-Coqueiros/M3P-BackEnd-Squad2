@@ -10,11 +10,11 @@ namespace MedicalCare.Infra
             optionsBuilder.UseSqlServer(connectionString);
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.ApplyConfiguration(new EstudioConfiguration());
-        //    modelBuilder.ApplyConfiguration(new JogoConfiguration());
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+        }
+
 
     }
 }
