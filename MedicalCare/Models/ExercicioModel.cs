@@ -36,6 +36,6 @@ namespace MedicalCare.Models
         public int UsuarioId { get; set; }
 
         [Required]
-        public int PacienteId { get; set; } // Possivel Icollection, pois podem haver varios
+        public int PacienteId { get; set; }
     }
 }
