@@ -7,7 +7,6 @@ namespace MedicalCare.Models
     {
         //Creio que será uma relação n x n, visto que um tipo de exercicio pode estar presente em varios prontuarios,
         //e um paciente pode ter varios tipos de exercicios prescritos
-
         [Key]
         public int Id { get; set; }
 
