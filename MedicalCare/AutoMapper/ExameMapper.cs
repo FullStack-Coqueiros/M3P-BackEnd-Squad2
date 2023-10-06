@@ -1,6 +1,7 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using MedicalCare.Models;
-using MedicalCare.DTOs;
+using MedicalCare.DTO;
 
 namespace MedicalCare.AutoMapper
 {
@@ -8,10 +9,7 @@ namespace MedicalCare.AutoMapper
     {
         public ExameMapper()
         {
-           
             CreateMap<ExameDTO, ExameModel>();
-
-
             CreateMap<ExameModel, ExameDTO>();
         }
     }
