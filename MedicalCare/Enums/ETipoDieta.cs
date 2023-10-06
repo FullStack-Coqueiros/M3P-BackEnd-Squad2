@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MedicalCare.Enum
+namespace MedicalCare.Enums
 {
     public enum ETipoDieta
     {

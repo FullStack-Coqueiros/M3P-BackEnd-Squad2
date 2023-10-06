@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MedicalCare.Enum;
+using MedicalCare.Enums;
 
 namespace MedicalCare.Models
 
