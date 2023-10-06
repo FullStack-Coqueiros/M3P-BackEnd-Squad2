@@ -1,5 +1,7 @@
 using MedicalCare.Infra;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,11 @@ builder.Services.AddSwaggerGen();
 // Certifique-se de que está dentro do escopo do builder.Services
 builder.Services.AddDbContext<MedicalCareDbContext>(options =>
     options.UseSqlServer(connectionString), ServiceLifetime.Transient);
+
+// Adicione a configuração do AutoMapper
+builder.Services.AddAutoMapper(typeof(Program));
+
+
 
 var app = builder.Build();
 
