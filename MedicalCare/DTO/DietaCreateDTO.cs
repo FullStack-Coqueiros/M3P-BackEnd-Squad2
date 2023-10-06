@@ -1,4 +1,4 @@
-﻿using MedicalCare.Enum;
+﻿using MedicalCare.Enums;
 
 namespace MedicalCare.DTO
 {
