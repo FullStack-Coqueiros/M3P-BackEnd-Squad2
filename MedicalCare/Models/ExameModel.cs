@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ExameModel
+namespace MedicalCare.Models
 {
     [Table("Exames")]
     public class ExameModel

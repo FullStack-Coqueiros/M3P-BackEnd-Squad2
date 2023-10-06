@@ -8,6 +8,8 @@ namespace MedicalCare.Infra
         public DbSet<EnderecoModel> DbEndereco { get; set; }
         public DbSet<ExercicioModel> DbExercicio { get; set; }
         public DbSet<PacienteModel> DbPaciente { get; set; }
+        public DbSet<ExameModel> DbExame { get; set; }
+        public DbSet<DietaModel> DbDieta { get; set; }
 
         public MedicalCareDbContext(){ }
         public MedicalCareDbContext(DbContextOptions<MedicalCareDbContext> options) : base(options) { }

@@ -2,8 +2,9 @@
 
 namespace MedicalCare.DTO
 {
-    public class DietaCreateDTO
+    public class DietaGetDTO
     {
+        public int Id { get; set; }
         public string NomeDaDieta { get; set; }
         public string Descricao { get; set; }
         public DateTime Data { get; set; }
