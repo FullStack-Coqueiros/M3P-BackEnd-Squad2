@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MedicalCare.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalCare.Models
 {
@@ -20,7 +21,7 @@ namespace MedicalCare.Models
         public TimeOnly Hora { get; set; }
 
         [Required]
-        public string Tipo { get; set; } //Mudar para enum  Resistência Aeróbica, Resistência Muscular, Flexibilidade, Força, Agilidade, Outro.
+        public EtipoExercicio Tipo { get; set; } 
 
         [Required, DataType("DECIMAL(3,2)", ErrorMessage = "Deve conter no minimo dois numeros após a vírgula.")]
         public int QuantidadePorSemana { get; set; }
