@@ -15,10 +15,10 @@ namespace MedicalCare.Models
         public string NomeDaSerieDeExercicios { get; set; }
 
         [Required]
-        public DateOnly Data { get; set; }
+        public string Data { get; set; }
 
         [Required]
-        public TimeOnly Hora { get; set; }
+        public string Hora { get; set; }
 
         [Required]
         public EtipoExercicio Tipo { get; set; } 
