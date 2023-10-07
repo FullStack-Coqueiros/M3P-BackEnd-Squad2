@@ -1,6 +1,6 @@
 using MedicalCare.Infra;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
+//using AutoMapper;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +20,7 @@ builder.Services.AddDbContext<MedicalCareDbContext>(options =>
     options.UseSqlServer(connectionString), ServiceLifetime.Transient);
 
 // Adicione a configuração do AutoMapper
-builder.Services.AddAutoMapper(typeof(Program));
+//builder.Services.AddAutoMapper(typeof(Program));
 
 
 
