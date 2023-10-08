@@ -1,5 +1,4 @@
-﻿
-namespace MedicalCare.Enums
+﻿namespace MedicalCare.Enums
 {
     public enum ETipoDieta
     {
@@ -12,5 +11,6 @@ namespace MedicalCare.Enums
         outra = 6
     }
 }
+
 
 

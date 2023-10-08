@@ -1,7 +1,7 @@
-﻿
-using MedicalCare.Models;
+﻿using MedicalCare.Models;
 using MedicalCare.Interfaces;
 using MedicalCare.Infra;
+
 
 public class ExameRepository : IExameRepository
 {
