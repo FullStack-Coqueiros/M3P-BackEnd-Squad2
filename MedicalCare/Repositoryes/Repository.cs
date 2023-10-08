@@ -1,11 +1,8 @@
 ﻿using MedicalCare.Infra;
 using Microsoft.EntityFrameworkCore;
-using static MedicalCare.Repositoryes.EnderecoRepository;
 
 namespace MedicalCare.Repositoryes
 {
-    public class EnderecoRepository
-    {
         public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
         {
             private readonly MedicalCareDbContext _context;
@@ -52,5 +49,4 @@ namespace MedicalCare.Repositoryes
                 return true;
             }
         }
-    }
 }
