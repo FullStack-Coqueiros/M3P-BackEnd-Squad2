@@ -7,6 +7,9 @@ namespace MedicalCare.Models
     [Table("Logs")]
     public class LogModel
     {
+        [Key]
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Favor inserir a data do Log!")]
         public DateTime Data { get; set; } = DateTime.Now;
 
