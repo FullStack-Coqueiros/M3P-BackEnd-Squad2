@@ -3,8 +3,6 @@ using MedicalCare.Interfaces;
 using MedicalCare.Infra;
 using Microsoft.EntityFrameworkCore;
 
-
-
 public class DietaRepository : IDietaRepository
 {
     private readonly MedicalCareDbContext _context;
