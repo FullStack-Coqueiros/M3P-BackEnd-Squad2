@@ -1,42 +1,40 @@
-﻿using MedicalCare.Models;
+﻿
+using MedicalCare.Models;
+using MedicalCare.Interfaces;  
 
-namespace MedicalCare.Services
+public class ExameService
 {
+    private readonly IExameRepository _exameRepository;  
 
-    public class ExameService
+    public ExameService(IExameRepository exameRepository)
     {
-        private readonly ExameRepository _exameRepository;
+        _exameRepository = exameRepository;
+    }
 
-        public ExameService(ExameRepository exameRepository)
-        {
-            _exameRepository = exameRepository;
-        }
+    public ExameModel CreateExame(ExameModel exame)
+    {
+        //  lógica de validação se necessário
+        return _exameRepository.Create(exame);
+    }
 
-        public ExameModel CreateExame(ExameModel exame)
-        {
-            // Adicionar lógica de validação se necessário
-            return _exameRepository.Create(exame);
-        }
+    public ExameModel UpdateExame(ExameModel exame)
+    {
+        //  lógica de validação se necessário
+        return _exameRepository.Update(exame);
+    }
 
-        public ExameModel UpdateExame(ExameModel exame)
-        {
-            // Adicionar lógica de validação se necessário
-            return _exameRepository.Update(exame);
-        }
+    public ExameModel GetExameById(int id)
+    {
+        return _exameRepository.GetById(id);
+    }
 
-        public ExameModel GetExameById(int id)
-        {
-            return _exameRepository.GetById(id);
-        }
+    public IEnumerable<ExameModel> GetAllExames()
+    {
+        return _exameRepository.GetAll();
+    }
 
-        public IEnumerable<ExameModel> GetAllExames()
-        {
-            return _exameRepository.GetAll();
-        }
-
-        public bool DeleteExame(int id)
-        {
-            return _exameRepository.Delete(id);
-        }
+    public bool DeleteExame(int id)
+    {
+        return _exameRepository.Delete(id);
     }
 }

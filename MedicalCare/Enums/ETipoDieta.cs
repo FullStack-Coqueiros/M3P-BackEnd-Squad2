@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace MedicalCare.Enums
 {
     public enum ETipoDieta

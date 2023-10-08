@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using MedicalCare.Infra;
+﻿
 using MedicalCare.Models;
+using MedicalCare.Interfaces;
+using MedicalCare.Infra;
 
-public class ExameRepository
+public class ExameRepository : IExameRepository
 {
     private readonly MedicalCareDbContext _context;
 
@@ -25,18 +24,21 @@ public class ExameRepository
         var existingExame = _context.DbExame.Find(exame.Id);
         if (existingExame != null)
         {
-            // Atualizar os campos necessários
             existingExame.NomeDoExame = exame.NomeDoExame;
             existingExame.DataDoExame = exame.DataDoExame;
             existingExame.HorarioDoExame = exame.HorarioDoExame;
-            // ...
+            existingExame.TipoDoExame = exame.TipoDoExame;
+            existingExame.Laboratorio = exame.Laboratorio;
+            existingExame.UrlDoDocumento = exame.UrlDoDocumento;
+            existingExame.Resultados = exame.Resultados;
+            existingExame.StatusDoSistema = exame.StatusDoSistema;
 
             _context.SaveChanges();
 
             return existingExame;
         }
 
-        return null; // Indica que o exame não foi encontrado
+        return null; //  exame não foi encontrado
     }
 
     public ExameModel GetById(int id)
@@ -59,6 +61,6 @@ public class ExameRepository
             return true;
         }
 
-        return false; // Indica que o exame não foi encontrado
+        return false; // exame não foi encontrado
     }
 }
