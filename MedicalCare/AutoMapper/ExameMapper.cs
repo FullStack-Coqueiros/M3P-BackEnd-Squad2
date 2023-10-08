@@ -1,7 +1,7 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using MedicalCare.Models;
 using MedicalCare.DTO;
+
 
 namespace MedicalCare.AutoMapper
 {

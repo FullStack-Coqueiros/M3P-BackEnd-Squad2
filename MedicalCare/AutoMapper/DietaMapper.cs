@@ -11,6 +11,7 @@ namespace MedicalCare.AutoMapper
             CreateMap<DietaCreateDTO, DietaModel>().ReverseMap();//usar ReverseMap(),  não precisa criar  mapeamento separado no sentido oposto.
             CreateMap<DietaUpdateDTO, DietaModel>().ReverseMap();
             CreateMap<DietaModel, DietaGetDTO>().ReverseMap();
+
         }
     }
 }
