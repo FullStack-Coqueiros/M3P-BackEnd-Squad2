@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalCare.Models
 {
+    [Table("Enderecos")]
     public class EnderecoModel
     {
         [Key]
