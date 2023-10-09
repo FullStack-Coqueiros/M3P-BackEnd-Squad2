@@ -16,6 +16,7 @@ namespace MedicalCare.Models
         public string Telefone { get; set; }
 
         [Column ("SENHA"), Required]
+        [MinLength(6, ErrorMessage = "Deve conter no mínimo 6 caracteres.")]
         public string Senha { get; set; }   
 
         [Column ("TIPO"), Required]
