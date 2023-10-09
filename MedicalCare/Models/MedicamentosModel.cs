@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace MedicalCare.Models
 {
@@ -44,10 +45,14 @@ namespace MedicalCare.Models
         [Required(ErrorMessage = "O Status é obrigatório")]
         public bool StatusDoSistema {get; set;}
 
-        [Column ("PacienteId")]
-        public int PacienteId {get; set;}
+        [ForeignKey("PacienteModel")]
+        [Required]
+        [DisplayName("Id do Paciente")]
+        public PacienteModel Paciente { get; set; }
 
-        [Column ("UsuarioId")] 
-        public int UsuarioId {get; set;}
+        [ForeignKey("UsuarioModel")]
+        [Required]
+        [DisplayName("Id do Médico/Enfermeiro")]
+        public UsuarioModel UsuarioId { get; set; }
     }
 }

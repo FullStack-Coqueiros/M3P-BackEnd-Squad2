@@ -37,16 +37,15 @@ namespace MedicalCare.Models
         [Required(ErrorMessage = "Favor inserir o status do sistema!")]
         public bool StatusDoSistema { get; set; }
 
-        //[ForeignKey("Paciente")]
+        [ForeignKey("PacienteModel")]
         [Required]
         [DisplayName("Id do Paciente")]
-        public int PacienteId { get; set; }
-        // public PacienteModel Paciente { get; set; }
+        public PacienteModel Paciente { get; set; }
 
-        //[ForeignKey("Usuario")]
+        [ForeignKey("UsuarioModel")]
         [Required]
         [DisplayName("Id do Médico/Enfermeiro")]
-        public int UsuarioId { get; set; }
+        public UsuarioModel UsuarioId { get; set; }
         // public UsuarioModel Usuario { get; set; }
     }
 }

@@ -42,12 +42,14 @@ namespace MedicalCare.Models
         [Required]
         public bool StatusDoSistema { get; set; }
 
+        [ForeignKey("PacienteModel")]
         [Required]
         [DisplayName("Id do Paciente")]
-        public int PacienteId { get; set; }
+        public PacienteModel Paciente { get; set; }
 
+        [ForeignKey("UsuarioModel")]
         [Required]
         [DisplayName("Id do Médico/Enfermeiro")]
-        public int UsuarioId { get; set; }
+        public UsuarioModel UsuarioId { get; set; }
     }
 }

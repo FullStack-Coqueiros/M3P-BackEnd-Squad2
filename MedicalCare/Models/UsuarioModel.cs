@@ -20,6 +20,13 @@ namespace MedicalCare.Models
         public string Senha { get; set; }   
 
         [Column ("TIPO"), Required]
-        public ETipo Tipo { get; set; }        
+        public ETipo Tipo { get; set; }
+
+        public ICollection <ConsultaModel> Consultas { get; set; }
+        public ICollection<DietaModel> Dietas { get; set; }
+        public ICollection<ExameModel> Exames { get; set; }
+        public ICollection<ExercicioModel> Exercicios { get; set; }
+        public ICollection<MedicamentosModel> Medicamentos { get; set; }
+
     }
 }

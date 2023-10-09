@@ -1,4 +1,5 @@
 ﻿using MedicalCare.Enums;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -33,10 +34,14 @@ namespace MedicalCare.Models
         [Required]
         public bool StatusNoSistema { get; set; }
 
+        [ForeignKey("PacienteModel")]
         [Required]
-        public int UsuarioId { get; set; }
+        [DisplayName("Id do Paciente")]
+        public PacienteModel Paciente { get; set; }
 
+        [ForeignKey("UsuarioModel")]
         [Required]
-        public int PacienteId { get; set; }
+        [DisplayName("Id do Médico/Enfermeiro")]
+        public UsuarioModel UsuarioId { get; set; }
     }
 }
