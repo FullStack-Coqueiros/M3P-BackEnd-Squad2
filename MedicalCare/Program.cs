@@ -1,4 +1,7 @@
 using MedicalCare.Infra;
+using MedicalCare.Interfaces;
+using MedicalCare.Repositoryes;
+using MedicalCare.Services;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -7,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Adicione essa linha para obter a string de conexão
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<MedicalCareDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddScoped <IEnderecoService, EnderecoService>();
 
 // Add services to the container.
 builder.Services.AddControllers();

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalCare.Models
 {
-    [Table("Enderecos")]
+    [Table("EnderecoModel")]
     public class EnderecoModel
     {
         [Key]
