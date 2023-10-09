@@ -1,6 +1,5 @@
 ﻿using MedicalCare.Interfaces;
 using MedicalCare.Models;
-using MedicalCare.Repositoryes;
 
 namespace MedicalCare.Services
 {
@@ -18,10 +17,10 @@ namespace MedicalCare.Services
             return _enderecoRepository.GetAll();
         }
 
-        //public async Task<DietaModel> GetEnderecoByIdAsync(int id)
-        //{
-        //    return await _dietaRepository.GetDietaByIdAsync(id);
-        //}
+        public EnderecoModel GetById(int id)
+        {
+            return _enderecoRepository.GetById(id);
+        }
 
         public EnderecoModel CreateEndereco(EnderecoModel endereco)
         {
@@ -29,15 +28,15 @@ namespace MedicalCare.Services
             //fazer mapper antes de retornar
         }
 
-        //public async Task<bool> UpdateDietaAsync(DietaModel dieta)
-        //{
-        //    return await _dietaRepository.UpdateDietaAsync(dieta);
-        //}
+        public EnderecoModel UpdateEndereco(EnderecoModel endereco)
+        {
+            return _enderecoRepository.Update(endereco);
+        }
 
-        //public async Task<bool> DeleteDietaAsync(int id)
-        //{
-        //    return await _dietaRepository.DeleteDietaAsync(id);
-        //}
+        public bool DeleteEndereco(int id)
+        {
+            return  _enderecoRepository.Delete(id);
+        }
 
     }
 }

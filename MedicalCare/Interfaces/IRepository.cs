@@ -1,4 +1,4 @@
-﻿namespace MedicalCare.Repositoryes
+﻿namespace MedicalCare.Interfaces
 {
     public interface IRepository<TEntity> where TEntity : class
     {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalCare.Migrations
 {
     [DbContext(typeof(MedicalCareDbContext))]
-    [Migration("20231009000248_Adjust")]
-    partial class Adjust
+    [Migration("20231009004312_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,9 +1,10 @@
 ﻿using MedicalCare.Infra;
+using MedicalCare.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCare.Repositoryes
 {
-        public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
         {
             private readonly MedicalCareDbContext _context;
 
@@ -31,6 +32,7 @@ namespace MedicalCare.Repositoryes
 
             public TEntity Update(TEntity entity)
             {
+            //está tendo um erro por aqui
                 _context.Entry(entity).State = EntityState.Modified;
                 _context.SaveChanges();
                 return entity;
