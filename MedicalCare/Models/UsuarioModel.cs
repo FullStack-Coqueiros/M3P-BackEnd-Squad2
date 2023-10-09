@@ -26,7 +26,7 @@ namespace MedicalCare.Models
         public ICollection<DietaModel> Dietas { get; set; }
         public ICollection<ExameModel> Exames { get; set; }
         public ICollection<ExercicioModel> Exercicios { get; set; }
-        public ICollection<MedicamentosModel> Medicamentos { get; set; }
+        public ICollection<MedicamentoModel> Medicamentos { get; set; }
 
     }
 }

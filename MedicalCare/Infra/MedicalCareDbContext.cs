@@ -18,13 +18,28 @@ namespace MedicalCare.Infra
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ConsultaModel>()
-                .HasOne(h => h.UsuarioId)
+                .HasOne(h => h.Usuario)
                 .WithMany(w => w.Consultas)
                 .HasForeignKey(h => h.UsuarioId);
 
             modelBuilder.Entity<DietaModel>()
-                .HasOne(h => h.UsuarioId)
+                .HasOne(h => h.Usuario)
                 .WithMany(w => w.Dietas)
+                .HasForeignKey(h => h.UsuarioId);
+
+            modelBuilder.Entity<ExameModel>()
+                .HasOne(h => h.Usuario)
+                .WithMany(w => w.Exames)
+                .HasForeignKey(h => h.UsuarioId);
+
+            modelBuilder.Entity<ExercicioModel>()
+                .HasOne(h => h.Usuario)
+                .WithMany(w => w.Exercicios)
+                .HasForeignKey(h => h.UsuarioId);
+
+            modelBuilder.Entity<MedicamentoModel>()
+                .HasOne(h => h.Usuario)
+                .WithMany(w => w.Medicamentos)
                 .HasForeignKey(h => h.UsuarioId);
         }
 

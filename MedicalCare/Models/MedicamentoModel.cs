@@ -10,8 +10,11 @@ using System.ComponentModel;
 namespace MedicalCare.Models
 {
     [Table("Medicamentos")]
-    public class MedicamentosModel
+    public class MedicamentoModel
     {
+        [Key]
+        public int Id { get; set; } 
+
         [Column ("Nome do Medicamento")]
         [StringLength(100, MinimumLength = 5, ErrorMessage = "Nome deve ter entre 5 e 100 caracteres.")]
         [Required(ErrorMessage = "O nome do medicamento é obrigatório")]
@@ -50,9 +53,9 @@ namespace MedicalCare.Models
         [DisplayName("Id do Paciente")]
         public PacienteModel Paciente { get; set; }
 
-        [ForeignKey("UsuarioModel")]
         [Required]
-        [DisplayName("Id do Médico/Enfermeiro")]
-        public UsuarioModel UsuarioId { get; set; }
+        public int UsuarioId { get; set; }
+
+        public UsuarioModel Usuario { get; set; }
     }
 }

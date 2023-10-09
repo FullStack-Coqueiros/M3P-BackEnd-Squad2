@@ -39,9 +39,9 @@ namespace MedicalCare.Models
         [DisplayName("Id do Paciente")]
         public PacienteModel Paciente { get; set; }
 
-        [ForeignKey("UsuarioModel")]
         [Required]
-        [DisplayName("Id do Médico/Enfermeiro")]
-        public UsuarioModel UsuarioId { get; set; }
+        public int UsuarioId { get; set; }
+
+        public UsuarioModel Usuario { get; set; }
     }
 }
