@@ -2,7 +2,7 @@
 
 namespace MedicalCare.DTO
 {
-    public class DietaUpdateDTO
+    public class DietaUpdateDto
     {
         public int Id { get; set; }
         public string NomeDaDieta { get; set; }
