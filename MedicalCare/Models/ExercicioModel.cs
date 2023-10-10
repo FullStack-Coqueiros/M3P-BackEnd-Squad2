@@ -1,4 +1,5 @@
 ﻿using MedicalCare.Enums;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -34,9 +35,13 @@ namespace MedicalCare.Models
         public bool StatusNoSistema { get; set; }
 
         [Required]
-        public int UsuarioId { get; set; }
+        public int PacienteId { get; set; }
+
+        public PacienteModel Paciente { get; set; }
 
         [Required]
-        public int PacienteId { get; set; }
+        public int UsuarioId { get; set; }
+
+        public UsuarioModel Usuario { get; set; }
     }
 }

@@ -5,12 +5,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace MedicalCare.Models
 {
     [Table("Medicamentos")]
-    public class MedicamentosModel
+    public class MedicamentoModel
     {
+        [Key]
+        public int Id { get; set; } 
+
         [Column ("Nome do Medicamento")]
         [StringLength(100, MinimumLength = 5, ErrorMessage = "Nome deve ter entre 5 e 100 caracteres.")]
         [Required(ErrorMessage = "O nome do medicamento é obrigatório")]
@@ -44,10 +48,14 @@ namespace MedicalCare.Models
         [Required(ErrorMessage = "O Status é obrigatório")]
         public bool StatusDoSistema {get; set;}
 
-        [Column ("PacienteId")]
-        public int PacienteId {get; set;}
+        [Required]
+        public int PacienteId { get; set; }
 
-        [Column ("UsuarioId")] 
-        public int UsuarioId {get; set;}
+        public PacienteModel Paciente { get; set; }
+
+        [Required]
+        public int UsuarioId { get; set; }
+
+        public UsuarioModel Usuario { get; set; }
     }
 }
