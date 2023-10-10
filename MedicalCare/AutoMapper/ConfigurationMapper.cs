@@ -27,6 +27,8 @@ namespace MedicalCare.AutoMapper
             CreateMap<DietaGetDto, DietaModel>().ReverseMap();
             CreateMap<DietaUpdateDto, DietaModel>().ReverseMap();
 
+            
+
         }
 
     }

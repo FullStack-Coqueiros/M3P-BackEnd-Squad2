@@ -10,6 +10,8 @@ namespace MedicalCare.Interfaces
         DietaGetDto GetById(int id);
         IEnumerable<DietaGetDto> GetAllDietas();
         bool DeleteDieta(int id);
+
+
     }
 }
 

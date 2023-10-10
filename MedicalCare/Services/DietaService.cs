@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 namespace MedicalCare.Services
+
 {
     public class DietaService : IDietaService
     {
