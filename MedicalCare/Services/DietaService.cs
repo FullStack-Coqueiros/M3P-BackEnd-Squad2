@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCare.Services
 {
-    public class DietaService //: IDietaService
+    public class DietaService : IDietaService
     {
         private readonly IRepository<DietaModel> _dietaRepository;
         private readonly IMapper _mapper;
