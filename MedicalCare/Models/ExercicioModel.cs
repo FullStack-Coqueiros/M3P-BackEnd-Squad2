@@ -34,9 +34,9 @@ namespace MedicalCare.Models
         [Required]
         public bool StatusNoSistema { get; set; }
 
-        [ForeignKey("PacienteModel")]
         [Required]
-        [DisplayName("Id do Paciente")]
+        public int PacienteId { get; set; }
+
         public PacienteModel Paciente { get; set; }
 
         [Required]

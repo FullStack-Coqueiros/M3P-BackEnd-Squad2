@@ -48,9 +48,9 @@ namespace MedicalCare.Models
         [Required(ErrorMessage = "O Status é obrigatório")]
         public bool StatusDoSistema {get; set;}
 
-        [ForeignKey("PacienteModel")]
         [Required]
-        [DisplayName("Id do Paciente")]
+        public int PacienteId { get; set; }
+
         public PacienteModel Paciente { get; set; }
 
         [Required]
