@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCare.Services
 {
-    public class UsuarioService
+    public class UsuarioService : IUsuarioService
     {
         private readonly IRepository<UsuarioModel> _usuarioRepository;
         private readonly IMapper _mapper;
@@ -17,6 +17,9 @@ namespace MedicalCare.Services
             _mapper = mapper;
             _usuarioRepository = usuarioRepository;
         }
+
+
+
 
         public IEnumerable<UsuarioGetDto> GetAllUsuarios()
         {
@@ -40,14 +43,22 @@ namespace MedicalCare.Services
             return usuarioGet;
         }
 
-        public UsuarioModel UpdateUsuario(UsuarioModel usuario)
+        public UsuarioGetDto UpdateUsuario(UsuarioUpdateDto usuario)
         {
-            return _usuarioRepository.Update(endereco);
+            UsuarioModel usuarioModel = _mapper.Map<UsuarioModel>(usuario);
+            _usuarioRepository.Update(usuarioModel);
+            UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuario);
+            return usuarioGet;
         }
 
         public bool DeleteUsuario(int id)
         {
-            return _usuarioRepository.Delete(id);
+            bool remocao = _usuarioRepository.Delete(id);
+            if (remocao)
+            {
+                return true;
+            }
+            return false;
         }
 
     }
