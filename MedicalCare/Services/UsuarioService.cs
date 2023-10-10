@@ -12,7 +12,7 @@ namespace MedicalCare.Services
             _usuarioRepository = usuarioRepository;
         }
 
-        public IEnumerable<UsuarioModel> GetAllEnderecos()
+        public IEnumerable<UsuarioModel> GetAllUsuarios()
         {
             return _usuarioRepository.GetAll();
         }
@@ -22,18 +22,18 @@ namespace MedicalCare.Services
             return _usuarioRepository.GetById(id);
         }
 
-        public UsuarioModel CreateEndereco(UsuarioModel endereco)
+        public UsuarioModel CreateUsuario(UsuarioModel endereco)
         {
             return _usuarioRepository.Create(endereco);
             //fazer mapper antes de retornar
         }
 
-        public UsuarioModel UpdateEndereco(UsuarioModel endereco)
+        public UsuarioModel UpdateUsuario(UsuarioModel endereco)
         {
             return _usuarioRepository.Update(endereco);
         }
 
-        public bool DeleteEndereco(int id)
+        public bool DeleteUsuario(int id)
         {
             return _usuarioRepository.Delete(id);
         }
