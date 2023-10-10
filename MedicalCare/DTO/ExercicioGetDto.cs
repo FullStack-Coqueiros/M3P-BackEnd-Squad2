@@ -5,7 +5,7 @@ namespace MedicalCare.DTO
 {
     public class ExercicioGetDto
     {
-        public int Identificador { get; set; }
+        public int Id { get; set; }
         public string Nome_Da_Serie_De_Exercicios { get; set; }
         public string Data { get; set; }
         public string Hora { get; set; }
