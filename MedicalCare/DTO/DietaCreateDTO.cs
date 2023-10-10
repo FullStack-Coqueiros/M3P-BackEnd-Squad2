@@ -13,5 +13,6 @@ namespace MedicalCare.DTO
         public bool StatusDoSistema { get; set; }
         public int PacienteId { get; set; }
         public int UsuarioId { get; set; }
+
     }
 }

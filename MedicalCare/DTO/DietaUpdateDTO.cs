@@ -12,5 +12,6 @@ namespace MedicalCare.DTO
         public ETipoDieta Tipo { get; set; }
         public int PacienteId { get; set; }
         public int UsuarioId { get; set; }
+
     }
 }

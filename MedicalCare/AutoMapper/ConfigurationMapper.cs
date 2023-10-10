@@ -15,10 +15,12 @@ namespace MedicalCare.AutoMapper
             CreateMap<UsuarioGetDto, UsuarioModel>();
             CreateMap<UsuarioModel, UsuarioGetDto>();
 
+
             //mapper exame
             CreateMap<ExameCreateDto, ExameModel>().ReverseMap();
             CreateMap<ExameGetDto, ExameModel>().ReverseMap();
             CreateMap<ExameUpdateDto, ExameModel>().ReverseMap();
+
 
             //mapper Dieta
             CreateMap<DietaCreateDto, DietaModel>().ReverseMap();

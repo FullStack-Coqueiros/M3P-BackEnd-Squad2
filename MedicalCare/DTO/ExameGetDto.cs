@@ -1,6 +1,6 @@
 ﻿namespace MedicalCare.DTO
 {
-    public class ExameDTO
+    public class ExameGetDto
     {
         public int Id { get; set; }
         public string NomeDoExame { get; set; }
