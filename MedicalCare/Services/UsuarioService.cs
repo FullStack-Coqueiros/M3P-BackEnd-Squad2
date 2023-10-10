@@ -1,34 +1,46 @@
-﻿using MedicalCare.Interfaces;
+﻿using AutoMapper;
+using MedicalCare.DTO;
+using MedicalCare.Interfaces;
 using MedicalCare.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCare.Services
 {
     public class UsuarioService
     {
         private readonly IRepository<UsuarioModel> _usuarioRepository;
+        private readonly IMapper _mapper;
 
-        public UsuarioService(IRepository<UsuarioModel> usuarioRepository)
+        public UsuarioService(IMapper mapper, IRepository<UsuarioModel> usuarioRepository)
         {
+            _mapper = mapper;
             _usuarioRepository = usuarioRepository;
         }
 
-        public IEnumerable<UsuarioModel> GetAllUsuarios()
+        public IEnumerable<UsuarioGetDto> GetAllUsuarios()
         {
-            return _usuarioRepository.GetAll();
+            IEnumerable<UsuarioModel> usuarios = _usuarioRepository.GetAll();
+            IEnumerable<UsuarioGetDto> usuarioGet = _mapper.Map<IEnumerable<UsuarioGetDto>>(usuarios);
+            return usuarioGet;
         }
 
-        public UsuarioModel GetById(int id)
+        public UsuarioGetDto GetById(int id)
         {
-            return _usuarioRepository.GetById(id);
+            UsuarioModel usuario = _usuarioRepository.GetById(id);
+            UsuarioGetDto usuarioGetId = _mapper.Map<UsuarioGetDto>(usuario);
+            return usuarioGetId;
         }
 
-        public UsuarioModel CreateUsuario(UsuarioModel endereco)
+        public UsuarioGetDto CreateUsuario(UsuarioCreateDto usuario)
         {
-            return _usuarioRepository.Create(endereco);
-            //fazer mapper antes de retornar
+            UsuarioModel usuarioModel = _mapper.Map<UsuarioModel>(usuario);
+            _usuarioRepository.Create(usuarioModel);
+            UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuario);
+            return usuarioGet;
         }
 
-        public UsuarioModel UpdateUsuario(UsuarioModel endereco)
+        public UsuarioModel UpdateUsuario(UsuarioModel usuario)
         {
             return _usuarioRepository.Update(endereco);
         }
@@ -39,3 +51,4 @@ namespace MedicalCare.Services
         }
 
     }
+}
