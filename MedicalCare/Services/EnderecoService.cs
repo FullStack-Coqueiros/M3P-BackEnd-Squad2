@@ -3,7 +3,7 @@ using MedicalCare.Models;
 
 namespace MedicalCare.Services
 {
-    public class EnderecoService : IEnderecoService
+    public class EnderecoService 
     {
         private readonly IRepository<EnderecoModel> _enderecoRepository;
 
@@ -12,7 +12,7 @@ namespace MedicalCare.Services
             _enderecoRepository = enderecoRepository;
         }
 
-        public IEnumerable<EnderecoModel> GetAllEnderecos()
+        public IEnumerable<EnderecoModel> GetAllUsuarios()
         {
             return _enderecoRepository.GetAll();
         }
@@ -22,18 +22,18 @@ namespace MedicalCare.Services
             return _enderecoRepository.GetById(id);
         }
 
-        public EnderecoModel CreateEndereco(EnderecoModel endereco)
+        public EnderecoModel CreateUsuario(EnderecoModel endereco)
         {
             return _enderecoRepository.Create(endereco);
             //fazer mapper antes de retornar
         }
 
-        public EnderecoModel UpdateEndereco(EnderecoModel endereco)
+        public EnderecoModel UpdateUsuario(EnderecoModel endereco)
         {
             return _enderecoRepository.Update(endereco);
         }
 
-        public bool DeleteEndereco(int id)
+        public bool DeleteUsuario(int id)
         {
             return  _enderecoRepository.Delete(id);
         }
