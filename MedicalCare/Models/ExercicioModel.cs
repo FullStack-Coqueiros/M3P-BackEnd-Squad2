@@ -20,7 +20,7 @@ namespace MedicalCare.Models
         public string Data { get; set; }
 
         [Required]
-        public string Hora { get; set; }
+        public string Horario { get; set; }
 
         [Required]
         public EtipoExercicio Tipo { get; set; } 
@@ -32,7 +32,7 @@ namespace MedicalCare.Models
         public string Descricao { get; set; }
 
         [Required]
-        public bool StatusNoSistema { get; set; }
+        public bool StatusDoSistema { get; set; }
 
         [Required]
         public int PacienteId { get; set; }
