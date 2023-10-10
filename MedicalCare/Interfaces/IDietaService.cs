@@ -1,15 +1,19 @@
-﻿using MedicalCare.Models;
+﻿using MedicalCare.DTO;
+using MedicalCare.Models;
 
 namespace MedicalCare.Interfaces
 {
     public interface IDietaService
     {
-        Task<IEnumerable<DietaModel>> GetAllDietasAsync();
-        DietaModel GetById(int id);
-        DietaModel Create(DietaModel dieta);
-        DietaModel Update(DietaModel dieta);
-        bool Delete(int id);
-
-
+      
+        DietaGetDto CreateDieta(DietaCreateDto dieta);
+        DietaGetDto UpdateDieta(DietaUpdateDto dieta);
+        DietaGetDto GetById(int id);
+        IEnumerable<DietaGetDto> GetAllDietas();
+        bool DeleteDieta(int id);
     }
 }
+
+
+
+
