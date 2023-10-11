@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalCare.Models
 {
-    [Table("Consultas")]
+    [Table("ConsultaModel")]
 
     public class ConsultaModel
     {

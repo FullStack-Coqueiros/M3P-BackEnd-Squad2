@@ -2,6 +2,7 @@
 {
     public class ConsultaCreateDTO
     {
+
         public string MotivoDaConsulta { get; set; }
         public DateTime DataDaConsulta { get; set; }
         public DateTime HorarioDaConsulta { get; set; }

@@ -1,4 +1,5 @@
-﻿using MedicalCare.Interfaces;
+﻿using MedicalCare.DTO;
+using MedicalCare.Interfaces;
 using MedicalCare.Models;
 using MedicalCare.Services;
 using Microsoft.AspNetCore.Http;
@@ -6,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalCare.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ConsultaController : ControllerBase
     {
         private readonly IConsultaService _consultaService;
@@ -18,10 +19,10 @@ namespace MedicalCare.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] ConsultaModel consultaCreate)
+        public IActionResult Post([FromBody] ConsultaCreateDTO consultaCreate)
         {
-            var consultaModel = _consultaService.CreateConsulta(consultaCreate);
-            return Ok(consultaModel);
+            ConsultaGetDto consultaGet = _consultaService.CreateConsulta(consultaCreate);
+            return Ok(consultaGet);
         }
 
         [HttpGet]
@@ -39,7 +40,7 @@ namespace MedicalCare.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] ConsultaModel consultaUpdate)
+        public IActionResult Update([FromRoute] int id, [FromBody] ConsultaUpdateDTO consultaUpdate)
         {
             var consultaModel = _consultaService.GetById(id);
             if (consultaModel == null)
