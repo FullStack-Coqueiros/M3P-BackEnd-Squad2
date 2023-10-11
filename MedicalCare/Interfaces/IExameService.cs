@@ -1,15 +1,15 @@
-﻿
-using MedicalCare.Models;
+﻿using MedicalCare.DTO;
+
 
 namespace MedicalCare.Interfaces
 {
     public interface IExameService
     {
-        ExameModel Create(ExameModel exame);
-        ExameModel Update(ExameModel exame);
-        ExameModel GetById(int id);
-        IEnumerable<ExameModel> GetAllExames();
-        bool Delete(int id);
+        ExameGetDto CreateExame(ExameCreateDto exame);
+        ExameGetDto UpdateExame(ExameUpdateDto exame);
+        ExameGetDto GetById(int id);
+        IEnumerable<ExameGetDto> GetAllExames();
+        bool DeleteExame(int id);
 
     }
 }
