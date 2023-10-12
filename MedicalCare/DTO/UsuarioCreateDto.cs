@@ -11,6 +11,6 @@ namespace MedicalCare.DTO
         public string Email { get; set; }
         public string Senha { get; set; }
         public ETipo Tipo { get; set; }
-        public bool StatusNoSistema { get; set; }
+        public bool StatusDoSistema { get; set; }
     }
 }

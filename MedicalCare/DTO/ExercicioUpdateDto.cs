@@ -10,7 +10,7 @@ namespace MedicalCare.DTO
         public EtipoExercicio Tipo { get; set; }
         public int QuantidadePorSemana { get; set; }
         public string Descricao { get; set; }
-        public bool StatusNoSistema { get; set; }
+        public bool StatusDoSistema { get; set; }
         public int UsuarioId { get; set; }
         public int PacienteId { get; set; }
     }
