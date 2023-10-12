@@ -28,6 +28,6 @@ namespace MedicalCare.Models
 
         [Column("Status_do_Sistema")]
         [Required(ErrorMessage = "O Status é obrigatório")]
-        public bool StatusNoSistema { get; set; }
+        public bool StatusDoSistema { get; set; }
     }
 }
