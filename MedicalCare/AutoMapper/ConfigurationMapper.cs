@@ -32,6 +32,16 @@ namespace MedicalCare.AutoMapper
             CreateMap<ConsultaGetDto, ConsultaModel>().ReverseMap();
             CreateMap<ConsultaUpdateDTO, ConsultaModel>().ReverseMap();
 
+            //mapper Paciente
+            CreateMap<PacienteCreateDto, PacienteModel>().ReverseMap();
+            CreateMap<PacienteGetDto, PacienteModel>().ReverseMap();
+            CreateMap<PacienteUpdateDto, PacienteModel>().ReverseMap();
+
+            //mapper Exercicio
+            CreateMap<ExercicioCreateDto, ExercicioModel>().ReverseMap();
+            CreateMap<ExercicioGetDto, ExercicioModel>().ReverseMap();
+            CreateMap<ExercicioUpdateDto, ExercicioModel>().ReverseMap();
+
         }
 
     }
