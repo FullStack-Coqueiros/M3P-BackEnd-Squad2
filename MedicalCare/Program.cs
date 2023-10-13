@@ -1,10 +1,20 @@
 using MedicalCare.Infra;
+using MedicalCare.Interfaces;
+using MedicalCare.Repositoryes;
+using MedicalCare.Services;
 using Microsoft.EntityFrameworkCore;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adicione essa linha para obter a string de conexão
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<MedicalCareDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddScoped <IEnderecoService, EnderecoService>();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -16,6 +26,11 @@ builder.Services.AddSwaggerGen();
 // Certifique-se de que está dentro do escopo do builder.Services
 builder.Services.AddDbContext<MedicalCareDbContext>(options =>
     options.UseSqlServer(connectionString), ServiceLifetime.Transient);
+
+// Adicione a configuração do AutoMapper
+builder.Services.AddAutoMapper(typeof(Program));
+
+
 
 var app = builder.Build();
 

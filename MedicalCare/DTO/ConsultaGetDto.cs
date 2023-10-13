@@ -1,8 +1,8 @@
 ﻿namespace MedicalCare.DTO
 {
-    public class ConsultaCreateDTO
+    public class ConsultaGetDto
     {
-
+        public int Id { get; set; }
         public string MotivoDaConsulta { get; set; }
         public DateTime DataDaConsulta { get; set; }
         public DateTime HorarioDaConsulta { get; set; }

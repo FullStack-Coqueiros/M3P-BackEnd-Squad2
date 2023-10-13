@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalCare.Models
 {
+    [Table("Pacientes")]
     public class PacienteModel : PessoaModel
     {
         [Required]
@@ -21,10 +22,10 @@ namespace MedicalCare.Models
         [Required, StringLength(10, MinimumLength = 10, ErrorMessage = "Deve conter 10 caracteres.")]
         public string ContatoDeEmergencia { get; set; }
 
-        public List<string> Alergias { get; set; }
+        public string Alergias { get; set; }
 
         [Column("Cuidados")]
-        public List<string> CuidadosEspecificos { get; set; }
+        public string CuidadosEspecificos { get; set; }
 
 
         public string Convenio { get; set; }

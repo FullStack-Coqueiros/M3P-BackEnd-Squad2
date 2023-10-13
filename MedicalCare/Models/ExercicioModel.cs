@@ -1,8 +1,11 @@
 ﻿using MedicalCare.Enums;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalCare.Models
 {
+    [Table("Exercicios")]
     public class ExercicioModel
     {
         //Creio que será uma relação n x n, visto que um tipo de exercicio pode estar presente em varios prontuarios,
@@ -17,7 +20,7 @@ namespace MedicalCare.Models
         public string Data { get; set; }
 
         [Required]
-        public string Hora { get; set; }
+        public string Horario { get; set; }
 
         [Required]
         public EtipoExercicio Tipo { get; set; } 
@@ -29,12 +32,16 @@ namespace MedicalCare.Models
         public string Descricao { get; set; }
 
         [Required]
-        public bool StatusNoSistema { get; set; }
+        public bool StatusDoSistema { get; set; }
+
+        [Required]
+        public int PacienteId { get; set; }
+
+        public PacienteModel Paciente { get; set; }
 
         [Required]
         public int UsuarioId { get; set; }
 
-        [Required]
-        public int PacienteId { get; set; }
+        public UsuarioModel Usuario { get; set; }
     }
 }

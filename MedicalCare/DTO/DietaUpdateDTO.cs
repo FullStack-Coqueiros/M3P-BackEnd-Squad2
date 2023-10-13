@@ -2,7 +2,7 @@
 
 namespace MedicalCare.DTO
 {
-    public class DietaUpdateDTO
+    public class DietaUpdateDto
     {
         public int Id { get; set; }
         public string NomeDaDieta { get; set; }
@@ -12,5 +12,6 @@ namespace MedicalCare.DTO
         public ETipoDieta Tipo { get; set; }
         public int PacienteId { get; set; }
         public int UsuarioId { get; set; }
+
     }
 }

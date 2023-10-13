@@ -4,7 +4,7 @@ namespace MedicalCare.DTO
 {
     public class EnderecoGetDto
     {
-        public int Identificador { get; set; }
+        public int Id { get; set; }
         public string Cep { get; set; }
         public string Cidade { get; set; }
         public string Estado { get; set; }

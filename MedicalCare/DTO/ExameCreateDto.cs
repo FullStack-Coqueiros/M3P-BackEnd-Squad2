@@ -1,8 +1,7 @@
 ﻿namespace MedicalCare.DTO
 {
-    public class ExameDTO
+    public class ExameCreateDto
     {
-        public int Id { get; set; }
         public string NomeDoExame { get; set; }
         public DateTime DataDoExame { get; set; }
         public DateTime HorarioDoExame { get; set; }
@@ -16,7 +15,3 @@
 
     }
 }
-
-
-
-
