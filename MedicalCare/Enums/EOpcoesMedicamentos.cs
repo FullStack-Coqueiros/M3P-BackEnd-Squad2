@@ -9,7 +9,8 @@ namespace MedicalCare.Enums
         Creme = 3,
         Gel = 4,
         Inalação = 5,
-        Injeção
+        Injeção = 6,
+        Spray = 7,
 
     }
 }
