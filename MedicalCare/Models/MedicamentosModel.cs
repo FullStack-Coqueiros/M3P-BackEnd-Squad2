@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using MedicalCare.Enums;
 
 namespace MedicalCare.Models
 {
@@ -25,7 +26,7 @@ namespace MedicalCare.Models
         public string Tipo {get;set;}
 
         [Column ("Opções")]
-        public string Opcoes {get; set;}
+        public EOpcoesMedicamentos Opcoes {get; set;}
 
         [Column ("Quantidade")] 
         [Required(ErrorMessage = "A quantidade é obrigatória")]
@@ -33,7 +34,7 @@ namespace MedicalCare.Models
 
         [Column ("Unidade")]
         [Required(ErrorMessage = "A unidade é obrigatória")]
-        public string Unidade {get; set;}
+        public EUnidadeMedicamentos Unidade {get; set;}
 
         [Column ("Observações")]
         [StringLength(1000, MinimumLength = 10, ErrorMessage = "Observações devem ter entre 10 e 1000 caracteres.")]
