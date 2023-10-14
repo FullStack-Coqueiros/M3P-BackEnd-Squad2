@@ -58,12 +58,20 @@ namespace MedicalCare.Controllers
         [HttpGet("{id}")]
         public ActionResult<PacienteGetDto> Get([FromRoute] int id)
         {
-            PacienteGetDto pacienteGet = _pacienteService.GetById(id);
-            if (pacienteGet  == null)
+            try
             {
-                return NotFound("Id de paciente não encontrado.");
+                PacienteGetDto pacienteGet = _pacienteService.GetById(id);
+                if (pacienteGet == null)
+                {
+                    return NotFound("Id de paciente não encontrado.");
+                }
+                return Ok(pacienteGet);
             }
-            return Ok(pacienteGet);
+            catch (Exception ex)
+            {
+
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
         }
 
     }
