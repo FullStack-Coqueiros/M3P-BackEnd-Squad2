@@ -27,6 +27,7 @@ namespace MedicalCare.Controllers
                     .Where(w => w.Cpf == pacienteCreate.Cpf || w.Email == pacienteCreate.Email);
                 if (verificaCpfEmail == null)
                 {
+                    pacienteCreate.StatusDoSistema = true;
                     PacienteGetDto pacienteGet = _pacienteService.CreatePaciente(pacienteCreate);
                     return Created("Paciente salvo com sucesso", pacienteGet);
                 }
@@ -73,6 +74,8 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+
+
 
     }
 }
