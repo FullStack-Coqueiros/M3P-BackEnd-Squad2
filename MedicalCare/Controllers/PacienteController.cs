@@ -23,15 +23,15 @@ namespace MedicalCare.Controllers
         {
             try
             {
-                IEnumerable<PacienteGetDto> verificaCpfEmail = _pacienteService.GetAllPacientes()
-                    .Where(w => w.Cpf == pacienteCreate.Cpf || w.Email == pacienteCreate.Email);
-                if (verificaCpfEmail == null)
+                bool verificaCpfEmail = _pacienteService.GetAllPacientes()
+                                .Any(a => a.Cpf == pacienteCreate.Cpf || a.Email == pacienteCreate.Email);
+                if (verificaCpfEmail)
                 {
-                    pacienteCreate.StatusDoSistema = true;
-                    PacienteGetDto pacienteGet = _pacienteService.CreatePaciente(pacienteCreate);
-                    return Created("Paciente salvo com sucesso", pacienteGet);
+                    return StatusCode(HttpStatusCode.Conflict.GetHashCode(), "Cpf e/ou email ja cadastrado(s).");
                 }
-                return StatusCode(HttpStatusCode.Conflict.GetHashCode(), "Cpf e/ou email ja cadastrado(s).");
+                pacienteCreate.StatusDoSistema = true;
+                PacienteGetDto pacienteGet = _pacienteService.CreatePaciente(pacienteCreate);
+                return Created("Paciente salvo com sucesso.", pacienteGet);
 
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace MedicalCare.Controllers
                 //verificar se realmente alterou o se adicionou um novo.
                 PacienteGetDto pacienteGet = _pacienteService.UpdatePaciente(pacienteUpdate);
                 return Ok(pacienteGet);
-                
+
             }
             catch (Exception ex)
             {
