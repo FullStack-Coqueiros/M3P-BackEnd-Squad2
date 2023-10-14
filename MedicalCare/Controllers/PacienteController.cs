@@ -40,5 +40,20 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult<IEnumerable<PacienteGetDto>> Get()
+        {
+            try
+            {
+                IEnumerable<PacienteGetDto> pacientes = _pacienteService.GetAllPacientes();
+                return Ok(pacientes);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
+        }
+
     }
 }
