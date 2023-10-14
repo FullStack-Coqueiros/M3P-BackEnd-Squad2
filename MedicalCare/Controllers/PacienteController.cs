@@ -75,6 +75,25 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public ActionResult<PacienteGetDto> Update([FromRoute] int id, [FromBody] PacienteUpdateDto pacienteUpdate)
+        {
+            try
+            {
+                //verificar se realmente alterou o se adicionou um novo.
+                PacienteGetDto pacienteGet = _pacienteService.UpdatePaciente(pacienteUpdate);
+                return Ok(pacienteGet);
+                
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
+        }
+
+
+
 
 
     }
