@@ -55,5 +55,16 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<PacienteGetDto> Get([FromRoute] int id)
+        {
+            PacienteGetDto pacienteGet = _pacienteService.GetById(id);
+            if (pacienteGet  == null)
+            {
+                return NotFound("Id de paciente não encontrado.");
+            }
+            return Ok(pacienteGet);
+        }
+
     }
 }
