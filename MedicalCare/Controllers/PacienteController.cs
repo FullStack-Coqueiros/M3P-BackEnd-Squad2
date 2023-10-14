@@ -92,7 +92,21 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            try
+            {
+                _pacienteService.DeletePaciente(id);
+                return Accepted();
 
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
+        }
 
 
 
