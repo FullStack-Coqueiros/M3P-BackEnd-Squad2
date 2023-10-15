@@ -3,7 +3,7 @@ using MedicalCare.Models;
 
 namespace MedicalCare.Services
 {
-    public class LogService
+    public class LogService : ILogService
     {
         private readonly IRepository<LogModel> _logRepository;
 
