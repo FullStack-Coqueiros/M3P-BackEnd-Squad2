@@ -102,8 +102,12 @@ namespace MedicalCare.Controllers
         {
             try
             {
-                _pacienteService.DeletePaciente(id);
+                bool remocao = _pacienteService.DeletePaciente(id);
+                if (remocao)
+                {
                 return Accepted();
+                }
+                return NotFound("Id de paciente não encontrado.");
 
             }
             catch (Exception ex)
