@@ -6,7 +6,7 @@ namespace MedicalCare.AutoMapper
 {
     public class ConfigurationMapper : Profile
     {
-        protected ConfigurationMapper()
+        public ConfigurationMapper()
         {
 
             //mapper usuario
@@ -35,7 +35,10 @@ namespace MedicalCare.AutoMapper
             //mapper Paciente
             CreateMap<PacienteCreateDto, PacienteModel>().ReverseMap();
             CreateMap<PacienteGetDto, PacienteModel>().ReverseMap();
-            CreateMap<PacienteUpdateDto, PacienteModel>().ReverseMap();
+            CreateMap<PacienteUpdateDto, PacienteModel>()
+                .ForMember(dest => dest.Cpf, act => act.Ignore())
+                .ForMember(dest => dest.Rg, act => act.Ignore());
+
 
             //mapper Exercicio
             CreateMap<ExercicioCreateDto, ExercicioModel>().ReverseMap();

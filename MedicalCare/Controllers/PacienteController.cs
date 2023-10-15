@@ -1,5 +1,6 @@
 ﻿using MedicalCare.DTO;
 using MedicalCare.Interfaces;
+using MedicalCare.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -80,8 +81,12 @@ namespace MedicalCare.Controllers
         {
             try
             {
-                //verificar se realmente alterou o se adicionou um novo.
-                PacienteGetDto pacienteGet = _pacienteService.UpdatePaciente(pacienteUpdate);
+                PacienteGetDto? verificaSeExiste = _pacienteService.GetById(id);
+                if (verificaSeExiste == null)
+                {
+                    return NotFound("Id de paciente não encontrado.");
+                }
+                PacienteGetDto pacienteGet = _pacienteService.UpdatePaciente(pacienteUpdate, id);
                 return Ok(pacienteGet);
 
             }
