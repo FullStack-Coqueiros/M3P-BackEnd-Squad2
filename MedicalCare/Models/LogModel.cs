@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalCare.Models
 {
-    [Table("Logs")]
+    [Table("LogModel")]
     public class LogModel
     {
         [Key]
