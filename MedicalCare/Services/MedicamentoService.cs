@@ -15,6 +15,7 @@ namespace MedicalCare.Services
 
     {
         private readonly IRepository<MedicamentoModel> _medicamentoRepository;
+        private readonly IMapper _mapper;
 
         public MedicamentoService(IMapper mapper, IRepository<MedicamentoModel> medicamentoRepository)
         {
@@ -32,7 +33,7 @@ namespace MedicalCare.Services
         public MedicamentoGetDTO GetById(int id)
         {
             MedicamentoModel medicamento = _medicamentoRepository.GetById(id);
-            MedicamentoGetDTO medicamentoGetID = _mapper.Map<MedicamentoGetDTO>(medicamento);
+            MedicamentoGetDTO medicamentoGetId = _mapper.Map<MedicamentoGetDTO>(medicamento);
             return medicamentoGetId;
         }
 
