@@ -5,10 +5,10 @@ namespace MedicalCare.Interfaces
 {
     public interface IConsultaService
     {
-        IEnumerable<ConsultaGetDto> GetAllConsultas();
         ConsultaGetDto CreateConsulta(ConsultaCreateDTO consulta);
-        ConsultaGetDto GetById(int id);
-        ConsultaGetDto UpdateConsulta(ConsultaUpdateDTO consulta);
         bool DeleteConsulta(int id);
+        IEnumerable<ConsultaGetDto> GetAllConsultas();
+        ConsultaGetDto GetById(int id);
+        ConsultaGetDto UpdateConsulta(ConsultaUpdateDTO consulta, int id);
     }
 }

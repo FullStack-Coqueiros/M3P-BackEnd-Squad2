@@ -32,19 +32,21 @@ namespace MedicalCare.Services
             return consultaGetId;
         }
 
-        public ConsultaGetDto CreateConsulta(ConsultaCreateDTO consulta)
+        public ConsultaGetDto CreateConsulta(ConsultaCreateDTO consultaCreate)
         {
-            ConsultaModel consultaModel = _mapper.Map<ConsultaModel>(consulta);
+            ConsultaModel consultaModel = _mapper.Map<ConsultaModel>(consultaCreate);
             _consultaRepository.Create(consultaModel);
-            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consulta);
+            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consultaCreate);
             return consultaGet;
         }
 
-        public ConsultaGetDto UpdateConsulta(ConsultaUpdateDTO consulta)
+        public ConsultaGetDto UpdateConsulta(ConsultaUpdateDTO consultaUpdate, int id)
         {
-            ConsultaModel consultaModel = _mapper.Map<ConsultaModel>(consulta);
+            ConsultaModel consultaModel = _consultaRepository.GetById(id);
+            consultaModel = _mapper.Map(consultaUpdate, consultaModel);
             _consultaRepository.Update(consultaModel);
-            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consulta);
+            ConsultaModel consultaModelAtualizado = _consultaRepository.GetById(id);
+            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consultaModelAtualizado);
             return consultaGet;
         }
 
