@@ -41,8 +41,13 @@ namespace MedicalCare.Infra
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Medicamentos)
                 .HasForeignKey(h => h.UsuarioId);
-        }
 
+            //    modelBuilder.Entity<PacienteModel>()
+            //        .HasOne(h => h.Endereco)
+            //        .WithMany(w => w.Pacientes)
+            //        .HasForeignKey(h => h.EnderecoId);
+            //}
+        }
     }
  
 }

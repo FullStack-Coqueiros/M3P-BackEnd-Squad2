@@ -5,6 +5,7 @@ namespace MedicalCare.DTO
 {
     public class PacienteGetDto
     {
+        public int Id { get; set; }
         public string NomeCompleto { get; set; }
         public Egenero Genero { get; set; }
         public DateTime DataDeNascimento { get; set; }

@@ -10,12 +10,16 @@ namespace MedicalCare.Services
     public class PacienteService : IPacienteService
     {
         private readonly IRepository<PacienteModel> _pacienteRepository;
+        //private readonly IRepository<EnderecoModel> _enderecoRepository;
+        //private readonly IEnderecoService _enderecoService;
         private readonly IMapper _mapper;
 
         public PacienteService(IMapper mapper, IRepository<PacienteModel> pacienteRepository)
         {
             _mapper = mapper;
             _pacienteRepository = pacienteRepository;
+            //_enderecoRepository = enderecoRepository;
+            //_enderecoService = enderecoService;
         }
 
 
@@ -34,19 +38,24 @@ namespace MedicalCare.Services
             return pacienteGetId;
         }
 
-        public PacienteGetDto CreatePaciente(PacienteCreateDto paciente)
+        public PacienteGetDto CreatePaciente(PacienteCreateDto pacienteCreate)
         {
-            PacienteModel pacienteModel = _mapper.Map<PacienteModel>(paciente);
+            PacienteModel pacienteModel = _mapper.Map<PacienteModel>(pacienteCreate);
             _pacienteRepository.Create(pacienteModel);
-            PacienteGetDto pacienteGet = _mapper.Map<PacienteGetDto>(paciente);
+            PacienteModel pacienteModelAtualizado = _pacienteRepository.GetAll()
+                               .Where(a => a.Cpf == pacienteCreate.Cpf).FirstOrDefault();
+            PacienteGetDto pacienteGet = _mapper.Map<PacienteGetDto>(pacienteModelAtualizado);
             return pacienteGet;
         }
 
-        public PacienteGetDto UpdatePaciente(PacienteUpdateDto paciente)
+        public PacienteGetDto UpdatePaciente(PacienteUpdateDto pacienteUpdate, int id)
         {
-            PacienteModel pacienteModel = _mapper.Map<PacienteModel>(paciente);
+            PacienteModel pacienteModel = _pacienteRepository.GetById(id);
+            pacienteModel = _mapper.Map(pacienteUpdate, pacienteModel);
+            Console.WriteLine(pacienteModel);
             _pacienteRepository.Update(pacienteModel);
-            PacienteGetDto pacienteGet = _mapper.Map<PacienteGetDto>(paciente);
+            PacienteModel pacienteModelAtualizado = _pacienteRepository.GetById(id);
+            PacienteGetDto pacienteGet = _mapper.Map<PacienteGetDto>(pacienteModelAtualizado);
             return pacienteGet;
         }
 

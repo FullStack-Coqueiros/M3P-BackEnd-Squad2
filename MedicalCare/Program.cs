@@ -15,6 +15,7 @@ builder.Services.AddDbContext<MedicalCareDbContext>(options => options.UseSqlSer
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 builder.Services.AddScoped <IEnderecoService, EnderecoService>();
+builder.Services.AddScoped<IPacienteService, PacienteService>();
 
 // Add services to the container.
 builder.Services.AddControllers();

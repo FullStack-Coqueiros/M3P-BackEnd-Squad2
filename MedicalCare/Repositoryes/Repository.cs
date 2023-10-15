@@ -33,7 +33,7 @@ namespace MedicalCare.Repositoryes
             public TEntity Update(TEntity entity)
             {
             //está tendo um erro por aqui
-                _context.Entry(entity).State = EntityState.Modified;
+                _context.Update<TEntity>(entity);
                 _context.SaveChanges();
                 return entity;
             }
