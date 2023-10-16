@@ -4,11 +4,12 @@ using MedicalCare.Models;
 using MedicalCare.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace MedicalCare.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class ConsultaController : ControllerBase
     {
         private readonly IConsultaService _consultaService;
@@ -22,44 +23,87 @@ namespace MedicalCare.Controllers
         public IActionResult Post([FromBody] ConsultaCreateDTO consultaCreate)
         {
             ConsultaGetDto consultaGet = _consultaService.CreateConsulta(consultaCreate);
-            return Ok(consultaGet);
+            return Created("Consulta salvo com sucesso.",consultaGet);
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public ActionResult<IEnumerable<ConsultaGetDto>> Get()
         {
-            var consultas = _consultaService.GetAllConsultas();
-            return Ok(consultas);
+            try
+            {
+                IEnumerable<ConsultaGetDto> consultas = _consultaService.GetAllConsultas();
+                return Ok(consultas);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(),ex);
+            }
+            //var consultas = _consultaService.GetAllConsultas();
+            //return Ok(consultas);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public ActionResult<ConsultaGetDto> Get([FromRoute] int id)
         {
-            var consulta = _consultaService.GetById(id);
-            return Ok(consulta);
+            try
+            {
+                ConsultaGetDto consultaGet = _consultaService.GetById(id);
+                if (consultaGet == null)
+                {
+                    return NotFound("Id de consulta não encontrada");
+                }
+                return Ok(consultaGet);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode() ,ex);
+            }
+            //var consulta = _consultaService.GetById(id);
+            //return Ok(consulta);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] ConsultaUpdateDTO consultaUpdate)
+        public ActionResult<ConsultaGetDto> Update([FromRoute] int id, [FromBody] ConsultaUpdateDTO consultaUpdate)
         {
-            var consultaModel = _consultaService.GetById(id);
-            if (consultaModel == null)
+            try
             {
-                return NotFound();
+                ConsultaGetDto? verificaSeExiste = _consultaService.GetById(id);
+                if (verificaSeExiste == null)
+                {
+                    return NotFound("Id de consulta não encontrada.");
+                }
+                ConsultaGetDto consultaGet = _consultaService.UpdateConsulta(consultaUpdate, id);
+                return Ok(consultaGet);
             }
-            _consultaService.UpdateConsulta(consultaUpdate);
-            return Ok(consultaUpdate);
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(),ex);
+            }
+            //var consultaModel = _consultaService.GetById(id);
+            //if (consultaModel == null)
+            //{
+            //    return NotFound();
+            //}
+            //_consultaService.UpdateConsulta(consultaUpdate);
+            //return Ok(consultaUpdate);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        public ActionResult Delete([FromRoute] int id)
         {
-            bool response = _consultaService.DeleteConsulta(id);
-            if (response == false)
+            try
             {
-                return NotFound();
+                bool remocao = _consultaService.DeleteConsulta(id);
+                if (remocao)
+                {
+                    return Accepted();
+                }
+                return NotFound("Id de consulta não encontrada");
             }
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
         }
     }
 }
