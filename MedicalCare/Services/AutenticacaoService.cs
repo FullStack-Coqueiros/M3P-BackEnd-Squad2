@@ -1,6 +1,8 @@
-﻿namespace MedicalCare.Services
+﻿using MedicalCare.Interfaces;
+
+namespace MedicalCare.Services
 {
-    public class AutenticacaoService
+    public class AutenticacaoService : IAutenticacaoService
     {
 
     }
