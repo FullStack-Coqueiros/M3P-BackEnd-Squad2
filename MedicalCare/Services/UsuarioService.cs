@@ -43,11 +43,14 @@ namespace MedicalCare.Services
             return usuarioGet;
         }
 
-        public UsuarioGetDto UpdateUsuario(UsuarioUpdateDto usuario)
+        public UsuarioGetDto UpdateUsuario(UsuarioUpdateDto usuarioUpdate, int id)
         {
-            UsuarioModel usuarioModel = _mapper.Map<UsuarioModel>(usuario);
+            UsuarioModel usuarioModel = _usuarioRepository.GetById(id);
+            usuarioModel = _mapper.Map(usuarioUpdate, usuarioModel);
+            Console.WriteLine(usuarioModel);
             _usuarioRepository.Update(usuarioModel);
-            UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuario);
+            UsuarioModel usuarioModelAtualizado = _usuarioRepository.GetById(id);
+            UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuarioModelAtualizado);
             return usuarioGet;
         }
 

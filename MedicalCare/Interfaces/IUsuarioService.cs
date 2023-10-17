@@ -8,6 +8,6 @@ namespace MedicalCare.Interfaces
         bool DeleteUsuario(int id);
         IEnumerable<UsuarioGetDto> GetAllUsuarios();
         UsuarioGetDto GetById(int id);
-        UsuarioGetDto UpdateUsuario(UsuarioUpdateDto usuario);
+        UsuarioGetDto UpdateUsuario(UsuarioUpdateDto usuarioUpdate, int id);
     }
 }
