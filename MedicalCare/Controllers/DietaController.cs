@@ -3,6 +3,7 @@ using MedicalCare.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
+
 namespace MedicalCare.Controllers
 {
     [Route("api/[controller]")]
@@ -37,13 +38,12 @@ namespace MedicalCare.Controllers
             {
                 if (pacienteId.HasValue)
                 {
-                    // Retorna dietas do paciente específico
-                    var dietas = _dietaService.GetDietasByPaciente(pacienteId.Value);
+                    bool isSomeOtherFlagSet = true; 
+                    var dietas = _dietaService.GetDietasByPaciente(pacienteId.Value, isSomeOtherFlagSet);
                     return Ok(dietas);
                 }
                 else
                 {
-                    // Retorna todas as dietas
                     var dietas = _dietaService.GetAllDietas();
                     return Ok(dietas);
                 }
@@ -53,7 +53,6 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
-
         [HttpGet("{id}")]
         public ActionResult<DietaGetDto> Get([FromRoute] int id)
         {

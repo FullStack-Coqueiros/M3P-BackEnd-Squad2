@@ -1,6 +1,7 @@
 ﻿using MedicalCare.DTO;
 using MedicalCare.Models;
 
+
 namespace MedicalCare.Interfaces
 {
     public interface IDietaService
@@ -11,7 +12,7 @@ namespace MedicalCare.Interfaces
         IEnumerable<DietaGetDto> GetAllDietas();
         bool DeleteDieta(int id);
 
-        IEnumerable<DietaGetDto> GetDietasByPaciente(int pacienteId);
+        IEnumerable<DietaGetDto> GetDietasByPaciente(int pacienteId,bool isSomeOtherFlagSet);
 
     }
 }

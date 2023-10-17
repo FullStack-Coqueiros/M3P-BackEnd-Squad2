@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
 
+
 namespace MedicalCare.Controllers
 {
     [Route("api/[controller]")]
