@@ -1,9 +1,7 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using MedicalCare.DTO;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
-
 
 
 namespace MedicalCare.Services

@@ -1,6 +1,5 @@
 ﻿using MedicalCare.DTO;
 
-
 namespace MedicalCare.Interfaces
 {
     public interface IExameService
