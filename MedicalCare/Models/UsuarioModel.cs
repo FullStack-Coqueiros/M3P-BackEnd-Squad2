@@ -8,7 +8,7 @@ using MedicalCare.Enums;
 
 namespace MedicalCare.Models
 {
-    [Table("USUARIOS")]
+    [Table("UsuarioModel")]
     public class UsuarioModel : PessoaModel
     {
         [Column("TELEFONE"), Required(ErrorMessage = "Telefone é obrigatório.")]

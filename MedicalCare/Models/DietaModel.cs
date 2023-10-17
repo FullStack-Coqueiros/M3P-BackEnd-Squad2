@@ -7,7 +7,7 @@ using MedicalCare.Enums;
 
 namespace MedicalCare.Models
 {
-    [Table("Dietas")]
+    [Table("DietaModel")]
     public class DietaModel
     {
         [Key]
