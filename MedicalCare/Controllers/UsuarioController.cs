@@ -19,7 +19,49 @@ namespace MedicalCare.Controllers
         }
 
 
-        //fazer o roles do login
+        [HttpPost("{Email}")]
+        public ActionResult<UsuarioGetDto> Post([FromRoute] string Email, [FromBody] UsuarioCreateDto usuarioCreate)
+        {
+             try
+            {
+                bool verificaEmail = _usuarioService.GetAllUsuarios()
+                                .Any(a => a.Email == usuarioCreate.Email);
+                if (!verificaEmail)
+                {
+                    return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), "email não cadastrado.");
+                }
+                usuarioCreate.StatusDoSistema = true;
+                return StatusCode(HttpStatusCode.OK.GetHashCode());   //token JWT
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
+        }
+        
+    
+        [HttpPost("{Email}")]
+        public ActionResult<UsuarioGetDto> Post([FromRoute] string Email, [FromBody] UsuarioUpdateDto usuarioUpdate)
+        {
+            try
+            {
+                bool verificaEmail = _usuarioService.GetAllUsuarios()
+                                .Any(a => a.Email == usuarioUpdate.Email);
+                if (!verificaEmail)
+                {
+                    return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), "email não cadastrado.");
+                }
+                UsuarioGetDto usuarioGet = _usuarioService.UpdateUsuario(usuarioUpdate, Email);
+                return Ok(usuarioGet);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
+
+        }
 
 
         [HttpPost]
