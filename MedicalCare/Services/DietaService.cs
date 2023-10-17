@@ -34,6 +34,12 @@ namespace MedicalCare.Services
             DietaGetDto dietaGetId = _mapper.Map<DietaGetDto>(dieta);
             return dietaGetId;
         }
+        public IEnumerable<DietaGetDto> GetDietasByPaciente(int pacienteId)
+        {
+            IEnumerable<DietaModel> dietas = _dietaRepository.GetAll().Where(d => d.PacienteId == pacienteId);
+            IEnumerable<DietaGetDto> dietaGet = _mapper.Map<IEnumerable<DietaGetDto>>(dietas);
+            return dietaGet;
+        }
 
         public DietaGetDto CreateDieta(DietaCreateDto dieta)
         {
