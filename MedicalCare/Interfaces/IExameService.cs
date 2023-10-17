@@ -11,5 +11,7 @@ namespace MedicalCare.Interfaces
         IEnumerable<ExameGetDto> GetAllExames();
         bool DeleteExame(int id);
 
+        IEnumerable<ExameGetDto> GetExamesByPaciente(int pacienteId);
+
     }
 }
