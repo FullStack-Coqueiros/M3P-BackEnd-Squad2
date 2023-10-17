@@ -4,6 +4,7 @@
     {
         IEnumerable<TEntity> GetAll();
         TEntity GetById(int id);
+        TEntity GetByEmail(string email);
         TEntity Create(TEntity entity);
         TEntity Update(TEntity entity);
         bool Delete(int id);
