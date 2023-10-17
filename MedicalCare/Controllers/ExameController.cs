@@ -57,7 +57,7 @@ namespace MedicalCare.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ExameGetDto> Get([FromRoute] int id)
+        public ActionResult<ExameGetDto> GetExame([FromRoute] int id)
         {
             try
             {
@@ -86,6 +86,27 @@ namespace MedicalCare.Controllers
                 }
                 ExameGetDto exameGet = _exameService.UpdateExame(exameUpdate);
                 return Ok(exameGet);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<ExameGetDto>> GetExamesByPaciente([FromQuery] int? pacienteId)
+        {
+            try
+            {
+                if (pacienteId.HasValue)
+                {
+                    var exames = _exameService.GetExamesByPaciente(pacienteId.Value);
+                    return Ok(exames);
+                }
+                else
+                {
+                    return BadRequest("O ID do paciente é obrigatório.");
+                }
             }
             catch (Exception ex)
             {
