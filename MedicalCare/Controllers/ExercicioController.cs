@@ -124,7 +124,7 @@ namespace MedicalCare.Controllers
                 {
                     return Accepted();
                 }
-                return NotFound("Id de exame não encontrado");
+                return NotFound("Exercício não encontrado");
             }
             catch (Exception ex)
             {
