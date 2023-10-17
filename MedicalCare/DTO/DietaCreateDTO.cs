@@ -1,7 +1,6 @@
-﻿using System;
+﻿
 using MedicalCare.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace MedicalCare.DTO
 {
@@ -20,9 +19,9 @@ namespace MedicalCare.DTO
 
         [Required(ErrorMessage = "O Horário é obrigatório.")]
         public DateTime Horario { get; set; }
-
         [Required(ErrorMessage = "O Tipo da Dieta é obrigatório.")]
-        [StringLength(32, ErrorMessage = "O Tipo da Dieta deve ter no máximo 32 caracteres.")]
+        [EnumDataType(typeof(ETipoDieta), ErrorMessage = "Valor inválido para o Tipo da Dieta.")]
+        //[StringLength(32, ErrorMessage = "O Tipo da Dieta deve ter no máximo 32 caracteres.")]
         //[JsonConverter(typeof(JsonStringEnumConverter))]
         public ETipoDieta Tipo { get; set; }
 
