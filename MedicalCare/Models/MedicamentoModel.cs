@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace MedicalCare.Models
 {
-    [Table("Medicamentos")]
+    [Table("MedicamentoModel")]
     public class MedicamentoModel
     {
         [Key]

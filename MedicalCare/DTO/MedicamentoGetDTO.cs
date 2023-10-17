@@ -7,6 +7,7 @@ namespace MedicalCare.DTO
 {
     public class MedicamentoGetDTO
     {
+        public int Id { get; set; }
         public string NomeDoMedicamento {get; set;}
         public DateTime Data {get; set;}
         public string Tipo {get; set;}
