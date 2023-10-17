@@ -6,5 +6,6 @@ namespace MedicalCare.Interfaces
     public interface IAutenticacaoService
     {
         bool Autenticar(LoginDto loginDto);
+        string GerarToken(LoginDto loginDto);
     }
 }

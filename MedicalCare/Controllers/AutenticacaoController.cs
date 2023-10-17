@@ -21,13 +21,10 @@ namespace MedicalCare.Controllers
         [HttpPost("Logar")]
         public ActionResult Logar([FromBody] LoginDto loginDto)
         {
-            bool autenticacao= _autenticacaoService.Autenticar(loginDto);
-            if (autenticacao)
-            {
-                return Ok(); //terminar aqui
-            }
-            return Ok(); //terminar aqui
-
+            if (!_autenticacaoService.Autenticar(loginDto)) return Unauthorized("Usuário e/ou senha inválido(s).");
+            string token = _autenticacaoService.GerarToken(loginDto);
+            return Ok(token);
+            
         }
 
 
