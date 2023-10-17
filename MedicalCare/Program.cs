@@ -12,8 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<MedicalCareDbContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+// Configuração da Injeção de Dependência:
+// Registra as implementações concretas para as interfaces utilizadas nas APP.
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped <IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IPacienteService, PacienteService>();
 
