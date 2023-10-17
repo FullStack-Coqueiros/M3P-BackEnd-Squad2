@@ -23,6 +23,11 @@ namespace MedicalCare.Repositoryes
                 return _context.Set<TEntity>().Find(id);
             }
 
+            public TEntity GetByEmail(string email)
+        {
+            return _context.Set<TEntity>().Find(email);
+        }
+
             public TEntity Create(TEntity entity)
             {
                 _context.Set<TEntity>().Add(entity);
