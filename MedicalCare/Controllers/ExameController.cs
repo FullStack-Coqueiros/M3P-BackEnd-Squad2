@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
 
+
 namespace MedicalCare.Controllers
 {
     [Route("api/[controller]")]
@@ -55,26 +56,7 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
-
-        [HttpGet("{id}")]
-        public ActionResult<ExameGetDto> Get([FromRoute] int id)
-        {
-            try
-            {
-                ExameGetDto exameGet = _exameService.GetById(id);
-                if (exameGet == null)
-                {
-                    return NotFound("Id de exame não encontrado");
-                }
-                return Ok(exameGet);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
-            }
-        }
-
-        [HttpPut("{id}")]
+         [HttpPut("{id}")]
         public ActionResult<ExameGetDto> Update([FromRoute] int id, [FromBody] ExameUpdateDto exameUpdate)
         {
             try
@@ -92,6 +74,47 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+
+
+        [HttpGet("{id}")]
+        public ActionResult<ExameGetDto> GetExame([FromRoute] int id)
+        {
+            try
+            {
+                ExameGetDto exameGet = _exameService.GetById(id);
+                if (exameGet == null)
+                {
+                    return NotFound("Id de exame não encontrado");
+                }
+                return Ok(exameGet);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<ExameGetDto>> GetExamesByPaciente([FromQuery] int? pacienteId, [FromBody] bool isSomeFlagSet)
+        {
+            try
+            {
+                if (pacienteId.HasValue)
+                {
+                    var exames = _exameService.GetExamesByPaciente(pacienteId.Value, isSomeFlagSet);
+                    return Ok(exames);
+                }
+                else
+                {
+                    return BadRequest("O ID do paciente é obrigatório.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
+        }
+
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)

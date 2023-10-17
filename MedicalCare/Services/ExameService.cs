@@ -49,7 +49,7 @@ namespace MedicalCare.Services
             return exameGet;
         }
 
-        public IEnumerable<ExameGetDto> GetExamesByPaciente(int pacienteId)
+        public IEnumerable<ExameGetDto> GetExamesByPaciente(int pacienteId, bool isSomeFlagSet)
         {
             return _exameRepository.GetAll().Where(e => e.PacienteId == pacienteId).Select(e => _mapper.Map<ExameGetDto>(e));
         }
@@ -62,6 +62,7 @@ namespace MedicalCare.Services
                 return true;
             }
             return false;
+
         }
 
     }
