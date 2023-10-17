@@ -20,7 +20,6 @@ namespace MedicalCare.DTO
         [StringLength(32, MinimumLength = 4, ErrorMessage = "O Tipo do Exame deve ter entre 4 e 32 caracteres.")]
         public string TipoDoExame { get; set; }
 
-
         [Required(ErrorMessage = "O Laboratório é obrigatório.")]
         [StringLength(32, MinimumLength = 4, ErrorMessage = "O Laboratório deve ter entre 4 e 32 caracteres.")]
         public string Laboratorio { get; set; }
@@ -32,18 +31,14 @@ namespace MedicalCare.DTO
         [StringLength(1024, MinimumLength = 16, ErrorMessage = "Os Resultados devem ter entre 16 e 1024 caracteres.")]
         public string Resultados { get; set; }
 
-
         [Required(ErrorMessage = "O Status do Sistema é obrigatório.")]
         public bool StatusDoSistema { get; set; }
-
 
         [Required(ErrorMessage = "O Id do Paciente é obrigatório.")]
         public int PacienteId { get; set; }
 
-      
-
-[Required(ErrorMessage = "O Id do Usuário é obrigatório.")]
-public int UsuarioId { get; set; }
+        [Required(ErrorMessage = "O Id do Usuário é obrigatório.")]
+        public int UsuarioId { get; set; }
 
     }
 }

@@ -14,10 +14,12 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<MedicalCareDbContext>(options => options.UseSqlServer(connectionString));
 
 // Configuração da Injeção de Dependência:
-// Registra as implementações concretas para as interfaces utilizadas nas APP.
+// Registra as implementações concretas para as interfaces(Services) utilizadas nas APP.
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped <IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IPacienteService, PacienteService>();
+builder.Services.AddScoped<IExameService, ExameService>();
+builder.Services.AddScoped<IDietaService, DietaService>();
 
 // Add services to the container.
 builder.Services.AddControllers();
