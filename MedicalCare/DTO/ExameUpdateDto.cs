@@ -1,4 +1,8 @@
-﻿namespace MedicalCare.DTO
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+
+namespace MedicalCare.DTO
 {
     public class ExameUpdateDto
     {
