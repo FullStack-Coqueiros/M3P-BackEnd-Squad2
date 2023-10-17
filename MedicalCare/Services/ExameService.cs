@@ -49,6 +49,13 @@ namespace MedicalCare.Services
             return exameGet;
         }
 
+        public IEnumerable<ExameGetDto> GetExamesByPaciente(int pacienteId)
+        {
+            IEnumerable<ExameModel> exames = _exameRepository.GetAll().Where(e => e.PacienteId == pacienteId);
+            IEnumerable<ExameGetDto> exameGet = _mapper.Map<IEnumerable<ExameGetDto>>(exames);
+            return exameGet;
+        }
+
         public bool DeleteExame(int id)
         {
             bool remocao = _exameRepository.Delete(id);

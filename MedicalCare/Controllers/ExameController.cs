@@ -93,6 +93,32 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult<IEnumerable<ExameGetDto>> GetAll([FromQuery] int? pacienteId)
+        {
+            try
+            {
+                if (pacienteId.HasValue)
+                {
+                    // Retorna exames do paciente específico
+                    var exames = _exameService.GetExamesByPaciente(pacienteId.Value);
+                    return Ok(exames);
+                }
+                else
+                {
+                    // Retorna todos os exames
+                    var exames = _exameService.GetAllExames();
+                    return Ok(exames);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
+        }
+
+
+
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {

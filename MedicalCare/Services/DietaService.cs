@@ -50,6 +50,12 @@ namespace MedicalCare.Services
             DietaGetDto dietaGet = _mapper.Map<DietaGetDto>(dieta);
             return dietaGet;
         }
+        public IEnumerable<DietaGetDto> GetDietasByPaciente(int pacienteId)
+        {
+            IEnumerable<DietaModel> dietas = _dietaRepository.GetAll().Where(d => d.PacienteId == pacienteId);
+            IEnumerable<DietaGetDto> dietaGet = _mapper.Map<IEnumerable<DietaGetDto>>(dietas);
+            return dietaGet;
+        }
 
         public bool DeleteDieta(int id)
         {
