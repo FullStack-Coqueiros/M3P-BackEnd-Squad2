@@ -12,7 +12,7 @@ namespace MedicalCare.Models
     public class UsuarioModel : PessoaModel
     {
         [Column("TELEFONE"), Required(ErrorMessage = "Telefone é obrigatório.")]
-        [StringLength(10, MinimumLength = 10, ErrorMessage = "Telefone deve estar no formato (99) 9999-9999")]
+        [StringLength(11, MinimumLength = 11, ErrorMessage = "Telefone deve estar no formato (99) 99999-9999")]
         public string Telefone { get; set; }
 
         [Column ("SENHA"), Required]

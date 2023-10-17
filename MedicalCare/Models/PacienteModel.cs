@@ -19,7 +19,7 @@ namespace MedicalCare.Models
         [Required, StringLength(64, MinimumLength = 8, ErrorMessage = "Deve conter entre 8 e 64 caracteres.")]
         public string Naturalidade { get; set; }
 
-        [Required, StringLength(10, MinimumLength = 10, ErrorMessage = "Deve conter 10 caracteres.")]
+        [Required, StringLength(11, MinimumLength = 11, ErrorMessage = "Deve conter 11 caracteres.")]
         public string ContatoDeEmergencia { get; set; }
 
         public string Alergias { get; set; }
