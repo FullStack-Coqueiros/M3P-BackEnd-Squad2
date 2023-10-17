@@ -1,5 +1,8 @@
-﻿namespace MedicalCare.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace MedicalCare.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum ETipoDieta
     {
         lowcarb = 0,

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using MedicalCare.Enums;
 
 namespace MedicalCare.Models
@@ -26,7 +27,7 @@ namespace MedicalCare.Models
         public DateTime Horario { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "O Tipo da Dieta é obrigatório.")]
-        [StringLength(32, ErrorMessage = "O Tipo da Dieta deve ter no máximo 32 caracteres.")]
+        //[JsonConverter(typeof(JsonStringEnumConverter))]
         [Column(TypeName = "VARCHAR")]
         public ETipoDieta Tipo { get; set; }
 

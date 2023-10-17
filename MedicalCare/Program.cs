@@ -3,8 +3,7 @@ using MedicalCare.Interfaces;
 using MedicalCare.Repositoryes;
 using MedicalCare.Services;
 using Microsoft.EntityFrameworkCore;
-
-
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +19,16 @@ builder.Services.AddScoped <IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IPacienteService, PacienteService>();
 builder.Services.AddScoped<IExameService, ExameService>();
 builder.Services.AddScoped<IDietaService, DietaService>();
+
+
+
+// Configuração da serialização JSON para enums
+//builder.Services.AddControllers()
+//    .AddJsonOptions(options =>
+//    {
+//        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+//    });
+
 
 // Add services to the container.
 builder.Services.AddControllers();
