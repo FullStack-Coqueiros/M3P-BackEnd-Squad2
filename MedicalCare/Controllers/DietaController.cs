@@ -1,8 +1,6 @@
 ﻿using MedicalCare.DTO;
 using MedicalCare.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Net;
 
 namespace MedicalCare.Controllers
