@@ -12,10 +12,12 @@ namespace MedicalCare.Controllers
     public class PacienteController : ControllerBase
     {
         private readonly IPacienteService _pacienteService;
+        private readonly IRepository<PacienteModel> _repository;
 
-        public PacienteController(IPacienteService pacienteService)
+        public PacienteController(IPacienteService pacienteService, IRepository<PacienteModel> repository)
         {
             _pacienteService = pacienteService;
+            _repository = repository;
         }
 
 
@@ -24,8 +26,7 @@ namespace MedicalCare.Controllers
         {
             try
             {
-                bool verificaCpfEmail = _pacienteService.GetAllPacientes()
-                                .Any(a => a.Cpf == pacienteCreate.Cpf || a.Email == pacienteCreate.Email);
+                bool verificaCpfEmail = _repository.GetByCpfEmail(pacienteCreate.Cpf, pacienteCreate.Email);
                 if (verificaCpfEmail)
                 {
                     return StatusCode(HttpStatusCode.Conflict.GetHashCode(), "Cpf e/ou email ja cadastrado(s).");
@@ -35,10 +36,10 @@ namespace MedicalCare.Controllers
                 return Created("Paciente salvo com sucesso.", pacienteGet);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -81,7 +82,7 @@ namespace MedicalCare.Controllers
         {
             try
             {
-                PacienteGetDto? verificaSeExiste = _pacienteService.GetById(id);
+                PacienteGetDto verificaSeExiste = _pacienteService.GetById(id);
                 if (verificaSeExiste == null)
                 {
                     return NotFound("Id de paciente não encontrado.");
