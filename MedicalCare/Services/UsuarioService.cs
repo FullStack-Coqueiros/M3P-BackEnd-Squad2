@@ -44,6 +44,12 @@ namespace MedicalCare.Services
             return usuarioGetId;
         }
 
+        public UsuarioModel GetByEmail (string email)
+        {
+            UsuarioModel usuario = _usuarioRepository.GetByEmail(email);
+            return usuario;
+        }
+
         public UsuarioGetDto CreateUsuario(UsuarioCreateDto usuario)
         {
             UsuarioModel usuarioModel = _mapper.Map<UsuarioModel>(usuario);

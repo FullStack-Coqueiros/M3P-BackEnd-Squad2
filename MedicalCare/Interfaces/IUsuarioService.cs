@@ -1,4 +1,5 @@
 ﻿using MedicalCare.DTO;
+using MedicalCare.Models;
 
 namespace MedicalCare.Interfaces
 {

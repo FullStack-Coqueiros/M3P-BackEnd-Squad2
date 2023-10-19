@@ -1,12 +1,12 @@
-﻿using System;
-using System.ComponentModel;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using MedicalCare.Enums;
 
 namespace MedicalCare.Models
 {
-    [Table("Dietas")]
+    [Table("DietaModel")]
     public class DietaModel
     {
         [Key]
@@ -26,7 +26,7 @@ namespace MedicalCare.Models
         public DateTime Horario { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "O Tipo da Dieta é obrigatório.")]
-        [StringLength(32, ErrorMessage = "O Tipo da Dieta deve ter no máximo 32 caracteres.")]
+        [EnumDataType(typeof(ETipoDieta), ErrorMessage = "Valor inválido para o Tipo da Dieta.")]
         [Column(TypeName = "VARCHAR")]
         public ETipoDieta Tipo { get; set; }
 

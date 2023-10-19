@@ -1,6 +1,5 @@
 ﻿using MedicalCare.DTO;
 
-
 namespace MedicalCare.Interfaces
 {
     public interface IExameService
@@ -10,6 +9,9 @@ namespace MedicalCare.Interfaces
         ExameGetDto GetById(int id);
         IEnumerable<ExameGetDto> GetAllExames();
         bool DeleteExame(int id);
+
+        IEnumerable<ExameGetDto> GetExamesByPaciente(int pacienteId, bool isSomeFlagSet);
+
 
     }
 }
