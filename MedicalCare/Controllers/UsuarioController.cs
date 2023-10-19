@@ -12,48 +12,51 @@ namespace MedicalCare.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
+        private readonly ILoginService _loginService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService, ILoginService loginService)
         {
             _usuarioService = usuarioService;
+            _loginService = loginService;
         }
 
 
-        [HttpPost("{Email}")]
-        public ActionResult<UsuarioGetDto> Post([FromRoute] string Email, [FromBody] UsuarioCreateDto usuarioCreate)
+        [HttpPost("login")]
+        // esse é o retorno certo do controller?
+        public ActionResult<UsuarioGetDto> Login([FromBody] TentativaLoginDto tentativaLogin)
         {
              try
             {
-                bool verificaEmail = _usuarioService.GetAllUsuarios()
-                                .Any(a => a.Email == usuarioCreate.Email);
-                if (!verificaEmail)
-                {
-                    return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), "email não cadastrado.");
+                if (_loginService.Login(tentativaLogin) == false) {
+                    return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), "Não foi possível logar.");
                 }
-                usuarioCreate.StatusDoSistema = true;
-                return StatusCode(HttpStatusCode.OK.GetHashCode());   //token JWT
+
+                tentativaLogin.Logado = true;
+
+                // TODO: colocar código no método de gerar a token JWT
+                int tokenJwt = _loginService.GeraTokenJWT(tentativaLogin);                
+                return StatusCode(HttpStatusCode.OK.GetHashCode(), tokenJwt);   
             }
             catch (Exception ex)
             {
-
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
         
     
-        [HttpPost("{Email}")]
-        public ActionResult<UsuarioGetDto> Post([FromRoute] string Email, [FromBody] UsuarioUpdateDto usuarioUpdate)
+        [HttpPost("login/resetarsenha")]
+        public ActionResult<TentativaTrocaDeSenhaDto> ResetarSenha([FromBody] TentativaTrocaDeSenhaDto tentativaTrocaDeSenha)
         {
             try
             {
-                bool verificaEmail = _usuarioService.GetAllUsuarios()
-                                .Any(a => a.Email == usuarioUpdate.Email);
-                if (!verificaEmail)
-                {
+                String novaSenha = _loginService.GeraNovaSenha(tentativaTrocaDeSenha);
+                if (novaSenha == null) {
                     return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), "email não cadastrado.");
                 }
-                UsuarioGetDto usuarioGet = _usuarioService.UpdateUsuario(usuarioUpdate, Email);
-                return Ok(usuarioGet);
+
+                tentativaTrocaDeSenha.SenhaNova = novaSenha;
+                tentativaTrocaDeSenha.SenhaAntiga = null;
+                return StatusCode(HttpStatusCode.OK.GetHashCode(), tentativaTrocaDeSenha);
             }
             catch (Exception ex)
             {

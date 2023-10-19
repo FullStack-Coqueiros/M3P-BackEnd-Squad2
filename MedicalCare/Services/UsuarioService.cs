@@ -1,9 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Runtime.CompilerServices;
+using AutoMapper;
 using MedicalCare.DTO;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MedicalCare.Services
 {
@@ -18,8 +20,16 @@ namespace MedicalCare.Services
             _usuarioRepository = usuarioRepository;
         }
 
-
-
+        public UsuarioGetDto GetByEmail(String email) {
+            IEnumerable<UsuarioModel> usuarios = _usuarioRepository.GetAll().Where(x => x.Email == email);
+            if (usuarios.IsNullOrEmpty()) {
+                return null;
+            } else {
+                // verificar se e-mail é unico
+                UsuarioModel usuario = usuarios.First();
+                return _mapper.Map<UsuarioGetDto>(usuario);
+            }
+        }
 
         public IEnumerable<UsuarioGetDto> GetAllUsuarios()
         {
