@@ -9,7 +9,7 @@ namespace MedicalCare.Interfaces
         bool DeleteUsuario(int id);
         IEnumerable<UsuarioGetDto> GetAllUsuarios();
         UsuarioGetDto GetById(int id);
-        UsuarioModel GetByEmail(string email);
-        UsuarioGetDto UpdateUsuario(UsuarioUpdateDto usuario);
+        UsuarioGetDto GetByEmail(string email);
+        UsuarioGetDto UpdateUsuario(UsuarioUpdateDto usuarioUpdate, int id);
     }
 }
