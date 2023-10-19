@@ -25,7 +25,6 @@ namespace MedicalCare.Services
             if (usuarios.IsNullOrEmpty()) {
                 return null;
             } else {
-                // verificar se e-mail é unico
                 UsuarioModel usuario = usuarios.First();
                 return _mapper.Map<UsuarioGetDto>(usuario);
             }

@@ -22,8 +22,7 @@ namespace MedicalCare.Controllers
 
 
         [HttpPost("login")]
-        // esse é o retorno certo do controller?
-        public ActionResult<UsuarioGetDto> Login([FromBody] TentativaLoginDto tentativaLogin)
+        public ActionResult Login([FromBody] TentativaLoginDto tentativaLogin)
         {
              try
             {
@@ -33,8 +32,7 @@ namespace MedicalCare.Controllers
 
                 tentativaLogin.Logado = true;
 
-                // TODO: colocar código no método de gerar a token JWT
-                int tokenJwt = _loginService.GeraTokenJWT(tentativaLogin);                
+                string tokenJwt = _loginService.GeraTokenJWT(tentativaLogin);                
                 return StatusCode(HttpStatusCode.OK.GetHashCode(), tokenJwt);   
             }
             catch (Exception ex)
