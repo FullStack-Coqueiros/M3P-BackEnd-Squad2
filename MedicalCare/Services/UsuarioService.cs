@@ -1,9 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Runtime.CompilerServices;
+using AutoMapper;
 using MedicalCare.DTO;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MedicalCare.Services
 {
@@ -18,8 +20,15 @@ namespace MedicalCare.Services
             _usuarioRepository = usuarioRepository;
         }
 
-
-
+        public UsuarioGetDto GetByEmail(string email) {
+            IEnumerable<UsuarioModel> usuarios = _usuarioRepository.GetAll().Where(x => x.Email == email);
+            if (usuarios.IsNullOrEmpty()) {
+                return null;
+            } else {
+                UsuarioModel usuario = usuarios.First();
+                return _mapper.Map<UsuarioGetDto>(usuario);
+            }
+        }
 
         public IEnumerable<UsuarioGetDto> GetAllUsuarios()
         {
@@ -35,12 +44,6 @@ namespace MedicalCare.Services
             return usuarioGetId;
         }
 
-        public UsuarioModel GetByEmail (string email)
-        {
-            UsuarioModel usuario = _usuarioRepository.GetByEmail(email);
-            return usuario;
-        }
-
         public UsuarioGetDto CreateUsuario(UsuarioCreateDto usuario)
         {
             UsuarioModel usuarioModel = _mapper.Map<UsuarioModel>(usuario);
@@ -49,11 +52,14 @@ namespace MedicalCare.Services
             return usuarioGet;
         }
 
-        public UsuarioGetDto UpdateUsuario(UsuarioUpdateDto usuario)
+        public UsuarioGetDto UpdateUsuario(UsuarioUpdateDto usuarioUpdate, int id)
         {
-            UsuarioModel usuarioModel = _mapper.Map<UsuarioModel>(usuario);
+            UsuarioModel usuarioModel = _usuarioRepository.GetById(id);
+            usuarioModel = _mapper.Map(usuarioUpdate, usuarioModel);
+            Console.WriteLine(usuarioModel);
             _usuarioRepository.Update(usuarioModel);
-            UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuario);
+            UsuarioModel usuarioModelAtualizado = _usuarioRepository.GetById(id);
+            UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuarioModelAtualizado);
             return usuarioGet;
         }
 
