@@ -9,5 +9,7 @@ namespace MedicalCare.Interfaces
         IEnumerable<ExercicioGetDto> GetAllExercicios();
         ExercicioGetDto GetById(int id);
         ExercicioGetDto UpdateExercicio(ExercicioUpdateDto exercicio);
+
+        //IEnumerable<ExercicioGetDto> GetExerciciosByPaciente(int pacienteId,bool isSomeOtherFlagSet);
     }
 }

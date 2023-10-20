@@ -92,7 +92,7 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
-        [HttpGet("ByPaciente")]
+        /* [HttpGet("ByPaciente")]
         public ActionResult<IEnumerable<ExercicioGetDto>> GetExerciciosByPaciente([FromQuery] int? pacienteId, [FromBody] bool isSomeFlagSet)
         {
             try
@@ -111,7 +111,7 @@ namespace MedicalCare.Controllers
             {
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
-        }
+        } */
 
 
         [HttpDelete("{id}")]
