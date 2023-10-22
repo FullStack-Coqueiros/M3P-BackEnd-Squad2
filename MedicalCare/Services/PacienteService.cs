@@ -11,15 +11,15 @@ namespace MedicalCare.Services
     {
         private readonly IRepository<PacienteModel> _pacienteRepository;
         //private readonly IRepository<EnderecoModel> _enderecoRepository;
-        //private readonly IEnderecoService _enderecoService;
+        private readonly IEnderecoService _enderecoService;
         private readonly IMapper _mapper;
 
-        public PacienteService(IMapper mapper, IRepository<PacienteModel> pacienteRepository)
+        public PacienteService(IMapper mapper, IRepository<PacienteModel> pacienteRepository, IEnderecoService enderecoService)
         {
             _mapper = mapper;
             _pacienteRepository = pacienteRepository;
             //_enderecoRepository = enderecoRepository;
-            //_enderecoService = enderecoService;
+            _enderecoService = enderecoService;
         }
 
 
@@ -42,9 +42,18 @@ namespace MedicalCare.Services
         {
             PacienteModel pacienteModel = _mapper.Map<PacienteModel>(pacienteCreate);
             _pacienteRepository.Create(pacienteModel);
-            PacienteModel pacienteModelAtualizado = _pacienteRepository.GetAll()
+            PacienteModel pacienteModelComId = _pacienteRepository.GetAll()
                                .Where(a => a.Cpf == pacienteCreate.Cpf).FirstOrDefault();
-            PacienteGetDto pacienteGet = _mapper.Map<PacienteGetDto>(pacienteModelAtualizado);
+
+            EnderecoCreateDto enderecoCreate = _mapper.Map<EnderecoCreateDto>(pacienteCreate.Endereco);
+            enderecoCreate.PacienteId = pacienteModelComId.Id;
+            _enderecoService.CreateEndereco(enderecoCreate); 
+
+            EnderecoGetDto enderecoGet = _enderecoService.GetByRelationship(pacienteModel);
+            
+            PacienteGetDto pacienteGet = _mapper.Map<PacienteGetDto>(pacienteModelComId);
+            pacienteGet.Endereco = enderecoGet;
+            
             return pacienteGet;
         }
 

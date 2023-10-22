@@ -20,9 +20,13 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IPacienteService, PacienteService>();
 builder.Services.AddScoped<IExameService, ExameService>();
+builder.Services.AddScoped<IExercicioService, ExercicioService>();
 builder.Services.AddScoped<IDietaService, DietaService>();
 builder.Services.AddScoped<IConsultaService, ConsultaService>();
 builder.Services.AddScoped<ILogService, LogService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
+
 
 
 
