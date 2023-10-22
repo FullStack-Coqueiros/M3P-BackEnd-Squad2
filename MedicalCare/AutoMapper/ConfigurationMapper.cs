@@ -34,11 +34,22 @@ namespace MedicalCare.AutoMapper
             CreateMap<ConsultaUpdateDTO, ConsultaModel>().ReverseMap();
 
             //mapper Paciente
-            CreateMap<PacienteCreateDto, PacienteModel>().ReverseMap();
+            CreateMap<PacienteCreateDto, PacienteModel>()
+                .ForMember(dest => dest.Endereco, act => act.Ignore());
             CreateMap<PacienteGetDto, PacienteModel>().ReverseMap();
             CreateMap<PacienteUpdateDto, PacienteModel>()
                 .ForMember(dest => dest.Cpf, act => act.Ignore())
                 .ForMember(dest => dest.Rg, act => act.Ignore());
+            CreateMap<PacienteCreateDto, EnderecoModel>()
+                .ForMember(dest => dest.Cep, map => map.MapFrom(map => map.Endereco.cep))
+                .ForMember(dest => dest.Numero, map => map.MapFrom(map => map.Endereco.Numero))
+                .ForMember(dest => dest.Bairro, map => map.MapFrom(map => map.Endereco.bairro))
+                .ForMember(dest => dest.Logradouro, map => map.MapFrom(map => map.Endereco.logradouro))
+                .ForMember(dest => dest.Cidade, map => map.MapFrom(map => map.Endereco.localidade))
+                .ForMember(dest => dest.Complemento, map => map.MapFrom(map => map.Endereco.Complemento))
+                .ForMember(dest => dest.PontoDeReferencia, map => map.MapFrom(map => map.Endereco.PontoDeReferencia))
+                .ForMember(dest => dest.Estado, map => map.MapFrom(map => map.Endereco.uf));
+
 
 
             //mapper Exercicio
@@ -51,6 +62,15 @@ namespace MedicalCare.AutoMapper
             CreateMap<MedicamentoGetDTO, MedicamentoModel>().ReverseMap();
             CreateMap<MedicamentoUpdateDTO, MedicamentoModel>().ReverseMap(); 
 
+
+            //mapper Endereco
+            CreateMap<EnderecoModel, EnderecoGetDto>();
+            CreateMap<EnderecoCreateDto, EnderecoModel>()
+                .ForMember(dest => dest.Cep, map => map.MapFrom(src => src.cep))
+                .ForMember(dest => dest.Bairro, map => map.MapFrom(src => src.bairro))
+                .ForMember(dest => dest.Logradouro, map => map.MapFrom(src => src.logradouro))
+                .ForMember(dest => dest.Cidade, map => map.MapFrom(src => src.localidade))
+                .ForMember(dest => dest.Estado, map => map.MapFrom(src => src.uf));
 
         }
 
