@@ -17,6 +17,12 @@ namespace MedicalCare.Infra
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<PacienteModel>()
+                .HasOne(h => h.Endereco)
+                .WithOne(w => w.Paciente)
+                .HasForeignKey<EnderecoModel>(h => h.PacienteId)
+                .IsRequired();
+
             modelBuilder.Entity<ConsultaModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Consultas)
@@ -41,12 +47,6 @@ namespace MedicalCare.Infra
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Medicamentos)
                 .HasForeignKey(h => h.UsuarioId);
-
-            //    modelBuilder.Entity<PacienteModel>()
-            //        .HasOne(h => h.Endereco)
-            //        .WithMany(w => w.Pacientes)
-            //        .HasForeignKey(h => h.EnderecoId);
-            //}
         }
     }
  
