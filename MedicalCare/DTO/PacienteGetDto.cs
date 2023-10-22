@@ -20,7 +20,7 @@ namespace MedicalCare.DTO
         public string Convenio { get; set; }
         public string NumeroDoConvenio { get; set; }
         public DateTime ValidadeDoConvenio { get; set; }
-        public EnderecoModel Endereco { get; set; }
+        public EnderecoGetDto Endereco { get; set; }
         public bool StatusDoSistema { get; set; }
     }
 }

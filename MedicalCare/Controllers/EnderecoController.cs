@@ -1,4 +1,5 @@
-﻿using MedicalCare.Interfaces;
+﻿using MedicalCare.DTO;
+using MedicalCare.Interfaces;
 using MedicalCare.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +17,11 @@ namespace MedicalCare.Controllers
             _enderecoService = enderecoService;
         }
         [HttpPost]
-        public IActionResult Post([FromBody] EnderecoModel enderecoCreate)
+        public IActionResult Post([FromBody] EnderecoCreateDto enderecoCreate)
         {
-            var enderecoModel = _enderecoService.CreateEndereco(enderecoCreate);
-            return Ok(enderecoModel);
+            EnderecoGetDto enderecoGet = _enderecoService.CreateEndereco(enderecoCreate);
+            return Ok(enderecoGet);
+            //TODO: Refatorar aqui.
         }
 
         [HttpGet]
