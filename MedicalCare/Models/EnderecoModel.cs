@@ -32,6 +32,8 @@ namespace MedicalCare.Models
 
         [Required, StringLength(60, MinimumLength = 6)]
         public string PontoDeReferencia { get; set; }
+        public int PacienteId { get; set; }
+        public PacienteModel Paciente { get; set; }
 
     }
 }

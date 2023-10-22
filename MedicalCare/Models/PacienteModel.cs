@@ -33,8 +33,7 @@ namespace MedicalCare.Models
         public string NumeroDoConvenio { get; set; }
 
         public DateTime ValidadeDoConvenio { get; set; }
-        //public int EnderecoId { get; set; }
-        //public EnderecoModel Endereco { get; set; }
+        public EnderecoModel Endereco { get; set; }
 
     }
 }
