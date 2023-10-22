@@ -5,6 +5,7 @@ using MedicalCare.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System;
 
 namespace MedicalCare.Controllers
 {
@@ -22,44 +23,39 @@ namespace MedicalCare.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] ConsultaCreateDTO consultaCreate)
         {
-            ConsultaGetDto consultaGet = _consultaService.CreateConsulta(consultaCreate);
-            return Created("Consulta salvo com sucesso.",consultaGet);
+            try
+            {
+                ConsultaGetDto consultaGet = _consultaService.CreateConsulta(consultaCreate);
+                return Created("Consulta salvo com sucesso.",consultaGet);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ConsultaGetDto>> Get()
+        public ActionResult<IEnumerable<ConsultaGetDto>> Get([FromQuery] int? pacienteId)
         {
             try
             {
-                IEnumerable<ConsultaGetDto> consultas = _consultaService.GetAllConsultas();
-                return Ok(consultas);
+                if (pacienteId.HasValue)
+                {
+                    // Retorna consultas do paciente específico
+                    var consultas = _consultaService.GetAllConsultas().Where(e => e.PacienteId == pacienteId.Value);
+                    return Ok(consultas);
+                }
+                else
+                {
+                    // Retorna todos as consultas
+                    var consultas = _consultaService.GetAllConsultas();
+                    return Ok(consultas);
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(),ex);
             }
-            //var consultas = _consultaService.GetAllConsultas();
-            //return Ok(consultas);
-        }
-
-        [HttpGet("{id}")]
-        public ActionResult<ConsultaGetDto> Get([FromRoute] int id)
-        {
-            try
-            {
-                ConsultaGetDto consultaGet = _consultaService.GetById(id);
-                if (consultaGet == null)
-                {
-                    return NotFound("Id de consulta não encontrada");
-                }
-                return Ok(consultaGet);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode() ,ex);
-            }
-            //var consulta = _consultaService.GetById(id);
-            //return Ok(consulta);
         }
 
         [HttpPut("{id}")]
@@ -67,25 +63,57 @@ namespace MedicalCare.Controllers
         {
             try
             {
-                ConsultaGetDto? verificaSeExiste = _consultaService.GetById(id);
+                ConsultaGetDto verificaSeExiste = _consultaService.GetById(id);
                 if (verificaSeExiste == null)
+                {
+                    return NotFound("Id de consulta não encontrada");
+                }
+                ConsultaGetDto consultaGet = _consultaService.UpdateConsulta(consultaUpdate);
+                return Ok(consultaGet);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode() ,ex);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<ConsultaGetDto> GetConsulta([FromRoute] int id)
+        {
+            try
+            {
+                ConsultaGetDto consultaGet = _consultaService.GetById(id);
+                if (consultaGet == null)
                 {
                     return NotFound("Id de consulta não encontrada.");
                 }
-                ConsultaGetDto consultaGet = _consultaService.UpdateConsulta(consultaUpdate, id);
                 return Ok(consultaGet);
             }
             catch (Exception ex)
             {
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(),ex);
             }
-            //var consultaModel = _consultaService.GetById(id);
-            //if (consultaModel == null)
-            //{
-            //    return NotFound();
-            //}
-            //_consultaService.UpdateConsulta(consultaUpdate);
-            //return Ok(consultaUpdate);
+        }
+
+        [HttpGet("ByPaciente")]
+        public ActionResult<IEnumerable<ConsultaGetDto>> GetConsultasByPaciente([FromQuery] int? pacienteId, [FromBody] bool isSomeFlagSet)
+        {
+            try
+            {
+                if (pacienteId.HasValue)
+                {
+                    var consultas = _consultaService.GetConsultasByPaciente(pacienteId.Value, isSomeFlagSet);
+                    return Ok(consultas);
+                }
+                else
+                {
+                    return BadRequest("O ID do paciente é obrigatório.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
         }
 
         [HttpDelete("{id}")]

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -37,12 +38,12 @@ namespace MedicalCare.Models
         [Required(ErrorMessage = "Favor inserir o status do sistema!")]
         public bool StatusDoSistema { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O Id do Paciente é obrigatório.")]
         public int PacienteId { get; set; }
 
         public PacienteModel Paciente { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O Id do Usuário é obrigatório.")]
         public int UsuarioId { get; set; }
 
         public UsuarioModel Usuario { get; set; }
