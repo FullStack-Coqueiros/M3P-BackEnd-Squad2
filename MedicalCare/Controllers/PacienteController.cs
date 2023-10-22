@@ -51,10 +51,10 @@ namespace MedicalCare.Controllers
                 IEnumerable<PacienteGetDto> pacientes = _pacienteService.GetAllPacientes();
                 return Ok(pacientes);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -66,14 +66,14 @@ namespace MedicalCare.Controllers
                 PacienteGetDto pacienteGet = _pacienteService.GetById(id);
                 if (pacienteGet == null)
                 {
-                    return NotFound("Id de paciente não encontrado.");
+                    return NoContent();
                 }
                 return Ok(pacienteGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -85,16 +85,16 @@ namespace MedicalCare.Controllers
                 PacienteGetDto verificaSeExiste = _pacienteService.GetById(id);
                 if (verificaSeExiste == null)
                 {
-                    return NotFound("Id de paciente não encontrado.");
+                    return NoContent();
                 }
                 PacienteGetDto pacienteGet = _pacienteService.UpdatePaciente(pacienteUpdate, id);
                 return Ok(pacienteGet);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -108,13 +108,13 @@ namespace MedicalCare.Controllers
                 {
                 return Accepted();
                 }
-                return NotFound("Id de paciente não encontrado.");
+                return NoContent();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
