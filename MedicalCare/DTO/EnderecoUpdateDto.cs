@@ -27,5 +27,8 @@ namespace MedicalCare.DTO
 
         [Required, StringLength(60, MinimumLength = 6, ErrorMessage = "Insira entre 6 e 60 caracteres.")]
         public string PontoDeReferencia { get; set; }
+
+        [Required]
+        public int PacienteId { get; set; }
     }
 }

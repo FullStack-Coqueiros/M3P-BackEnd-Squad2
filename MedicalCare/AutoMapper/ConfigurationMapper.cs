@@ -34,6 +34,7 @@ namespace MedicalCare.AutoMapper
             CreateMap<ConsultaUpdateDTO, ConsultaModel>().ReverseMap();
 
             //mapper Paciente
+            CreateMap<IQueryable<PacienteModel>, PacienteGetDto>();
             CreateMap<PacienteCreateDto, PacienteModel>()
                 .ForMember(dest => dest.Endereco, act => act.Ignore());
             CreateMap<PacienteGetDto, PacienteModel>().ReverseMap();
@@ -65,6 +66,12 @@ namespace MedicalCare.AutoMapper
 
             //mapper Endereco
             CreateMap<EnderecoModel, EnderecoGetDto>();
+            CreateMap<EnderecoUpdateDto,EnderecoModel>()
+                .ForMember(dest => dest.Cep, map => map.MapFrom(src => src.cep))
+                .ForMember(dest => dest.Bairro, map => map.MapFrom(src => src.bairro))
+                .ForMember(dest => dest.Logradouro, map => map.MapFrom(src => src.logradouro))
+                .ForMember(dest => dest.Cidade, map => map.MapFrom(src => src.localidade))
+                .ForMember(dest => dest.Estado, map => map.MapFrom(src => src.uf));
             CreateMap<EnderecoCreateDto, EnderecoModel>()
                 .ForMember(dest => dest.Cep, map => map.MapFrom(src => src.cep))
                 .ForMember(dest => dest.Bairro, map => map.MapFrom(src => src.bairro))

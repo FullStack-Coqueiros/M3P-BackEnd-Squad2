@@ -13,5 +13,6 @@ namespace MedicalCare.DTO
         public string Complemento { get; set; }
         public string Bairro { get; set; }
         public string PontoDeReferencia { get; set; }
+        public int PacienteId { get; set; }
     }
 }

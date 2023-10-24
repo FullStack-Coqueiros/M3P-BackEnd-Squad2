@@ -39,7 +39,7 @@ namespace MedicalCare.DTO
         public DateTime ValidadeDoConvenio { get; set; }
 
         [Required]
-        public EnderecoCreateDto Endereco { get; set; }
+        public EnderecoUpdateDto Endereco { get; set; }
 
         [Required]
         public bool StatusDoSistema { get; set; }
