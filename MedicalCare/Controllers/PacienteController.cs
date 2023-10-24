@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Cryptography;
 
 namespace MedicalCare.Controllers
 {
@@ -68,6 +69,11 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
                 IEnumerable<PacienteGetDto> pacientes = _pacienteService.GetAllPacientes();
                 return Ok(pacientes);
             }
@@ -84,6 +90,11 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
                 PacienteGetDto pacienteGet = _pacienteService.GetById(id);
                 if (pacienteGet == null)
                 {
@@ -104,12 +115,29 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+
                 PacienteGetDto verificaSeExiste = _pacienteService.GetById(id);
                 if (verificaSeExiste == null)
                 {
                     return NoContent();
                 }
                 PacienteGetDto pacienteGet = _pacienteService.UpdatePaciente(pacienteUpdate, id);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, atualizou o paciente {pacienteUpdate.NomeCompleto} no sistema.",
+                    Dominio = "Paciente-update."
+                };
+                _logService.CreateLog(logModel);
+
                 return Ok(pacienteGet);
 
             }
@@ -126,9 +154,26 @@ namespace MedicalCare.Controllers
         {
             try
             {
-                bool remocao = _pacienteService.DeletePaciente(id);
-                if (remocao)
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
                 {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                PacienteGetDto pacienteGet = _pacienteService.GetById(id);
+
+                if (pacienteGet != null)
+                {
+
+                    _pacienteService.DeletePaciente(id);
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {_id}, excluiu o paciente {pacienteGet.NomeCompleto}.",
+                        Dominio = "Paciente-delete."
+                    };
+                    _logService.CreateLog(logModel);
                     return Accepted();
                 }
                 return NoContent();
