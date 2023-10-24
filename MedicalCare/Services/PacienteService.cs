@@ -1,5 +1,6 @@
 using AutoMapper;
 using MedicalCare.DTO;
+using MedicalCare.Infra;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,28 +13,32 @@ namespace MedicalCare.Services
         private readonly IRepository<PacienteModel> _pacienteRepository;
         private readonly IRepository<EnderecoModel> _enderecoRepository;
         private readonly IEnderecoService _enderecoService;
+        private readonly MedicalCareDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public PacienteService(IMapper mapper, IRepository<PacienteModel> pacienteRepository, IEnderecoService enderecoService, IRepository<EnderecoModel> enderecoRepository)
+        public PacienteService(IMapper mapper, IRepository<PacienteModel> pacienteRepository,
+            IEnderecoService enderecoService, IRepository<EnderecoModel> enderecoRepository,
+            MedicalCareDbContext medicalCareDbContext)
         {
             _mapper = mapper;
             _pacienteRepository = pacienteRepository;
             _enderecoService = enderecoService;
             _enderecoRepository = enderecoRepository;
+            _dbContext = medicalCareDbContext;
         }
 
 
 
         public IEnumerable<PacienteGetDto> GetAllPacientes()
         {
-            IEnumerable<PacienteModel> pacientes = _pacienteRepository.GetAll();
+            IEnumerable<PacienteModel> pacientes = _dbContext.DbPaciente.Include(p => p.Endereco);
             IEnumerable<PacienteGetDto> pacienteGet = _mapper.Map<IEnumerable<PacienteGetDto>>(pacientes);
             return pacienteGet;
         }
 
         public PacienteGetDto GetById(int id)
         {
-            PacienteModel paciente = _pacienteRepository.GetById(id);
+            PacienteModel paciente = _dbContext.DbPaciente.Include(p => p.Endereco).FirstOrDefault(f => f.Id == id);
             PacienteGetDto pacienteGetId = _mapper.Map<PacienteGetDto>(paciente);
             return pacienteGetId;
         }
@@ -47,13 +52,13 @@ namespace MedicalCare.Services
 
             EnderecoCreateDto enderecoCreate = _mapper.Map<EnderecoCreateDto>(pacienteCreate.Endereco);
             enderecoCreate.PacienteId = pacienteModelComId.Id;
-            _enderecoService.CreateEndereco(enderecoCreate); 
+            _enderecoService.CreateEndereco(enderecoCreate);
 
             EnderecoGetDto enderecoGet = _enderecoService.GetByRelationship(pacienteModel);
-            
+
             PacienteGetDto pacienteGet = _mapper.Map<PacienteGetDto>(pacienteModelComId);
             pacienteGet.Endereco = enderecoGet;
-            
+
             return pacienteGet;
         }
 

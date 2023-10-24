@@ -34,6 +34,7 @@ namespace MedicalCare.AutoMapper
             CreateMap<ConsultaUpdateDTO, ConsultaModel>().ReverseMap();
 
             //mapper Paciente
+            CreateMap<IQueryable<PacienteModel>, PacienteGetDto>();
             CreateMap<PacienteCreateDto, PacienteModel>()
                 .ForMember(dest => dest.Endereco, act => act.Ignore());
             CreateMap<PacienteGetDto, PacienteModel>().ReverseMap();
