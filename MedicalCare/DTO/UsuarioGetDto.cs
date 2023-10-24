@@ -6,7 +6,7 @@ namespace MedicalCare.DTO
     {
         public int Id { get; set; }
         public string NomeCompleto { get; set; }
-        public Egenero Genero { get; set; }
+        public string Genero { get; set; }
         public string Cpf { get; set; }
         public string Telefone { get; set; }
         public string Email { get; set; }
