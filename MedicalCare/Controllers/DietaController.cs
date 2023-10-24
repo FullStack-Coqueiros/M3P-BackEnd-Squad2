@@ -90,7 +90,7 @@ namespace MedicalCare.Controllers
                 {
                     return NoContent();
                 }
-                DietaGetDto dietaGet = _dietaService.UpdateDieta(dietaUpdateDto);
+                DietaGetDto dietaGet = _dietaService.UpdateDieta(dietaUpdateDto, id);
                 return Ok(dietaGet);
             }
             catch (Exception)

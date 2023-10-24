@@ -53,10 +53,11 @@ namespace MedicalCare.Services
             return dietaGet;
         }
 
-        public DietaGetDto UpdateDieta(DietaUpdateDto dieta)
+        public DietaGetDto UpdateDieta(DietaUpdateDto dieta, int id)
         {
-            DietaModel dietaModel = _mapper.Map<DietaModel>(dieta);
-            dietaModel.Tipo = Enum.GetName(typeof(ETipo), dieta.GetHashCode());
+            DietaModel dietaModel = _dietaRepository.GetById(id);
+            dietaModel = _mapper.Map(dieta, dietaModel);
+            dietaModel.Tipo = Enum.GetName(typeof(ETipoDieta), dieta.Tipo.GetHashCode()); // Descobrir o pq de estar ficando null
             _dietaRepository.Update(dietaModel);
             DietaGetDto dietaGet = _mapper.Map<DietaGetDto>(dietaModel);
             return dietaGet;
