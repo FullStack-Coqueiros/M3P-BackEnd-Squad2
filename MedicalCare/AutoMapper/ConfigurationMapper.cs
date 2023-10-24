@@ -11,11 +11,12 @@ namespace MedicalCare.AutoMapper
             //Source, Destination
 
             //mapper usuario
-            CreateMap<UsuarioCreateDto, UsuarioModel>().ReverseMap();//usar ReverseMap(),  não precisa criar  mapeamento separado no sentido oposto.
+            CreateMap<UsuarioCreateDto, UsuarioModel>()
+                .ForMember(dest => dest.Genero, act => act.Ignore())
+                .ForMember(dest => dest.Tipo, act => act.Ignore());
             CreateMap<UsuarioUpdateDto, UsuarioModel>().ReverseMap();
             CreateMap<UsuarioGetDto, UsuarioModel>();
-            CreateMap<UsuarioModel, UsuarioGetDto>()
-            .ForMember(dest => dest.Cpf, act => act.Ignore());
+            CreateMap<UsuarioModel, UsuarioGetDto>();
 
 
             //mapper exame
@@ -42,6 +43,8 @@ namespace MedicalCare.AutoMapper
                 .ForMember(dest => dest.Endereco, act => act.Ignore());
             CreateMap<PacienteGetDto, PacienteModel>().ReverseMap();
             CreateMap<PacienteUpdateDto, PacienteModel>()
+                .ForMember(dest => dest.Genero, act => act.Ignore())
+                .ForMember(dest => dest.EstadoCivil, act => act.Ignore())
                 .ForMember(dest => dest.Cpf, act => act.Ignore())
                 .ForMember(dest => dest.Rg, act => act.Ignore());
             CreateMap<PacienteCreateDto, EnderecoModel>()
