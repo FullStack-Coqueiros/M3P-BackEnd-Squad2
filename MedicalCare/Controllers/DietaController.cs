@@ -48,8 +48,7 @@ namespace MedicalCare.Controllers
             {
                 if (pacienteId.HasValue)
                 {
-                    bool isSomeOtherFlagSet = true;
-                    var dietas = _dietaService.GetDietasByPaciente(pacienteId.Value, isSomeOtherFlagSet);
+                    var dietas = _dietaService.GetDietasByPaciente(pacienteId.Value);
                     return Ok(dietas);
                 }
                 else
@@ -63,33 +62,33 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
-        [HttpGet("{id}")]
-        public ActionResult<DietaGetDto> Get([FromRoute] int id)
-        {
-            try
-            {
-                DietaGetDto dietaGet = _dietaService.GetById(id);
-                if (dietaGet == null)
-                {
-                    return NotFound("Id de dieta não encontrado");
-                }
-                return Ok(dietaGet);
-            }
-            catch (Exception)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
-            }
-        }
+        //[HttpGet("{id}")]
+        //public ActionResult<DietaGetDto> Get([FromRoute] int id)
+        //{
+        //    try
+        //    {
+        //        DietaGetDto dietaGet = _dietaService.GetById(id);
+        //        if (dietaGet == null)
+        //        {
+        //            return NotFound("Id de dieta não encontrado");
+        //        }
+        //        return Ok(dietaGet);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
+        //    }
+        //}
 
         [HttpPut("{id}")]
         public ActionResult<DietaGetDto> Update([FromRoute] int id, [FromBody] DietaUpdateDto dietaUpdateDto)
         {
             try
             {
-                DietaGetDto? verificaSeExiste = _dietaService.GetById(id);
+                DietaGetDto verificaSeExiste = _dietaService.GetById(id);
                 if (verificaSeExiste == null)
                 {
-                    return NotFound("Id de dieta não encontrado.");
+                    return NoContent();
                 }
                 DietaGetDto dietaGet = _dietaService.UpdateDieta(dietaUpdateDto);
                 return Ok(dietaGet);
@@ -110,7 +109,7 @@ namespace MedicalCare.Controllers
                 {
                     return Accepted();
                 }
-                return NotFound("Id de dieta não encontrado");
+                return NoContent();
             }
             catch (Exception)
             {
