@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using MedicalCare.DTO;
+using MedicalCare.Enums;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -45,8 +46,10 @@ namespace MedicalCare.Services
         public DietaGetDto CreateDieta(DietaCreateDto dieta)
         {
             DietaModel dietaModel = _mapper.Map<DietaModel>(dieta);
+            dietaModel.Tipo = Enum.GetName(typeof(ETipo), dieta.GetHashCode());
             _dietaRepository.Create(dietaModel);
-            DietaGetDto dietaGet = _mapper.Map<DietaGetDto>(dieta);
+            DietaGetDto dietaGet = GetAllDietas()
+                .FirstOrDefault(w => w.PacienteId == dieta.PacienteId && w.UsuarioId == dieta.UsuarioId);
             return dietaGet;
         }
 
