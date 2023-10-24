@@ -11,15 +11,10 @@ namespace MedicalCare.Models
     [Table("UsuarioModel")]
     public class UsuarioModel : PessoaModel
     {
-        [Column("TELEFONE"), Required(ErrorMessage = "Telefone é obrigatório.")]
-        [StringLength(11, MinimumLength = 11, ErrorMessage = "Telefone deve estar no formato (99) 99999-9999")]
         public string Telefone { get; set; }
 
-        [Column ("SENHA"), Required]
-        [MinLength(6, ErrorMessage = "Deve conter no mínimo 6 caracteres.")]
         public string Senha { get; set; }   
 
-        [Column ("TIPO"), Required]
         public string Tipo { get; set; }
 
         public ICollection <ConsultaModel> Consultas { get; set; }
