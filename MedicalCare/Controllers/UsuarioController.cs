@@ -78,7 +78,7 @@ namespace MedicalCare.Controllers
                 }
                 usuarioCreate.StatusDoSistema = true;
                 UsuarioGetDto usuarioGet = _usuarioService.CreateUsuario(usuarioCreate);
-                return Created("Usuário salvo com sucesso.", usuarioGet);
+                return Created("Usuario salvo com sucesso.", usuarioGet);
 
             }
             catch (Exception ex)
