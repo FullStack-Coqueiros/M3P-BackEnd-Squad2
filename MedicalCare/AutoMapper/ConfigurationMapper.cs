@@ -8,6 +8,7 @@ namespace MedicalCare.AutoMapper
     {
         public ConfigurationMapper()
         {
+            //Source, Destination
 
             //mapper usuario
             CreateMap<UsuarioCreateDto, UsuarioModel>().ReverseMap();//usar ReverseMap(),  não precisa criar  mapeamento separado no sentido oposto.
