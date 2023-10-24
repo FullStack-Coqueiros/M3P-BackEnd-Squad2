@@ -48,7 +48,7 @@ namespace MedicalCare.Services
         {
             UsuarioModel usuarioModel = _mapper.Map<UsuarioModel>(usuario);
             _usuarioRepository.Create(usuarioModel);
-            UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuario);
+            UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuarioModel);
             return usuarioGet;
         }
 
