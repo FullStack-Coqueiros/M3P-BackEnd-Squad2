@@ -10,16 +10,16 @@ namespace MedicalCare.Services
     public class PacienteService : IPacienteService
     {
         private readonly IRepository<PacienteModel> _pacienteRepository;
-        //private readonly IRepository<EnderecoModel> _enderecoRepository;
+        private readonly IRepository<EnderecoModel> _enderecoRepository;
         private readonly IEnderecoService _enderecoService;
         private readonly IMapper _mapper;
 
-        public PacienteService(IMapper mapper, IRepository<PacienteModel> pacienteRepository, IEnderecoService enderecoService)
+        public PacienteService(IMapper mapper, IRepository<PacienteModel> pacienteRepository, IEnderecoService enderecoService, IRepository<EnderecoModel> enderecoRepository)
         {
             _mapper = mapper;
             _pacienteRepository = pacienteRepository;
-            //_enderecoRepository = enderecoRepository;
             _enderecoService = enderecoService;
+            _enderecoRepository = enderecoRepository;
         }
 
 
@@ -61,10 +61,20 @@ namespace MedicalCare.Services
         {
             PacienteModel pacienteModel = _pacienteRepository.GetById(id);
             pacienteModel = _mapper.Map(pacienteUpdate, pacienteModel);
-            Console.WriteLine(pacienteModel);
             _pacienteRepository.Update(pacienteModel);
+
+            EnderecoModel enderecoModel = _enderecoService.GetAllEnderecos()
+                .Where(a => a.PacienteId == id).FirstOrDefault();
+            enderecoModel = _mapper.Map(pacienteUpdate.Endereco, enderecoModel);
+            enderecoModel.PacienteId = pacienteModel.Id;
+            _enderecoRepository.Update(enderecoModel);
+            EnderecoUpdateDto enderecoUpdate = pacienteUpdate.Endereco;
+            EnderecoGetDto enderecoGet = _mapper.Map<EnderecoGetDto>(enderecoModel);
+
             PacienteModel pacienteModelAtualizado = _pacienteRepository.GetById(id);
             PacienteGetDto pacienteGet = _mapper.Map<PacienteGetDto>(pacienteModelAtualizado);
+
+            pacienteGet.Endereco = enderecoGet;
             return pacienteGet;
         }
 

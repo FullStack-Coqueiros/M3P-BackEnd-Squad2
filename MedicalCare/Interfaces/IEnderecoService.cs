@@ -9,7 +9,7 @@ namespace MedicalCare.Interfaces
         EnderecoGetDto CreateEndereco(EnderecoCreateDto endereco);
         EnderecoModel GetById(int id);
         EnderecoGetDto GetByRelationship(PacienteModel relationship);
-        EnderecoModel UpdateEndereco(EnderecoModel endereco);
+        EnderecoGetDto UpdateEndereco(EnderecoUpdateDto endereco, int id);
         bool DeleteEndereco(int id);
 
     }

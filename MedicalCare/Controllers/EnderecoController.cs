@@ -39,14 +39,14 @@ namespace MedicalCare.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] EnderecoModel enderecoUpdate)
+        public IActionResult Update([FromRoute] int id, [FromBody] EnderecoUpdateDto enderecoUpdate)  //terminar essa controller
         {
             var enderecoModel = _enderecoService.GetById(id);
             if (enderecoModel == null)
             {
                 return NotFound();
             }
-            _enderecoService.UpdateEndereco(enderecoUpdate);
+            _enderecoService.UpdateEndereco(enderecoUpdate, id); 
             return Ok(enderecoUpdate);
         }
 

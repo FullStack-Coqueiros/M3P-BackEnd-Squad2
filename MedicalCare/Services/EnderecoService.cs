@@ -42,9 +42,15 @@ namespace MedicalCare.Services
             return enderecoGet;
         }
 
-        public EnderecoModel UpdateEndereco(EnderecoModel endereco)
+        public EnderecoGetDto UpdateEndereco(EnderecoUpdateDto endereco, int id)
         {
-            return _enderecoRepository.Update(endereco);
+            EnderecoModel enderecoModel = GetById(id);
+
+            enderecoModel = _mapper.Map<EnderecoModel>(endereco);
+             _enderecoRepository.Update(enderecoModel);
+
+            EnderecoGetDto enderecoGet = _mapper.Map<EnderecoGetDto>(enderecoModel);
+            return enderecoGet;
         }
 
         public bool DeleteEndereco(int id)
