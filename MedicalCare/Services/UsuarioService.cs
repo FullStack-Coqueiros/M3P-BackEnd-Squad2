@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using AutoMapper;
 using MedicalCare.DTO;
+using MedicalCare.Enums;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +21,15 @@ namespace MedicalCare.Services
             _usuarioRepository = usuarioRepository;
         }
 
-        public UsuarioGetDto GetByEmail(string email) {
+        public UsuarioGetDto GetByEmail(string email)
+        {
             IEnumerable<UsuarioModel> usuarios = _usuarioRepository.GetAll().Where(x => x.Email == email);
-            if (usuarios.IsNullOrEmpty()) {
+            if (usuarios.IsNullOrEmpty())
+            {
                 return null;
-            } else {
+            }
+            else
+            {
                 UsuarioModel usuario = usuarios.First();
                 return _mapper.Map<UsuarioGetDto>(usuario);
             }
@@ -47,8 +52,11 @@ namespace MedicalCare.Services
         public UsuarioGetDto CreateUsuario(UsuarioCreateDto usuario)
         {
             UsuarioModel usuarioModel = _mapper.Map<UsuarioModel>(usuario);
+            usuarioModel.Genero = Enum.GetName(typeof(Egenero), usuario.Genero.GetHashCode());
+            usuarioModel.Tipo = Enum.GetName(typeof(ETipo), usuario.Tipo.GetHashCode());
             _usuarioRepository.Create(usuarioModel);
-            UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuarioModel);
+            UsuarioModel usuarioModelComId = _usuarioRepository.GetAll().Where(x => x.Email == usuarioModel.Email).FirstOrDefault();
+            UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuarioModelComId);
             return usuarioGet;
         }
 
