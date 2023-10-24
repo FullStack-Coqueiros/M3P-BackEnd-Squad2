@@ -27,13 +27,13 @@ namespace MedicalCare.Controllers
         [HttpPost]
         public ActionResult<PacienteGetDto> Post([FromBody] PacienteCreateDto pacienteCreate)
         {
-            var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
-            if (!ativo) 
-            {
-                return BadRequest("Usuário inativo no sistema"); 
-            }
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
                 var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
                 var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
                 int id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
