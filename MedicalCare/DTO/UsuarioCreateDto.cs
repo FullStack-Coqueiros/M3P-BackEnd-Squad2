@@ -10,7 +10,6 @@ namespace MedicalCare.DTO
         public string NomeCompleto { get; set; }
 
         [Required]
-        [StringLength(32)]
         public Egenero Genero { get; set; }
 
         [Required(ErrorMessage = "CPF é obrigatório.")]

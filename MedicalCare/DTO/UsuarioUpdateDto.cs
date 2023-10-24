@@ -6,7 +6,6 @@ namespace MedicalCare.DTO
     public class UsuarioUpdateDto
     {
         [Key]
-        public int Id { get; set; }
 
         [Required]
         [StringLength(64, MinimumLength = 8, ErrorMessage = "Deve possuir entre 8 e 64 caracteres.")]
