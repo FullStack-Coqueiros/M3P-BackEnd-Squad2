@@ -24,6 +24,8 @@ namespace MedicalCare.Controllers
             _logService = logService;
         }
 
+
+
         [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPost]
         public ActionResult<PacienteGetDto> Post([FromBody] PacienteCreateDto pacienteCreate)
@@ -63,6 +65,8 @@ namespace MedicalCare.Controllers
             }
         }
 
+
+
         [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet]
         public ActionResult<IEnumerable<PacienteGetDto>> Get()
@@ -74,7 +78,19 @@ namespace MedicalCare.Controllers
                 {
                     return BadRequest("Usuário inativo no sistema");
                 }
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+
                 IEnumerable<PacienteGetDto> pacientes = _pacienteService.GetAllPacientes();
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, listou todos os pacientes do sistema.",
+                    Dominio = "Paciente-getAll."
+                };
+                _logService.CreateLog(logModel);
+
                 return Ok(pacientes);
             }
             catch (Exception)
@@ -83,6 +99,8 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
+
+
 
         [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet("{id}")]
@@ -95,11 +113,22 @@ namespace MedicalCare.Controllers
                 {
                     return BadRequest("Usuário inativo no sistema");
                 }
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+
                 PacienteGetDto pacienteGet = _pacienteService.GetById(id);
                 if (pacienteGet == null)
                 {
                     return NoContent();
                 }
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, listou o paciente {pacienteGet.NomeCompleto} no sistema.",
+                    Dominio = "Paciente-getById."
+                };
+                _logService.CreateLog(logModel);
                 return Ok(pacienteGet);
             }
             catch (Exception)
@@ -108,6 +137,8 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
+
+
 
         [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPut("{id}")]
@@ -147,6 +178,8 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
+
+
 
         [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpDelete("{id}")]
