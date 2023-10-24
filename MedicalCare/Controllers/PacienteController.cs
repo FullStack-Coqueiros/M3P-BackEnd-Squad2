@@ -13,19 +13,21 @@ namespace MedicalCare.Controllers
     public class PacienteController : ControllerBase
     {
         private readonly IPacienteService _pacienteService;
+        private readonly ILogService _logService;
         private readonly IRepository<PacienteModel> _repository;
 
-        public PacienteController(IPacienteService pacienteService, IRepository<PacienteModel> repository)
+        public PacienteController(IPacienteService pacienteService, IRepository<PacienteModel> repository, ILogService logService)
         {
             _pacienteService = pacienteService;
             _repository = repository;
+            _logService = logService;
         }
 
         [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPost]
         public ActionResult<PacienteGetDto> Post([FromBody] PacienteCreateDto pacienteCreate)
         {
-            var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Ativo").Value);
+            var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
             if (!ativo) 
             {
                 return BadRequest("Usuário inativo no sistema"); 
@@ -42,8 +44,14 @@ namespace MedicalCare.Controllers
                 }
                 pacienteCreate.StatusDoSistema = true;
                 PacienteGetDto pacienteGet = _pacienteService.CreatePaciente(pacienteCreate);
-                //Aqui faz a chamada para a service do log, enviando o texto e usando as var nome, tipo  e Id
-                //para extração de dados e envio ao log.
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {id}, cadastrou o paciente {pacienteCreate.NomeCompleto} no sistema.",
+                    Dominio = "Paciente-cadastro."
+                };
+                _logService.CreateLog(logModel);
+
                 return Created("Paciente salvo com sucesso.", pacienteGet);
 
             }
