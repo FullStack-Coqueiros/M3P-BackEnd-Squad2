@@ -42,6 +42,27 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+        [HttpGet("ByPaciente")]
+        public ActionResult<IEnumerable<MedicamentoGetDTO>> Get([FromQuery] int? pacienteId)
+        {
+            try
+            {
+                if (pacienteId.HasValue)
+                {
+                    var medicamentos = _medicamentoService.GetAllMedicamentos().Where(e => e.PacienteId == pacienteId.Value);
+                    return Ok(medicamentos);
+                }
+                else
+                {
+                    var medicamentos = _medicamentoService.GetAllMedicamentos();
+                    return Ok(medicamentos);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+            }
+        }
         [HttpGet("{id}")]
         public ActionResult<MedicamentoGetDTO> Get([FromRoute] int id)
         {
@@ -80,6 +101,7 @@ namespace MedicalCare.Controllers
             }
         }
         [HttpDelete("{id}")]
+
         public ActionResult Delete([FromRoute] int id)
         {
             try
@@ -99,5 +121,7 @@ namespace MedicalCare.Controllers
         }
     }
 }
+
+
 
 
