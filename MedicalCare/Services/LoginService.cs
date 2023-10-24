@@ -51,7 +51,9 @@ namespace MedicalCare.Services
                 {
                     new Claim(ClaimTypes.Name, usuario.Email),
                     new Claim("Nome", usuario.NomeCompleto),
+                    new Claim("Tipo", usuario.Tipo),
                     new Claim("Id", usuario.Id.ToString()),
+                    new Claim("StatusDoSistema", usuario.StatusDoSistema.ToString()),
                     new Claim(ClaimTypes.Role, usuario.Tipo.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(4),

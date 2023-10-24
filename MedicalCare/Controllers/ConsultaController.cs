@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalCare.Controllers
 {
@@ -20,6 +21,7 @@ namespace MedicalCare.Controllers
             _consultaService = consultaService;
         }
 
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpPost]
         public IActionResult Post([FromBody] ConsultaCreateDTO consultaCreate)
         {
@@ -34,6 +36,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpGet]
         public ActionResult<IEnumerable<ConsultaGetDto>> Get([FromQuery] int? pacienteId)
         {
@@ -58,6 +61,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpPut("{id}")]
         public ActionResult<ConsultaGetDto> Update([FromRoute] int id, [FromBody] ConsultaUpdateDTO consultaUpdate)
         {
@@ -77,6 +81,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpGet("{id}")]
         public ActionResult<ConsultaGetDto> GetConsulta([FromRoute] int id)
         {
@@ -95,6 +100,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpGet("ByPaciente")]
         public ActionResult<IEnumerable<ConsultaGetDto>> GetConsultasByPaciente([FromQuery] int? pacienteId, [FromBody] bool isSomeFlagSet)
         {
@@ -116,6 +122,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {

@@ -1,6 +1,7 @@
 ﻿using MedicalCare.DTO;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,7 @@ namespace MedicalCare.Controllers
             //TODO: Refatorar aqui.
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -31,6 +33,7 @@ namespace MedicalCare.Controllers
             return Ok(enderecos);
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute] int id)
         {
@@ -38,6 +41,7 @@ namespace MedicalCare.Controllers
             return Ok(endereco);
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] EnderecoUpdateDto enderecoUpdate)  //terminar essa controller
         {
@@ -50,6 +54,7 @@ namespace MedicalCare.Controllers
             return Ok(enderecoUpdate);
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {

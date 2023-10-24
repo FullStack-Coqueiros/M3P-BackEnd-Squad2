@@ -1,6 +1,7 @@
 ﻿using MedicalCare.DTO;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -20,12 +21,20 @@ namespace MedicalCare.Controllers
             _repository = repository;
         }
 
-
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPost]
         public ActionResult<PacienteGetDto> Post([FromBody] PacienteCreateDto pacienteCreate)
         {
+            var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Ativo").Value);
+            if (!ativo) 
+            {
+                return BadRequest("Usuário inativo no sistema"); 
+            }
             try
             {
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                int id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
                 bool verificaCpfEmail = _repository.GetByCpfEmail(pacienteCreate.Cpf, pacienteCreate.Email);
                 if (verificaCpfEmail)
                 {
@@ -33,6 +42,8 @@ namespace MedicalCare.Controllers
                 }
                 pacienteCreate.StatusDoSistema = true;
                 PacienteGetDto pacienteGet = _pacienteService.CreatePaciente(pacienteCreate);
+                //Aqui faz a chamada para a service do log, enviando o texto e usando as var nome, tipo  e Id
+                //para extração de dados e envio ao log.
                 return Created("Paciente salvo com sucesso.", pacienteGet);
 
             }
@@ -43,6 +54,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet]
         public ActionResult<IEnumerable<PacienteGetDto>> Get()
         {
@@ -58,6 +70,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet("{id}")]
         public ActionResult<PacienteGetDto> Get([FromRoute] int id)
         {
@@ -77,6 +90,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPut("{id}")]
         public ActionResult<PacienteGetDto> Update([FromRoute] int id, [FromBody] PacienteUpdateDto pacienteUpdate)
         {
@@ -98,6 +112,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
@@ -106,7 +121,7 @@ namespace MedicalCare.Controllers
                 bool remocao = _pacienteService.DeletePaciente(id);
                 if (remocao)
                 {
-                return Accepted();
+                    return Accepted();
                 }
                 return NoContent();
 
