@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using MedicalCare.DTO;
+using MedicalCare.Enums;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,7 @@ namespace MedicalCare.Services
             DietaGetDto dietaGetId = _mapper.Map<DietaGetDto>(dieta);
             return dietaGetId;
         }
-        public IEnumerable<DietaGetDto> GetDietasByPaciente(int pacienteId, bool isSomeOtherFlagSet)
+        public IEnumerable<DietaGetDto> GetDietasByPaciente(int pacienteId)
         {
             IEnumerable<DietaModel> dietas = _dietaRepository.GetAll().Where(d => d.PacienteId == pacienteId);
             IEnumerable<DietaGetDto> dietaGet = _mapper.Map<IEnumerable<DietaGetDto>>(dietas);
@@ -45,16 +46,19 @@ namespace MedicalCare.Services
         public DietaGetDto CreateDieta(DietaCreateDto dieta)
         {
             DietaModel dietaModel = _mapper.Map<DietaModel>(dieta);
+            dietaModel.Tipo = Enum.GetName(typeof(ETipo), dieta.GetHashCode());
             _dietaRepository.Create(dietaModel);
-            DietaGetDto dietaGet = _mapper.Map<DietaGetDto>(dieta);
+            DietaGetDto dietaGet = GetAllDietas()
+                .FirstOrDefault(w => w.Data == dieta.Data && w.PacienteId == dieta.PacienteId);
             return dietaGet;
         }
 
         public DietaGetDto UpdateDieta(DietaUpdateDto dieta)
         {
             DietaModel dietaModel = _mapper.Map<DietaModel>(dieta);
+            dietaModel.Tipo = Enum.GetName(typeof(ETipo), dieta.GetHashCode());
             _dietaRepository.Update(dietaModel);
-            DietaGetDto dietaGet = _mapper.Map<DietaGetDto>(dieta);
+            DietaGetDto dietaGet = _mapper.Map<DietaGetDto>(dietaModel);
             return dietaGet;
         }
 

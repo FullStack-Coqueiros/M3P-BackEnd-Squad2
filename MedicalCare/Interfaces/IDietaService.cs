@@ -12,7 +12,7 @@ namespace MedicalCare.Interfaces
         IEnumerable<DietaGetDto> GetAllDietas();
         bool DeleteDieta(int id);
 
-        IEnumerable<DietaGetDto> GetDietasByPaciente(int pacienteId,bool isSomeOtherFlagSet);
+        IEnumerable<DietaGetDto> GetDietasByPaciente(int pacienteId);
 
     }
 }

@@ -21,11 +21,15 @@ namespace MedicalCare.Services
             _usuarioRepository = usuarioRepository;
         }
 
-        public UsuarioGetDto GetByEmail(string email) {
+        public UsuarioGetDto GetByEmail(string email)
+        {
             IEnumerable<UsuarioModel> usuarios = _usuarioRepository.GetAll().Where(x => x.Email == email);
-            if (usuarios.IsNullOrEmpty()) {
+            if (usuarios.IsNullOrEmpty())
+            {
                 return null;
-            } else {
+            }
+            else
+            {
                 UsuarioModel usuario = usuarios.First();
                 return _mapper.Map<UsuarioGetDto>(usuario);
             }

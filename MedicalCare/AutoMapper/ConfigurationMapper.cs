@@ -8,6 +8,7 @@ namespace MedicalCare.AutoMapper
     {
         public ConfigurationMapper()
         {
+            //Source, Destination
 
             //mapper usuario
             CreateMap<UsuarioCreateDto, UsuarioModel>()
@@ -25,9 +26,11 @@ namespace MedicalCare.AutoMapper
 
 
             //mapper Dieta
-            CreateMap<DietaCreateDto, DietaModel>().ReverseMap();
+            CreateMap<DietaCreateDto, DietaModel>()
+                .ForMember(dest => dest.Tipo, act => act.Ignore());
             CreateMap<DietaGetDto, DietaModel>().ReverseMap();
-            CreateMap<DietaUpdateDto, DietaModel>().ReverseMap();
+            CreateMap<DietaUpdateDto, DietaModel>()
+                .ForMember(dest => dest.Tipo, act => act.Ignore());
 
             //mapper Consulta
             CreateMap<ConsultaCreateDTO, ConsultaModel>().ReverseMap();
@@ -64,12 +67,12 @@ namespace MedicalCare.AutoMapper
             //mapper Medicamento
             CreateMap<MedicamentoCreateDTO, MedicamentoModel>().ReverseMap();
             CreateMap<MedicamentoGetDTO, MedicamentoModel>().ReverseMap();
-            CreateMap<MedicamentoUpdateDTO, MedicamentoModel>().ReverseMap(); 
+            CreateMap<MedicamentoUpdateDTO, MedicamentoModel>().ReverseMap();
 
 
             //mapper Endereco
             CreateMap<EnderecoModel, EnderecoGetDto>();
-            CreateMap<EnderecoUpdateDto,EnderecoModel>()
+            CreateMap<EnderecoUpdateDto, EnderecoModel>()
                 .ForMember(dest => dest.Cep, map => map.MapFrom(src => src.cep))
                 .ForMember(dest => dest.Bairro, map => map.MapFrom(src => src.bairro))
                 .ForMember(dest => dest.Logradouro, map => map.MapFrom(src => src.logradouro))
