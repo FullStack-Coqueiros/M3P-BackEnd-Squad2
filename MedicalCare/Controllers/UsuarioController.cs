@@ -1,6 +1,7 @@
 using MedicalCare.DTO;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -20,7 +21,7 @@ namespace MedicalCare.Controllers
             _loginService = loginService;
         }
 
-
+        [AllowAnonymous]
         [HttpPost("login")]
         public ActionResult Login([FromBody] TentativaLoginDto tentativaLogin)
         {
@@ -40,8 +41,8 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
-        
-    
+
+        [AllowAnonymous]
         [HttpPost("login/resetarsenha")]
         public ActionResult<TentativaTrocaDeSenhaDto> ResetarSenha([FromBody] TentativaTrocaDeSenhaDto tentativaTrocaDeSenha)
         {
@@ -65,6 +66,7 @@ namespace MedicalCare.Controllers
         }
 
 
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public ActionResult<UsuarioGetDto> Post([FromBody] UsuarioCreateDto usuarioCreate)
         {
@@ -88,6 +90,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public ActionResult<IEnumerable<UsuarioGetDto>> Get()
         {
@@ -103,6 +106,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador")]
         [HttpGet("{id}")]
         public ActionResult<UsuarioGetDto> Get([FromRoute] int id)
         {
@@ -122,9 +126,11 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador")]
         [HttpPut("{id}")]
         public ActionResult<UsuarioGetDto> Update([FromRoute] int id, [FromBody] UsuarioUpdateDto usuarioUpdate)
         {
+            //Aqui criar var pegando o id do adm logado, e barrar caso queira inativar ele mesmo.
             try
             {
                 UsuarioGetDto? verificaSeExiste = _usuarioService.GetById(id);
@@ -143,9 +149,11 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador")]
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
+            //Aqui criar var pegando o id do adm logado, e barrar caso queira excluir ele mesmo.
             try
             {
                 bool remocao = _usuarioService.DeleteUsuario(id);

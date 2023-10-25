@@ -16,12 +16,12 @@ namespace MedicalCare.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<EnderecoModel> GetAllEnderecos()
+        public IEnumerable<EnderecoModel> GetAllEnderecos() //Alterar retorno para GetDto
         {
             return _enderecoRepository.GetAll();
         }
 
-        public EnderecoModel GetById(int id)
+        public EnderecoModel GetById(int id) //Alterar retorno para GetDto
         {
             return _enderecoRepository.GetById(id);
         }

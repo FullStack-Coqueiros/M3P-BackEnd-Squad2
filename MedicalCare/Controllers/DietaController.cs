@@ -1,5 +1,6 @@
 ﻿using MedicalCare.DTO;
 using MedicalCare.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -21,6 +22,7 @@ namespace MedicalCare.Controllers
             _usuarioService = usuarioService;
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPost]
         public IActionResult Post([FromBody] DietaCreateDto dietaCreateDto)
         {
@@ -41,6 +43,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet]
         public ActionResult<IEnumerable<DietaGetDto>> Get([FromQuery] int? pacienteId)
         {
@@ -80,6 +83,7 @@ namespace MedicalCare.Controllers
         //    }
         //}
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPut("{id}")]
         public ActionResult<DietaGetDto> Update([FromRoute] int id, [FromBody] DietaUpdateDto dietaUpdateDto)
         {
@@ -90,7 +94,7 @@ namespace MedicalCare.Controllers
                 {
                     return NoContent();
                 }
-                DietaGetDto dietaGet = _dietaService.UpdateDieta(dietaUpdateDto);
+                DietaGetDto dietaGet = _dietaService.UpdateDieta(dietaUpdateDto, id);
                 return Ok(dietaGet);
             }
             catch (Exception)
@@ -99,6 +103,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {

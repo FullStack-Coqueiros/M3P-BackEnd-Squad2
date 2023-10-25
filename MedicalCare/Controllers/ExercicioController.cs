@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using MedicalCare.DTO;
 using MedicalCare.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalCare.Controllers
@@ -20,6 +21,7 @@ namespace MedicalCare.Controllers
             _exercicioService = exercicioService;
         }
 
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPost]
         public IActionResult Post([FromBody] ExercicioCreateDto exercicioCreate)
         {
@@ -34,6 +36,8 @@ namespace MedicalCare.Controllers
             }
 
         }
+
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPut("{id}")]
         public ActionResult<ExercicioGetDto> Update([FromRoute] int id, [FromBody] ExercicioUpdateDto exercicioUpdate)
         {
@@ -54,6 +58,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet]
         public ActionResult<IEnumerable<ExercicioGetDto>> Get([FromQuery] int? pacienteId)
         {
@@ -75,6 +80,8 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet("{id}")]
         public ActionResult<ExercicioGetDto>GetExercicio([FromRoute] int id)
         {
@@ -113,7 +120,7 @@ namespace MedicalCare.Controllers
             }
         } */
 
-
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {

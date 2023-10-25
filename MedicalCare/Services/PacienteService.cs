@@ -45,7 +45,7 @@ namespace MedicalCare.Services
 
         public PacienteGetDto CreatePaciente(PacienteCreateDto pacienteCreate)
         {
-            PacienteModel pacienteModel = _mapper.Map<PacienteModel>(pacienteCreate);
+            PacienteModel pacienteModel = _mapper.Map<PacienteModel>(pacienteCreate); //Ver aqui sobre os enums...
             _pacienteRepository.Create(pacienteModel);
             PacienteModel pacienteModelComId = _pacienteRepository.GetAll()
                                .Where(a => a.Cpf == pacienteCreate.Cpf).FirstOrDefault();
@@ -65,7 +65,7 @@ namespace MedicalCare.Services
         public PacienteGetDto UpdatePaciente(PacienteUpdateDto pacienteUpdate, int id)
         {
             PacienteModel pacienteModel = _pacienteRepository.GetById(id);
-            pacienteModel = _mapper.Map(pacienteUpdate, pacienteModel);
+            pacienteModel = _mapper.Map(pacienteUpdate, pacienteModel); //Ver aqui sobre os enums...
             _pacienteRepository.Update(pacienteModel);
 
             EnderecoModel enderecoModel = _enderecoService.GetAllEnderecos()

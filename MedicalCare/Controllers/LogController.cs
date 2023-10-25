@@ -1,5 +1,6 @@
 ﻿using MedicalCare.Interfaces;
 using MedicalCare.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ namespace MedicalCare.Controllers
             return Ok(logModel);
         }
 
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public IActionResult GetAll()
         {
