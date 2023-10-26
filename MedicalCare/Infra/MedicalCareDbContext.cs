@@ -89,7 +89,7 @@ namespace MedicalCare.Infra
                 new UsuarioModel
                 {
                     Id = 2,
-                    NomeCompleto = "Julio Mattos Siqueira",
+                    NomeCompleto = "Julio Matos Siqueira",
                     Genero = "Masculino",
                     Cpf = "06532589965",
                     Email = "julioms@gmail.com",
@@ -99,6 +99,46 @@ namespace MedicalCare.Infra
                     Tipo = "Enfermeiro"
                 }
                 );
+
+            modelBuilder.Entity<PacienteModel>().HasData(
+                new PacienteModel
+                {
+                    Id = 1,
+                    NomeCompleto = "Amanda Siqueira",
+                    Genero = "Feminino",
+                    Cpf = "09856326588",
+                    Email = "amandasq95@gmail.com",
+                    StatusDoSistema = true,
+                },
+                new PacienteModel
+                {
+                    Id = 2,
+                    NomeCompleto = "Patrícia Santos",
+                    Genero = "Feminino",
+                    Cpf = "09856322658",
+                    Email = "patisantos@gmail.com",
+                    StatusDoSistema = true,
+                },
+                new PacienteModel
+                {
+                    Id = 3,
+                    NomeCompleto = "Rogério Antunnes Scretzh",
+                    Genero = "Masculino",
+                    Cpf = "09987452685",
+                    Email = "rogerio@gmail.com",
+                    StatusDoSistema = true,
+                },
+                new PacienteModel
+                {
+                    Id = 4,
+                    NomeCompleto = "Emersom Junior Mattos",
+                    Genero = "Masculino",
+                    Cpf = "09855633254",
+                    Email = "emersom@gmail.com",
+                    StatusDoSistema = true,
+                }
+
+                )
 
         }
     }
