@@ -17,11 +17,11 @@ namespace MedicalCare.Models
         public string NomeDoExame { get; set; }
 
         [Required(ErrorMessage = "A Data do Exame é obrigatória.")]
+        [Column(TypeName = "Date")]
         public DateTime DataDoExame { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "O Horário do Exame é obrigatório.")]
-        public DateTime HorarioDoExame { get; set; } = DateTime.Now;
-
+        public TimeSpan HorarioDoExame { get; set; } = DateTime.Now.TimeOfDay;
         [Required(ErrorMessage = "O Tipo do Exame é obrigatório.")]
         [StringLength(32, MinimumLength = 4, ErrorMessage = "O Tipo do Exame deve ter entre 4 e 32 caracteres.")]
         [Column(TypeName = "VARCHAR")]

@@ -20,8 +20,8 @@ namespace MedicalCare.AutoMapper
 
 
             //mapper exame
-            CreateMap<ExameCreateDto, ExameModel>().ReverseMap();
-            CreateMap<ExameGetDto, ExameModel>().ReverseMap();
+            CreateMap<ExameCreateDto, ExameModel>();
+            CreateMap<ExameModel, ExameGetDto>();
             CreateMap<ExameUpdateDto, ExameModel>().ReverseMap();
 
 

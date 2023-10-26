@@ -7,11 +7,12 @@ namespace MedicalCare.Models
     [Table("PacienteModel")]
     public class PacienteModel : PessoaModel
     {
+        [Column(TypeName = "Date")]
         public DateTime DataDeNascimento { get; set; }
 
         public string Rg { get; set; }
 
-        public EestadoCivil EstadoCivil { get; set; } 
+        public string EstadoCivil { get; set; } 
 
         public string Telefone { get; set; }
 
@@ -27,6 +28,7 @@ namespace MedicalCare.Models
 
         public string NumeroDoConvenio { get; set; }
 
+        [Column(TypeName = "Date")]
         public DateTime ValidadeDoConvenio { get; set; }
         public EnderecoModel Endereco { get; set; }
 
