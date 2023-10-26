@@ -1,4 +1,5 @@
-﻿using MedicalCare.Models;
+﻿using MedicalCare.Enums;
+using MedicalCare.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCare.Infra
@@ -57,7 +58,49 @@ namespace MedicalCare.Infra
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Medicamentos)
                 .HasForeignKey(h => h.UsuarioId); //Marcar como obrigatório
+
+
+            modelBuilder.Entity<UsuarioModel>().HasData(
+
+                new UsuarioModel
+                {
+                    Id = 1,
+                    NomeCompleto = "José Alves",
+                    Genero = "Masculino",
+                    Cpf = "09465328956",
+                    Email = "jose85@gmail.com",
+                    StatusDoSistema = true,
+                    Telefone = "48998561254",
+                    Senha = "12345678",
+                    Tipo = "Administrador"
+                },
+                new UsuarioModel
+                {
+                    Id = 2,
+                    NomeCompleto = "André Souza",
+                    Genero = "Masculino",
+                    Cpf = "03262548652",
+                    Email = "andresz@gmail.com",
+                    StatusDoSistema = true,
+                    Telefone = "48995321544",
+                    Senha = "12345678",
+                    Tipo = "Médico"
+                },
+                new UsuarioModel
+                {
+                    Id = 2,
+                    NomeCompleto = "Julio Mattos Siqueira",
+                    Genero = "Masculino",
+                    Cpf = "06532589965",
+                    Email = "julioms@gmail.com",
+                    StatusDoSistema = true,
+                    Telefone = "48995874233",
+                    Senha = "12345678",
+                    Tipo = "Enfermeiro"
+                }
+                );
+
         }
     }
- 
+
 }
