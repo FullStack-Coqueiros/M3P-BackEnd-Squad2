@@ -15,10 +15,12 @@ namespace MedicalCare.Controllers
     public class ConsultaController : ControllerBase
     {
         private readonly IConsultaService _consultaService;
+        private readonly ILogService _logService;
 
-        public ConsultaController(IConsultaService consultaService)
+        public ConsultaController(IConsultaService consultaService, ILogService logService)
         {
             _consultaService = consultaService;
+            _logService = logService;
         }
 
         [Authorize(Roles = "Administrador, Médico")]
@@ -27,12 +29,33 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
+                if (tipo == "Médico")
+                {
+                    consultaCreate.UsuarioId = id;
+                }
                 ConsultaGetDto consultaGet = _consultaService.CreateConsulta(consultaCreate);
-                return Created("Consulta salvo com sucesso.",consultaGet);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {id}, cadastrou a consulta de id {consultaGet.Id}.",
+                    Dominio = "Consulta-cadastro."
+                };
+                _logService.CreateLog(logModel);
+
+                return Created("Consulta salvo com sucesso.", consultaGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -42,22 +65,47 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
                 if (pacienteId.HasValue)
                 {
                     // Retorna consultas do paciente específico
                     var consultas = _consultaService.GetAllConsultas().Where(e => e.PacienteId == pacienteId.Value);
+
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {id}, listou consultas do paciente de id {id}.",
+                        Dominio = "Consulta-cadastro."
+                    };
+                    _logService.CreateLog(logModel);
+
                     return Ok(consultas);
                 }
                 else
                 {
                     // Retorna todos as consultas
                     var consultas = _consultaService.GetAllConsultas();
+
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {id}, listou todas as consultas.",
+                        Dominio = "Consulta-obter."
+                    };
+                    _logService.CreateLog(logModel);
+
                     return Ok(consultas);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(),ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -67,58 +115,39 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
                 ConsultaGetDto verificaSeExiste = _consultaService.GetById(id);
                 if (verificaSeExiste == null)
                 {
-                    return NotFound("Id de consulta não encontrada");
+                    return NoContent();
                 }
-                ConsultaGetDto consultaGet = _consultaService.UpdateConsulta(consultaUpdate);
+
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                if (tipo == "Médico")
+                {
+                    consultaUpdate.UsuarioId = _id;
+                }
+
+                ConsultaGetDto consultaGet = _consultaService.UpdateConsulta(consultaUpdate, id);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, atualizou a consulta de id {id}.",
+                    Dominio = "Consulta-atualizar."
+                };
+                _logService.CreateLog(logModel);
+
                 return Ok(consultaGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode() ,ex);
-            }
-        }
-
-        [Authorize(Roles = "Administrador, Médico")]
-        [HttpGet("{id}")]
-        public ActionResult<ConsultaGetDto> GetConsulta([FromRoute] int id)
-        {
-            try
-            {
-                ConsultaGetDto consultaGet = _consultaService.GetById(id);
-                if (consultaGet == null)
-                {
-                    return NotFound("Id de consulta não encontrada.");
-                }
-                return Ok(consultaGet);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(),ex);
-            }
-        }
-
-        [Authorize(Roles = "Administrador, Médico")]
-        [HttpGet("ByPaciente")]
-        public ActionResult<IEnumerable<ConsultaGetDto>> GetConsultasByPaciente([FromQuery] int? pacienteId, [FromBody] bool isSomeFlagSet)
-        {
-            try
-            {
-                if (pacienteId.HasValue)
-                {
-                    var consultas = _consultaService.GetConsultasByPaciente(pacienteId.Value, isSomeFlagSet);
-                    return Ok(consultas);
-                }
-                else
-                {
-                    return BadRequest("O ID do paciente é obrigatório.");
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -128,16 +157,32 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
                 bool remocao = _consultaService.DeleteConsulta(id);
                 if (remocao)
                 {
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {_id}, excluiu a consulta de id {id}.",
+                        Dominio = "Consulta-excluir."
+                    };
+                    _logService.CreateLog(logModel);
+
                     return Accepted();
                 }
-                return NotFound("Id de consulta não encontrada");
+                return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
     }

@@ -200,7 +200,7 @@ namespace MedicalCare.Infra
                     Id = 1,
                     MotivoDaConsulta = "Dor de cabeça persistente",
                     DataDaConsulta = DateTime.Now.AddDays(-7), // Data da consulta há uma semana
-                    HorarioDaConsulta = new TimeSpan(14, 30, 07), // Horário da consulta às 14:30
+                    HorarioDaConsulta = DateTime.Now.AddHours(-8), // Horário da consulta às 14:30
                     DescricaoDoProblema = "Paciente relatou dor de cabeça recorrente nas últimas duas semanas.",
                     MedicacaoReceitada = "Paracetamol",
                     DosagemEPrecaucoes = "Tomar um comprimido a cada 4 horas. Evitar o consumo de álcool durante o tratamento.",
@@ -213,7 +213,7 @@ namespace MedicalCare.Infra
                     Id = 2,
                     MotivoDaConsulta = "Check-up anual",
                     DataDaConsulta = DateTime.Now.AddDays(-30), // Data da consulta há um mês
-                    HorarioDaConsulta = new TimeSpan(10, 15, 12), // Horário da consulta às 10:15
+                    HorarioDaConsulta = DateTime.Now.AddHours(3), // Horário da consulta às 10:15
                     DescricaoDoProblema = "O paciente não relata nenhum problema específico, mas deseja um check-up geral.",
                     MedicacaoReceitada = null, // Nenhuma medicação prescrita
                     DosagemEPrecaucoes = "Nenhuma medicação prescrita neste momento.",
@@ -226,7 +226,7 @@ namespace MedicalCare.Infra
                     Id = 3,
                     MotivoDaConsulta = "Febre e tosse persistente",
                     DataDaConsulta = DateTime.Now.AddDays(-5), // Data da consulta há 5 dias
-                    HorarioDaConsulta = new TimeSpan(11, 45, 45), // Horário da consulta às 11:45
+                    HorarioDaConsulta = DateTime.Now.AddHours(-3), // Horário da consulta às 11:45
                     DescricaoDoProblema = "O paciente relata febre alta e tosse constante há uma semana.",
                     MedicacaoReceitada = "Antibiótico",
                     DosagemEPrecaucoes = "Tomar o antibiótico de 8 em 8 horas com alimentos. Evitar o consumo de laticínios durante o tratamento.",
@@ -239,7 +239,7 @@ namespace MedicalCare.Infra
                     Id = 4,
                     MotivoDaConsulta = "Consulta de rotina anual",
                     DataDaConsulta = DateTime.Now.AddDays(-365), // Consulta de rotina há um ano
-                    HorarioDaConsulta = new TimeSpan(9, 30, 0), // Horário da consulta às 9:30
+                    HorarioDaConsulta = DateTime.Now.AddHours(-10), // Horário da consulta às 9:30
                     DescricaoDoProblema = "O paciente não apresenta queixas específicas, apenas uma verificação anual de sua saúde.",
                     MedicacaoReceitada = null, // Nenhuma medicação prescrita
                     DosagemEPrecaucoes = "Nenhuma medicação prescrita para esta consulta de rotina.",

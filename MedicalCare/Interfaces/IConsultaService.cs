@@ -6,7 +6,7 @@ namespace MedicalCare.Interfaces
     public interface IConsultaService
     {
         ConsultaGetDto CreateConsulta(ConsultaCreateDTO consulta);
-        ConsultaGetDto UpdateConsulta(ConsultaUpdateDTO consulta);
+        ConsultaGetDto UpdateConsulta(ConsultaUpdateDTO consulta, int id);
         ConsultaGetDto GetById(int id);
         IEnumerable<ConsultaGetDto> GetAllConsultas();
         bool DeleteConsulta(int id);
