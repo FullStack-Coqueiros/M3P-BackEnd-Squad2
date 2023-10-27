@@ -63,10 +63,10 @@ namespace MedicalCare.Services
             return false;
         }
 
-        public MedicamentoGetDTO UpdateMedicamento(MedicamentoUpdateDTO medicamento, int id)
-        {
-            throw new NotImplementedException();
-        }
+        //public MedicamentoGetDTO UpdateMedicamento(MedicamentoUpdateDTO medicamento, int id)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 
 
