@@ -26,6 +26,7 @@ builder.Services.AddScoped<IConsultaService, ConsultaService>();
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IMedicamentoService, MedicamentoService>();
 
 
 
