@@ -26,10 +26,10 @@ namespace MedicalCare.Services
             return _enderecoRepository.GetById(id);
         }
 
-        public EnderecoGetDto GetByRelationship (PacienteModel relationship)
+        public EnderecoGetDto GetByRelationship (int id)
         {
             EnderecoModel enderecoModel = GetAllEnderecos()
-                .Where(a => a.PacienteId == relationship.Id).FirstOrDefault();
+                .Where(a => a.PacienteId == id).FirstOrDefault();
             EnderecoGetDto enderecoGet = _mapper.Map<EnderecoGetDto>(enderecoModel);
             return enderecoGet;
         }
@@ -38,7 +38,7 @@ namespace MedicalCare.Services
         {
             EnderecoModel enderecoModel = _mapper.Map<EnderecoModel>(endereco);
              _enderecoRepository.Create(enderecoModel);
-            EnderecoGetDto enderecoGet = _mapper.Map<EnderecoGetDto>(enderecoModel);
+            EnderecoGetDto enderecoGet = GetByRelationship(enderecoModel.PacienteId);
             return enderecoGet;
         }
 
@@ -46,7 +46,7 @@ namespace MedicalCare.Services
         {
             EnderecoModel enderecoModel = GetById(id);
 
-            enderecoModel = _mapper.Map<EnderecoModel>(endereco);
+            enderecoModel = _mapper.Map(endereco, enderecoModel);
              _enderecoRepository.Update(enderecoModel);
 
             EnderecoGetDto enderecoGet = _mapper.Map<EnderecoGetDto>(enderecoModel);
