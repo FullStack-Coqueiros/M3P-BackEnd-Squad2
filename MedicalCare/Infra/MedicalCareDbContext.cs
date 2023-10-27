@@ -25,26 +25,46 @@ namespace MedicalCare.Infra
                 .HasForeignKey<EnderecoModel>(h => h.PacienteId)
                 .IsRequired();
 
-            modelBuilder.Entity<ExameModel>()
-                .HasOne(h => h.Paciente)
-                .WithMany(w => w.Exames)
-                .HasForeignKey(h=>h.PacienteId)
+            modelBuilder.Entity<PacienteModel>()
+                .HasMany(h => h.Exames)
+                .WithOne(w => w.Paciente)
+                .HasForeignKey(h => h.PacienteId)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
-            //fzr relacionamento consulta e paciente, evitar deleção em cascata
-            //fzr relação diete e paciente, evitar deleção em cascata
-            //fzr relação exercicio e paciente, evitar deleção em cascata
-            //fzr relação exame e paciente, evitar deleção em cascata
-            //fzr relação medicamentos e paciente, evitar deleção em cascata
+            modelBuilder.Entity<PacienteModel>()
+                .HasMany(h => h.Consultas)
+                .WithOne(w => w.Paciente)
+                .HasForeignKey(h => h.PacienteId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
 
+            modelBuilder.Entity<PacienteModel>()
+               .HasMany(h => h.Dietas)
+               .WithOne(w => w.Paciente)
+               .HasForeignKey(h => h.PacienteId)
+               .OnDelete(DeleteBehavior.Restrict)
+               .IsRequired();
+
+            modelBuilder.Entity<PacienteModel>()
+               .HasMany(h => h.Exercicios)
+               .WithOne(w => w.Paciente)
+               .HasForeignKey(h => h.PacienteId)
+               .OnDelete(DeleteBehavior.Restrict)
+               .IsRequired();
+
+            modelBuilder.Entity<PacienteModel>()
+               .HasMany(h => h.Medicamentos)
+               .WithOne(w => w.Paciente)
+               .HasForeignKey(h => h.PacienteId)
+               .OnDelete(DeleteBehavior.Restrict)
+               .IsRequired();
 
             modelBuilder.Entity<ConsultaModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Consultas)
                 .HasForeignKey(h => h.UsuarioId)
                 .IsRequired();
-            
-
 
             modelBuilder.Entity<DietaModel>()
                 .HasOne(h => h.Usuario)
@@ -52,14 +72,11 @@ namespace MedicalCare.Infra
                 .HasForeignKey(h => h.UsuarioId)
                 .IsRequired();
 
-
-
             modelBuilder.Entity<ExameModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Exames)
                 .HasForeignKey(h => h.UsuarioId)
                 .IsRequired();
-
 
             modelBuilder.Entity<ExercicioModel>()
                 .HasOne(h => h.Usuario)
@@ -67,13 +84,11 @@ namespace MedicalCare.Infra
                 .HasForeignKey(h => h.UsuarioId)
                 .IsRequired();
 
-
             modelBuilder.Entity<MedicamentoModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Medicamentos)
                 .HasForeignKey(h => h.UsuarioId)
                 .IsRequired();
-
 
 
             modelBuilder.Entity<UsuarioModel>().HasData(
