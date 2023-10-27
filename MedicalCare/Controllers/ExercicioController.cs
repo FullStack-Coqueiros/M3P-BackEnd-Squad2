@@ -54,7 +54,7 @@ namespace MedicalCare.Controllers
                 if (consultaNoSistema == null)
                 {
                     return NotFound("Exercicio não encontrado");
-
+                }
                 if(consultaNoSistema == null)
                 {
                     return NotFound("Exercicio não encontrado");
