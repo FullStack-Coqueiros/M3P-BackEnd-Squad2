@@ -92,7 +92,7 @@ namespace MedicalCare.Controllers
 
                     LogModel logModel = new LogModel
                     {
-                        Descricao = $"{tipo} {nome}, de Id {id}, listou consultas do paciente de id {id}.",
+                        Descricao = $"{tipo} {nome}, de Id {id}, listou consultas do paciente de id {pacienteId}.",
                         Dominio = "Consulta-obter."
                     };
                     _logService.CreateLog(logModel);

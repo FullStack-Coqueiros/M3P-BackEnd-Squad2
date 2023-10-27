@@ -31,6 +31,8 @@ namespace MedicalCare.Models
         [Column(TypeName = "Date")]
         public DateTime ValidadeDoConvenio { get; set; }
         public EnderecoModel Endereco { get; set; }
+        public ICollection<ExameModel> Exames { get; set; }
+
 
     }
 }

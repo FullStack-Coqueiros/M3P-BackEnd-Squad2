@@ -25,6 +25,12 @@ namespace MedicalCare.Infra
                 .HasForeignKey<EnderecoModel>(h => h.PacienteId)
                 .IsRequired();
 
+            modelBuilder.Entity<ExameModel>()
+                .HasOne(h => h.Paciente)
+                .WithMany(w => w.Exames)
+                .HasForeignKey(h=>h.PacienteId)
+                .IsRequired();
+
             //fzr relacionamento consulta e paciente, evitar deleção em cascata
             //fzr relação diete e paciente, evitar deleção em cascata
             //fzr relação exercicio e paciente, evitar deleção em cascata
@@ -35,29 +41,39 @@ namespace MedicalCare.Infra
             modelBuilder.Entity<ConsultaModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Consultas)
-                .HasForeignKey(h => h.UsuarioId); // marcar como obrigatório
+                .HasForeignKey(h => h.UsuarioId)
+                .IsRequired();
+            
 
 
             modelBuilder.Entity<DietaModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Dietas)
-                .HasForeignKey(h => h.UsuarioId); //Marcar como obrigatório
+                .HasForeignKey(h => h.UsuarioId)
+                .IsRequired();
+
 
 
             modelBuilder.Entity<ExameModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Exames)
-                .HasForeignKey(h => h.UsuarioId);//Marcar como obrigatório
+                .HasForeignKey(h => h.UsuarioId)
+                .IsRequired();
+
 
             modelBuilder.Entity<ExercicioModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Exercicios)
-                .HasForeignKey(h => h.UsuarioId); //Marcar como obrigatório
+                .HasForeignKey(h => h.UsuarioId)
+                .IsRequired();
+
 
             modelBuilder.Entity<MedicamentoModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Medicamentos)
-                .HasForeignKey(h => h.UsuarioId); //Marcar como obrigatório
+                .HasForeignKey(h => h.UsuarioId)
+                .IsRequired();
+
 
 
             modelBuilder.Entity<UsuarioModel>().HasData(
@@ -199,8 +215,8 @@ namespace MedicalCare.Infra
                 {
                     Id = 1,
                     MotivoDaConsulta = "Dor de cabeça persistente",
-                    DataDaConsulta = DateTime.Now.AddDays(-7), // Data da consulta há uma semana
-                    HorarioDaConsulta = DateTime.Now.AddHours(-8), // Horário da consulta às 14:30
+                    DataDaConsulta = DateTime.Now.AddDays(-7), 
+                    HorarioDaConsulta = DateTime.Now.AddHours(-8),
                     DescricaoDoProblema = "Paciente relatou dor de cabeça recorrente nas últimas duas semanas.",
                     MedicacaoReceitada = "Paracetamol",
                     DosagemEPrecaucoes = "Tomar um comprimido a cada 4 horas. Evitar o consumo de álcool durante o tratamento.",
@@ -212,10 +228,10 @@ namespace MedicalCare.Infra
                 {
                     Id = 2,
                     MotivoDaConsulta = "Check-up anual",
-                    DataDaConsulta = DateTime.Now.AddDays(-30), // Data da consulta há um mês
-                    HorarioDaConsulta = DateTime.Now.AddHours(3), // Horário da consulta às 10:15
+                    DataDaConsulta = DateTime.Now.AddDays(-30), 
+                    HorarioDaConsulta = DateTime.Now.AddHours(3), 
                     DescricaoDoProblema = "O paciente não relata nenhum problema específico, mas deseja um check-up geral.",
-                    MedicacaoReceitada = null, // Nenhuma medicação prescrita
+                    MedicacaoReceitada = null, 
                     DosagemEPrecaucoes = "Nenhuma medicação prescrita neste momento.",
                     StatusDoSistema = true,
                     PacienteId = 2,
@@ -225,8 +241,8 @@ namespace MedicalCare.Infra
                 {
                     Id = 3,
                     MotivoDaConsulta = "Febre e tosse persistente",
-                    DataDaConsulta = DateTime.Now.AddDays(-5), // Data da consulta há 5 dias
-                    HorarioDaConsulta = DateTime.Now.AddHours(-3), // Horário da consulta às 11:45
+                    DataDaConsulta = DateTime.Now.AddDays(-5), 
+                    HorarioDaConsulta = DateTime.Now.AddHours(-3), 
                     DescricaoDoProblema = "O paciente relata febre alta e tosse constante há uma semana.",
                     MedicacaoReceitada = "Antibiótico",
                     DosagemEPrecaucoes = "Tomar o antibiótico de 8 em 8 horas com alimentos. Evitar o consumo de laticínios durante o tratamento.",
@@ -238,10 +254,10 @@ namespace MedicalCare.Infra
                 {
                     Id = 4,
                     MotivoDaConsulta = "Consulta de rotina anual",
-                    DataDaConsulta = DateTime.Now.AddDays(-365), // Consulta de rotina há um ano
-                    HorarioDaConsulta = DateTime.Now.AddHours(-10), // Horário da consulta às 9:30
+                    DataDaConsulta = DateTime.Now.AddDays(-365), 
+                    HorarioDaConsulta = DateTime.Now.AddHours(-10), 
                     DescricaoDoProblema = "O paciente não apresenta queixas específicas, apenas uma verificação anual de sua saúde.",
-                    MedicacaoReceitada = null, // Nenhuma medicação prescrita
+                    MedicacaoReceitada = null, 
                     DosagemEPrecaucoes = "Nenhuma medicação prescrita para esta consulta de rotina.",
                     StatusDoSistema = true,
                     PacienteId = 1,
@@ -253,8 +269,8 @@ namespace MedicalCare.Infra
                 {
                     Id = 1,
                     NomeDoExame = "Hemograma Completo",
-                    DataDoExame = DateTime.Now.AddDays(-10), // Exame realizado há 10 dias
-                    HorarioDoExame = new TimeSpan(8, 30, 0), // Exame realizado às 8:30
+                    DataDoExame = DateTime.Now.AddDays(-10), 
+                    HorarioDoExame = DateTime.Now.AddHours(-1), 
                     TipoDoExame = "Exame de Sangue",
                     Laboratorio = "Laboratório ABC",
                     UrlDoDocumento = "http://www.laboratorioabc.com/exames/hemograma-completo",
@@ -267,8 +283,8 @@ namespace MedicalCare.Infra
                 {
                     Id = 2,
                     NomeDoExame = "Raios-X do Tórax",
-                    DataDoExame = DateTime.Now.AddDays(-30), // Exame realizado há 30 dias
-                    HorarioDoExame = new TimeSpan(14, 45, 32), // Exame realizado às 14:45
+                    DataDoExame = DateTime.Now.AddDays(-30), 
+                    HorarioDoExame = DateTime.Now.AddHours(-7),
                     TipoDoExame = "Imagem",
                     Laboratorio = "Centro de Radiologia XYZ",
                     UrlDoDocumento = "http://www.centroradiologiaxyz.com/exames/raios-x-torax",
@@ -281,8 +297,8 @@ namespace MedicalCare.Infra
                 {
                     Id = 3,
                     NomeDoExame = "Ultrassonografia Abdominal",
-                    DataDoExame = DateTime.Now.AddDays(-45), // Exame realizado há 45 dias
-                    HorarioDoExame = new TimeSpan(11, 15, 0), // Exame realizado às 11:15
+                    DataDoExame = DateTime.Now.AddDays(-45), 
+                    HorarioDoExame = DateTime.Now.AddHours(8),
                     TipoDoExame = "Imagem",
                     Laboratorio = "Clinica de Ultrassonografia ABC",
                     UrlDoDocumento = "http://www.ultrassonografiaabc.com/exames/ultrassonografia-abdominal",

@@ -1,5 +1,7 @@
 ﻿using MedicalCare.DTO;
 using MedicalCare.Interfaces;
+using MedicalCare.Models;
+using MedicalCare.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +16,16 @@ namespace MedicalCare.Controllers
     public class ExameController : ControllerBase
     {
         private readonly IExameService _exameService;
+        private readonly ILogService _logService;
+        private readonly IPacienteService _pacienteService;
+        private readonly IUsuarioService _usuarioService;
 
-        public ExameController(IExameService exameService)
+        public ExameController(IExameService exameService, ILogService logService, IPacienteService pacienteService, IUsuarioService usuarioService)
         {
             _exameService = exameService;
+            _logService = logService;
+            _pacienteService = pacienteService;
+            _usuarioService = usuarioService;
         }
 
         [Authorize(Roles = "Administrador, Médico")]
@@ -26,12 +34,40 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+
+                var verificaSeExsitePaciente = _pacienteService.GetById(exameCreate.PacienteId);
+                var verificaSeExisteUsuario = _usuarioService.GetById(exameCreate.UsuarioId);
+                if (verificaSeExsitePaciente == null || verificaSeExisteUsuario == null)
+                {
+                    return NoContent();
+                }
+
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                if (tipo == "Médico")
+                {
+                    exameCreate.UsuarioId = _id;
+                }
                 ExameGetDto exameGet = _exameService.CreateExame(exameCreate);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, cadastrou o exame de id {exameGet.Id}.",
+                    Dominio = "Exame-cadastro."
+                };
+                _logService.CreateLog(logModel);
+
                 return Created("Exame salvo com sucesso.", exameGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -41,22 +77,47 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
                 if (pacienteId.HasValue)
                 {
                     // Retorna exames do paciente específico
-                    var exames = _exameService.GetAllExames().Where(e => e.PacienteId == pacienteId.Value);
-                    return Ok(exames);
+                    var exame = _exameService.GetAllExames().Where(e => e.PacienteId == pacienteId.Value);
+
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {_id}, listou exames do paciente com id {pacienteId}.",
+                        Dominio = "Exame-obter."
+                    };
+                    _logService.CreateLog(logModel);
+
+                    return Ok(exame);
                 }
                 else
                 {
                     // Retorna todos os exames
                     var exames = _exameService.GetAllExames();
+
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {_id}, listou todos os exames.",
+                        Dominio = "Exame-obter."
+                    };
+                    _logService.CreateLog(logModel);
+
                     return Ok(exames);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -66,58 +127,46 @@ namespace MedicalCare.Controllers
         {
             try
             {
-                ExameGetDto? verificaSeExiste = _exameService.GetById(id);
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+
+                var verificaSeExsitePaciente = _pacienteService.GetById(exameUpdate.PacienteId);
+                var verificaSeExisteUsuario = _usuarioService.GetById(exameUpdate.UsuarioId);
+                if (verificaSeExsitePaciente == null || verificaSeExisteUsuario == null)
+                {
+                    return NoContent();
+                }
+
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                if (tipo == "Médico")
+                {
+                    exameUpdate.UsuarioId = _id;
+                }
+                ExameGetDto verificaSeExiste = _exameService.GetById(id);
                 if (verificaSeExiste == null)
                 {
-                    return NotFound("Id de exame não encontrado.");
+                    return NoContent();
                 }
-                ExameGetDto exameGet = _exameService.UpdateExame(exameUpdate);
+
+                ExameGetDto exameGet = _exameService.UpdateExame(exameUpdate, id);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, atualizou o exame de id {exameGet.Id}.",
+                    Dominio = "Exame-atualizar."
+                };
+                _logService.CreateLog(logModel);
+
                 return Ok(exameGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
-            }
-        }
-
-        [Authorize(Roles = "Administrador, Médico")]
-        [HttpGet("{id}")]
-        public ActionResult<ExameGetDto> GetExame([FromRoute] int id)
-        {
-            try
-            {
-                ExameGetDto exameGet = _exameService.GetById(id);
-                if (exameGet == null)
-                {
-                    return NotFound("Id de exame não encontrado");
-                }
-                return Ok(exameGet);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
-            }
-        }
-
-        [Authorize(Roles = "Administrador, Médico")]
-        [HttpGet("ByPaciente")]
-        public ActionResult<IEnumerable<ExameGetDto>> GetExamesByPaciente([FromQuery] int? pacienteId, [FromBody] bool isSomeFlagSet)
-        {
-            try
-            {
-                if (pacienteId.HasValue)
-                {
-                    var exames = _exameService.GetExamesByPaciente(pacienteId.Value, isSomeFlagSet);
-                    return Ok(exames);
-                }
-                else
-                {
-                    return BadRequest("O ID do paciente é obrigatório.");
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -127,16 +176,30 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
                 bool remocao = _exameService.DeleteExame(id);
                 if (remocao)
                 {
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {_id}, excluiu o exame de id {id}.",
+                        Dominio = "Exame-excluir."
+                    };
                     return Accepted();
                 }
-                return NotFound("Id de exame não encontrado");
+                return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
     }
