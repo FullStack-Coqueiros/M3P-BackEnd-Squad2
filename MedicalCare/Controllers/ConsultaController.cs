@@ -16,11 +16,15 @@ namespace MedicalCare.Controllers
     {
         private readonly IConsultaService _consultaService;
         private readonly ILogService _logService;
+        private readonly IPacienteService _pacienteService;
+        private readonly IUsuarioService _usuarioService;
 
-        public ConsultaController(IConsultaService consultaService, ILogService logService)
+        public ConsultaController(IConsultaService consultaService, ILogService logService, IPacienteService pacienteService, IUsuarioService usuarioService)
         {
             _consultaService = consultaService;
             _logService = logService;
+            _pacienteService = pacienteService;
+            _usuarioService = usuarioService;
         }
 
         [Authorize(Roles = "Administrador, Médico")]
@@ -34,6 +38,13 @@ namespace MedicalCare.Controllers
                 {
                     return BadRequest("Usuário inativo no sistema");
                 }
+                var verificaSeExsitePaciente = _pacienteService.GetById(consultaCreate.PacienteId);
+                var verificaSeExisteUsuario = _usuarioService.GetById(consultaCreate.UsuarioId);
+                if(verificaSeExisteUsuario == null || verificaSeExsitePaciente == null)
+                {
+                    return NoContent();
+                }
+
                 int id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
                 var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
                 var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
@@ -132,6 +143,13 @@ namespace MedicalCare.Controllers
                 if (tipo == "Médico")
                 {
                     consultaUpdate.UsuarioId = _id;
+                }
+
+                var verificaSeExsitePaciente = _pacienteService.GetById(consultaUpdate.PacienteId);
+                var verificaSeExisteUsuario = _usuarioService.GetById(consultaUpdate.UsuarioId);
+                if (verificaSeExisteUsuario == null || verificaSeExsitePaciente == null)
+                {
+                    return NoContent();
                 }
 
                 ConsultaGetDto consultaGet = _consultaService.UpdateConsulta(consultaUpdate, id);
