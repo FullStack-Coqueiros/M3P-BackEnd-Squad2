@@ -40,7 +40,7 @@ namespace MedicalCare.Controllers
                 }
                 var verificaSeExsitePaciente = _pacienteService.GetById(consultaCreate.PacienteId);
                 var verificaSeExisteUsuario = _usuarioService.GetById(consultaCreate.UsuarioId);
-                if(verificaSeExisteUsuario == null || verificaSeExsitePaciente == null)
+                if (verificaSeExisteUsuario == null || verificaSeExsitePaciente == null)
                 {
                     return NoContent();
                 }
@@ -93,7 +93,7 @@ namespace MedicalCare.Controllers
                     LogModel logModel = new LogModel
                     {
                         Descricao = $"{tipo} {nome}, de Id {id}, listou consultas do paciente de id {id}.",
-                        Dominio = "Consulta-cadastro."
+                        Dominio = "Consulta-obter."
                     };
                     _logService.CreateLog(logModel);
 
@@ -145,8 +145,8 @@ namespace MedicalCare.Controllers
                     consultaUpdate.UsuarioId = _id;
                 }
 
-                var verificaSeExsitePaciente = _pacienteService.GetById(consultaUpdate.PacienteId);
                 var verificaSeExisteUsuario = _usuarioService.GetById(consultaUpdate.UsuarioId);
+                var verificaSeExsitePaciente = _pacienteService.GetById(consultaUpdate.PacienteId);
                 if (verificaSeExisteUsuario == null || verificaSeExsitePaciente == null)
                 {
                     return NoContent();

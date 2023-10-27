@@ -46,7 +46,7 @@ namespace MedicalCare.Services
         public DietaGetDto CreateDieta(DietaCreateDto dieta)
         {
             DietaModel dietaModel = _mapper.Map<DietaModel>(dieta);
-            dietaModel.Tipo = Enum.GetName(typeof(ETipo), dieta.GetHashCode());
+            dietaModel.Tipo = Enum.GetName(typeof(ETipoDieta), dieta.Tipo.GetHashCode());
             _dietaRepository.Create(dietaModel);
             DietaGetDto dietaGet = GetAllDietas()
                 .FirstOrDefault(w => w.Data == dieta.Data && w.PacienteId == dieta.PacienteId);
@@ -57,7 +57,7 @@ namespace MedicalCare.Services
         {
             DietaModel dietaModel = _dietaRepository.GetById(id);
             dietaModel = _mapper.Map(dieta, dietaModel);
-            dietaModel.Tipo = Enum.GetName(typeof(ETipoDieta), dieta.Tipo.GetHashCode()); // Descobrir o pq de estar ficando null
+            dietaModel.Tipo = Enum.GetName(typeof(ETipoDieta), dieta.Tipo.GetHashCode());
             _dietaRepository.Update(dietaModel);
             DietaGetDto dietaGet = _mapper.Map<DietaGetDto>(dietaModel);
             return dietaGet;
