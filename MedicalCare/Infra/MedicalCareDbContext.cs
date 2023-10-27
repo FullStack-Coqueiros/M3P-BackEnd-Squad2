@@ -482,7 +482,7 @@ namespace MedicalCare.Infra
                     Quantidade = 10,
                     Observacoes = "Observações do medicamento 1",
                     StatusDoSistema = true,
-                    UnidadeMedicamento = "mg",
+                    Unidade = "mg",
                     PacienteId = 1,
                     UsuarioId = 1
                 },
@@ -495,7 +495,7 @@ namespace MedicalCare.Infra
                     Quantidade = 20,
                     Observacoes = "Observações do medicamento 2",
                     StatusDoSistema = true,
-                    UnidadeMedicamento = "mcg",
+                    Unidade = "mcg",
                     PacienteId = 2,
                     UsuarioId = 2
                 },
@@ -508,7 +508,7 @@ namespace MedicalCare.Infra
                     Quantidade = 15,
                     Observacoes = "Observações do medicamento 3",
                     StatusDoSistema = true,
-                    UnidadeMedicamento = "mL",
+                    Unidade = "mL",
                     PacienteId = 3,
                     UsuarioId = 3
                 },
@@ -521,7 +521,7 @@ namespace MedicalCare.Infra
                     Quantidade = 30,
                     Observacoes = "Observações do medicamento 4",
                     StatusDoSistema = true,
-                    UnidadeMedicamento = "g",
+                    Unidade = "g",
                     PacienteId = 4,
                     UsuarioId = 4
                 }
