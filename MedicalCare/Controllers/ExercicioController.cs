@@ -8,6 +8,7 @@ using MedicalCare.Interfaces;
 using MedicalCare.Models;
 using MedicalCare.Services;
 using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalCare.Controllers
@@ -17,6 +18,7 @@ namespace MedicalCare.Controllers
     public class ExercicioController : ControllerBase
     {
         private readonly IExercicioService _exercicioService;
+
         private readonly ILogService _logService;
         private readonly IPacienteService _pacienteService;
         private readonly IUsuarioService _usuarioService;
@@ -28,6 +30,7 @@ namespace MedicalCare.Controllers
             _pacienteService = pacienteService;
             _usuarioService = usuarioService;
         }
+
 
         [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPost]
@@ -74,6 +77,7 @@ namespace MedicalCare.Controllers
 
         }
 
+
         [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPut("{id}")]
         public ActionResult<ExercicioGetDto> Update([FromRoute] int id, [FromBody] ExercicioUpdateDto exercicioUpdate)
@@ -101,6 +105,7 @@ namespace MedicalCare.Controllers
                     exercicioUpdate.UsuarioId = _id;
                 }
 
+
                 ExercicioGetDto consultaNoSistema = _exercicioService.GetById(id);
                 if(consultaNoSistema == null)
                 {
@@ -119,11 +124,13 @@ namespace MedicalCare.Controllers
 
                 return Ok(exercicioGet);
             }
+
             catch (Exception)
             {
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
+
 
         [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet]
@@ -172,6 +179,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+
         [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
@@ -210,4 +218,5 @@ namespace MedicalCare.Controllers
 }
 
         
+
 
