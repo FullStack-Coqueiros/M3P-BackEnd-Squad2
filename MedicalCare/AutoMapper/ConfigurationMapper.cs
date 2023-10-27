@@ -65,7 +65,9 @@ namespace MedicalCare.AutoMapper
             CreateMap<ExercicioUpdateDto, ExercicioModel>().ReverseMap();
 
             //mapper Medicamento
-            CreateMap<MedicamentoCreateDTO, MedicamentoModel>().ReverseMap();
+            CreateMap<MedicamentoCreateDTO, MedicamentoModel>()
+                .ForMember(dest => dest.Tipo, act => act.Ignore())
+                .ForMember(dest => dest.Unidade, act => act.Ignore());
             CreateMap<MedicamentoGetDTO, MedicamentoModel>().ReverseMap();
             CreateMap<MedicamentoUpdateDTO, MedicamentoModel>().ReverseMap();
 

@@ -12,8 +12,8 @@ namespace MedicalCare.DTO
         public string NomeDoMedicamento {get; set;}
         public DateTime Data {get; set;}
         public string Tipo {get; set;}
-        public string Opcoes {get; set;}
         public int Quantidade {get; set;}
+        public string Unidade { get; set; }
         public string Observacoes {get;set;}
         public bool StatusDoSistema {get; set;}
        
