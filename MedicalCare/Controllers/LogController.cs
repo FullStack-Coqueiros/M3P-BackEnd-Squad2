@@ -3,6 +3,7 @@ using MedicalCare.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace MedicalCare.Controllers
 {
@@ -47,10 +48,9 @@ namespace MedicalCare.Controllers
             }
             catch (Exception)
             {
-
-                throw;
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
-           
+
         }
     }
 }

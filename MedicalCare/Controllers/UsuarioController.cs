@@ -43,9 +43,9 @@ namespace MedicalCare.Controllers
                 string tokenJwt = _loginService.GeraTokenJWT(tentativaLogin);
                 return StatusCode(HttpStatusCode.OK.GetHashCode(), tokenJwt);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -65,10 +65,9 @@ namespace MedicalCare.Controllers
                 tentativaTrocaDeSenha.SenhaAntiga = null;
                 return StatusCode(HttpStatusCode.OK.GetHashCode(), tentativaTrocaDeSenha);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
 
         }
