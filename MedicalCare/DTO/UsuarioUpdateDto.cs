@@ -11,8 +11,7 @@ namespace MedicalCare.DTO
         [StringLength(64, MinimumLength = 8, ErrorMessage = "Deve possuir entre 8 e 64 caracteres.")]
         public string NomeCompleto { get; set; }
 
-        [Required]
-        [StringLength(32)]
+        [Required(ErrorMessage = "Genero é obrigatório.")]
         public Egenero Genero { get; set; }
 
         [Required(ErrorMessage = "Telefone é obrigatório.")]
