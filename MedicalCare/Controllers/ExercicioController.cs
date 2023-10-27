@@ -5,6 +5,8 @@ using System.Net;
 using System.Threading.Tasks;
 using MedicalCare.DTO;
 using MedicalCare.Interfaces;
+using MedicalCare.Models;
+using MedicalCare.Services;
 using Microsoft.AspNetCore.Authorization;
 
 using Microsoft.AspNetCore.Mvc;
@@ -17,153 +19,199 @@ namespace MedicalCare.Controllers
     {
         private readonly IExercicioService _exercicioService;
 
+        private readonly ILogService _logService;
+        private readonly IPacienteService _pacienteService;
+        private readonly IUsuarioService _usuarioService;
 
-        public ExercicioController(IExercicioService exercicioService)
+        public ExercicioController(IExercicioService exercicioService, ILogService logService, IPacienteService pacienteService, IUsuarioService usuarioService)
         {
             _exercicioService = exercicioService;
+            _logService = logService;
+            _pacienteService = pacienteService;
+            _usuarioService = usuarioService;
         }
 
 
-        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
-
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPost]
         public IActionResult Post([FromBody] ExercicioCreateDto exercicioCreate)
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+
+                var verificaSeExsitePaciente = _pacienteService.GetById(exercicioCreate.PacienteId);
+                var verificaSeExisteUsuario = _usuarioService.GetById(exercicioCreate.UsuarioId);
+                if (verificaSeExsitePaciente == null || verificaSeExisteUsuario == null)
+                {
+                    return NoContent();
+                }
+
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                if (tipo == "Médico")
+                {
+                    exercicioCreate.UsuarioId = _id;
+                }
+
                 ExercicioGetDto exercicioGet = _exercicioService.CreateExercicio(exercicioCreate);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, cadastrou o exercício de id {exercicioGet.Id}.",
+                    Dominio = "Exercicio-cadastro."
+                };
+                _logService.CreateLog(logModel);
+
                 return Created("Exercicio salvo com sucesso", exercicioGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
 
         }
 
 
-        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
-
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPut("{id}")]
         public ActionResult<ExercicioGetDto> Update([FromRoute] int id, [FromBody] ExercicioUpdateDto exercicioUpdate)
         {
             try
             {
-                ExercicioGetDto? consultaNoSistema = _exercicioService.GetById(id);
-
-                if (consultaNoSistema == null)
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
                 {
-                    return NotFound("Exercicio não encontrado");
+                    return BadRequest("Usuário inativo no sistema");
                 }
+
+                var verificaSeExsitePaciente = _pacienteService.GetById(exercicioUpdate.PacienteId);
+                var verificaSeExisteUsuario = _usuarioService.GetById(exercicioUpdate.UsuarioId);
+                if (verificaSeExsitePaciente == null || verificaSeExisteUsuario == null)
+                {
+                    return NoContent();
+                }
+
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                if (tipo == "Médico")
+                {
+                    exercicioUpdate.UsuarioId = _id;
+                }
+
+
+                ExercicioGetDto consultaNoSistema = _exercicioService.GetById(id);
                 if(consultaNoSistema == null)
                 {
-                    return NotFound("Exercicio não encontrado");
+                    return NoContent();
                     
-
                 }
-                ExercicioGetDto exercicioGet = _exercicioService.UpdateExercicio(exercicioUpdate);
+
+                ExercicioGetDto exercicioGet = _exercicioService.UpdateExercicio(exercicioUpdate, id);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, atualizou o exercício de id {exercicioGet.Id}.",
+                    Dominio = "Exercicio-atualizar."
+                };
+                _logService.CreateLog(logModel);
+
                 return Ok(exercicioGet);
             }
 
-
-            catch(Exception ex)
-
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
 
-        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
-
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet]
         public ActionResult<IEnumerable<ExercicioGetDto>> Get([FromQuery] int? pacienteId)
         {
             try
             {
-
-                if(pacienteId.HasValue)
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
                 {
-                    var exercicios = _exercicioService.GetAllExercicios().Where(e => e.PacienteId == pacienteId.Value);
-                    return Ok (exercicios);
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                if (pacienteId.HasValue)
+                {
+                    var exercicio = _exercicioService.GetAllExercicios().Where(e => e.PacienteId == pacienteId.Value);
 
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {_id}, listou exercicios do paciente com id {pacienteId}.",
+                        Dominio = "Exercicio-obter."
+                    };
+                    _logService.CreateLog(logModel);
+
+                    return Ok (exercicio);
                 }
                 else
                 {
                     var exercicios = _exercicioService.GetAllExercicios();
+
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {_id}, listou todos os exercícios.",
+                        Dominio = "Exercicio-obter."
+                    };
+                    _logService.CreateLog(logModel);
+
                     return Ok(exercicios);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
 
-        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
-        [HttpGet("{id}")]
-        public ActionResult<ExercicioGetDto>GetExercicio([FromRoute] int id)
-
-        {
-            try
-            {
-                ExercicioGetDto exercicioGet = _exercicioService.GetById(id);
-
-                if(exercicioGet == null)
-
-                {
-                    return NotFound("Exercicio não encontrado");
-                }
-                return Ok(exercicioGet);
-            }
-
-            catch(Exception ex)
-
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
-            }
-        }
-
-        /* [HttpGet("ByPaciente")]
-
-        public ActionResult<IEnumerable<ExercicioGetDto>> GetExerciciosByPaciente([FromQuery] int? pacienteId, [FromBody] bool isSomeFlagSet)
-        {
-            try
-            {
-                if (pacienteId.HasValue)
-                {
-                    var exercicios = _exercicioService.GetExerciciosByPaciente(pacienteId.Value, isSomeFlagSet);
-                    return Ok(exercicios);
-                }
-                else
-                {
-                    return BadRequest("O ID do paciente é obrigatório.");
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
-            }
-
-        } */
-
-        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
                 bool remocao = _exercicioService.DeleteExercicio(id);
                 if (remocao)
                 {
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {_id}, excluiu o exercicio de id {id}.",
+                        Dominio = "Exercicio-excluir."
+                    };
+                    _logService.CreateLog(logModel);
+
                     return Accepted();
                 }
-                return NotFound("Exercício não encontrado");
+                return NoContent();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
     }

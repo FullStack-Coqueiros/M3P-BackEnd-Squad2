@@ -17,25 +17,10 @@ namespace MedicalCare.Services
             return _logRepository.GetAll();
         }
 
-        public LogModel GetById(int id)
-        {
-            return _logRepository.GetById(id);
-        }
-
         public LogModel CreateLog(LogModel log)
         {
             return _logRepository.Create(log);
             //fazer mapper antes de retornar
-        }
-
-        public LogModel UpdateLog(LogModel log)
-        {
-            return _logRepository.Update(log);
-        }
-
-        public bool DeleteLog(int id)
-        {
-            return _logRepository.Delete(id);
         }
     }
 }

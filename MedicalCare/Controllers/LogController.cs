@@ -3,6 +3,7 @@ using MedicalCare.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace MedicalCare.Controllers
 {
@@ -17,49 +18,38 @@ namespace MedicalCare.Controllers
             _logService = logService;
         }
 
-        [HttpPost]
-        public IActionResult Post([FromBody] LogModel logCreate)
-        {
-            var logModel = _logService.CreateLog(logCreate);
-            return Ok(logModel);
-        }
-
         [Authorize(Roles = "Administrador")]
         [HttpGet]
         public IActionResult GetAll()
         {
-            var logs = _logService.GetAllLogs();
-            return Ok(logs);
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
-        {
-            var log = _logService.GetById(id);
-            return Ok(log);
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] LogModel logUpdate)
-        {
-            var logModel = _logService.GetById(id);
-            if (logModel == null)
+            try
             {
-                return NotFound();
-            }
-            _logService.UpdateLog(logUpdate);
-            return Ok(logUpdate);
-        }
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete([FromRoute] int id)
-        {
-            bool response = _logService.DeleteLog(id);
-            if (response == false)
-            {
-                return NotFound();
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
+                var logs = _logService.GetAllLogs();
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, listou todos os logs.",
+                    Dominio = "Logs-obter."
+                };
+                _logService.CreateLog(logModel);
+
+                return Ok(logs);
+
             }
-            return Ok();
+            catch (Exception)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
+            }
 
         }
     }

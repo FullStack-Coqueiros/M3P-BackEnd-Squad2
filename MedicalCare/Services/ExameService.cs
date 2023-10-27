@@ -33,25 +33,21 @@ namespace MedicalCare.Services
             return exameGetId;
         }
 
-        public ExameGetDto CreateExame(ExameCreateDto exame)
+        public ExameGetDto CreateExame(ExameCreateDto exameCreate)
         {
-            ExameModel exameModel = _mapper.Map<ExameModel>(exame);
+            ExameModel exameModel = _mapper.Map<ExameModel>(exameCreate);
             _exameRepository.Create(exameModel);
             ExameGetDto exameGet = _mapper.Map<ExameGetDto>(exameModel);
             return exameGet;
         }
 
-        public ExameGetDto UpdateExame(ExameUpdateDto exame)
+        public ExameGetDto UpdateExame(ExameUpdateDto exameUpdate, int id)
         {
-            ExameModel exameModel = _mapper.Map<ExameModel>(exame);
+            ExameModel exameModel = _exameRepository.GetById(id);
+            exameModel = _mapper.Map(exameUpdate, exameModel);
             _exameRepository.Update(exameModel);
-            ExameGetDto exameGet = _mapper.Map<ExameGetDto>(exame);
+            ExameGetDto exameGet = _mapper.Map<ExameGetDto>(exameModel);
             return exameGet;
-        }
-
-        public IEnumerable<ExameGetDto> GetExamesByPaciente(int pacienteId, bool isSomeFlagSet)
-        {
-            return _exameRepository.GetAll().Where(e => e.PacienteId == pacienteId).Select(e => _mapper.Map<ExameGetDto>(e));
         }
 
         public bool DeleteExame(int id)

@@ -54,7 +54,7 @@ namespace MedicalCare.Services
             enderecoCreate.PacienteId = pacienteModelComId.Id;
             _enderecoService.CreateEndereco(enderecoCreate);
 
-            EnderecoGetDto enderecoGet = _enderecoService.GetByRelationship(pacienteModel);
+            EnderecoGetDto enderecoGet = _enderecoService.GetByRelationship(pacienteModel.Id);
 
             PacienteGetDto pacienteGet = _mapper.Map<PacienteGetDto>(pacienteModelComId);
             pacienteGet.Endereco = enderecoGet;

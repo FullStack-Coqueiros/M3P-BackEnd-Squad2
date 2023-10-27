@@ -35,15 +35,16 @@ namespace MedicalCare.Services
         {
             ConsultaModel consultaModel = _mapper.Map<ConsultaModel>(consulta);
             _consultaRepository.Create(consultaModel);
-            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consulta);
+            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consultaModel);
             return consultaGet;
         }
 
-        public ConsultaGetDto UpdateConsulta(ConsultaUpdateDTO consulta)
+        public ConsultaGetDto UpdateConsulta(ConsultaUpdateDTO consulta, int id)
         {
-            ConsultaModel consultaModel = _mapper.Map<ConsultaModel>(consulta);
+            ConsultaModel consultaModel = _consultaRepository.GetById(id);
+            consultaModel = _mapper.Map(consulta, consultaModel);
             _consultaRepository.Update(consultaModel);
-            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consulta);
+            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consultaModel);
             return consultaGet;
         }
 

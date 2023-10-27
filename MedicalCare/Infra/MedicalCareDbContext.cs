@@ -25,39 +25,70 @@ namespace MedicalCare.Infra
                 .HasForeignKey<EnderecoModel>(h => h.PacienteId)
                 .IsRequired();
 
-            //fzr relacionamento consulta e paciente, evitar deleção em cascata
-            //fzr relação diete e paciente, evitar deleção em cascata
-            //fzr relação exercicio e paciente, evitar deleção em cascata
-            //fzr relação exame e paciente, evitar deleção em cascata
-            //fzr relação medicamentos e paciente, evitar deleção em cascata
+            modelBuilder.Entity<PacienteModel>()
+                .HasMany(h => h.Exames)
+                .WithOne(w => w.Paciente)
+                .HasForeignKey(h => h.PacienteId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
 
+            modelBuilder.Entity<PacienteModel>()
+                .HasMany(h => h.Consultas)
+                .WithOne(w => w.Paciente)
+                .HasForeignKey(h => h.PacienteId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+
+            modelBuilder.Entity<PacienteModel>()
+               .HasMany(h => h.Dietas)
+               .WithOne(w => w.Paciente)
+               .HasForeignKey(h => h.PacienteId)
+               .OnDelete(DeleteBehavior.Restrict)
+               .IsRequired();
+
+            modelBuilder.Entity<PacienteModel>()
+               .HasMany(h => h.Exercicios)
+               .WithOne(w => w.Paciente)
+               .HasForeignKey(h => h.PacienteId)
+               .OnDelete(DeleteBehavior.Restrict)
+               .IsRequired();
+
+            modelBuilder.Entity<PacienteModel>()
+               .HasMany(h => h.Medicamentos)
+               .WithOne(w => w.Paciente)
+               .HasForeignKey(h => h.PacienteId)
+               .OnDelete(DeleteBehavior.Restrict)
+               .IsRequired();
 
             modelBuilder.Entity<ConsultaModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Consultas)
-                .HasForeignKey(h => h.UsuarioId); // marcar como obrigatório
-
+                .HasForeignKey(h => h.UsuarioId)
+                .IsRequired();
 
             modelBuilder.Entity<DietaModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Dietas)
-                .HasForeignKey(h => h.UsuarioId); //Marcar como obrigatório
-
+                .HasForeignKey(h => h.UsuarioId)
+                .IsRequired();
 
             modelBuilder.Entity<ExameModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Exames)
-                .HasForeignKey(h => h.UsuarioId);//Marcar como obrigatório
+                .HasForeignKey(h => h.UsuarioId)
+                .IsRequired();
 
             modelBuilder.Entity<ExercicioModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Exercicios)
-                .HasForeignKey(h => h.UsuarioId); //Marcar como obrigatório
+                .HasForeignKey(h => h.UsuarioId)
+                .IsRequired();
 
             modelBuilder.Entity<MedicamentoModel>()
                 .HasOne(h => h.Usuario)
                 .WithMany(w => w.Medicamentos)
-                .HasForeignKey(h => h.UsuarioId); //Marcar como obrigatório
+                .HasForeignKey(h => h.UsuarioId)
+                .IsRequired();
 
 
             modelBuilder.Entity<UsuarioModel>().HasData(
@@ -111,7 +142,6 @@ namespace MedicalCare.Infra
                      Tipo = "Médico"
                  }
                 );
-
             modelBuilder.Entity<PacienteModel>().HasData(
                 new PacienteModel
                 {
@@ -199,8 +229,8 @@ namespace MedicalCare.Infra
                 {
                     Id = 1,
                     MotivoDaConsulta = "Dor de cabeça persistente",
-                    DataDaConsulta = DateTime.Now.AddDays(-7), // Data da consulta há uma semana
-                    HorarioDaConsulta = new TimeSpan(14, 30, 07), // Horário da consulta às 14:30
+                    DataDaConsulta = DateTime.Now.AddDays(-7),
+                    HorarioDaConsulta = DateTime.Now.AddHours(-8),
                     DescricaoDoProblema = "Paciente relatou dor de cabeça recorrente nas últimas duas semanas.",
                     MedicacaoReceitada = "Paracetamol",
                     DosagemEPrecaucoes = "Tomar um comprimido a cada 4 horas. Evitar o consumo de álcool durante o tratamento.",
@@ -212,10 +242,10 @@ namespace MedicalCare.Infra
                 {
                     Id = 2,
                     MotivoDaConsulta = "Check-up anual",
-                    DataDaConsulta = DateTime.Now.AddDays(-30), // Data da consulta há um mês
-                    HorarioDaConsulta = new TimeSpan(10, 15, 12), // Horário da consulta às 10:15
+                    DataDaConsulta = DateTime.Now.AddDays(-30),
+                    HorarioDaConsulta = DateTime.Now.AddHours(3),
                     DescricaoDoProblema = "O paciente não relata nenhum problema específico, mas deseja um check-up geral.",
-                    MedicacaoReceitada = null, // Nenhuma medicação prescrita
+                    MedicacaoReceitada = null,
                     DosagemEPrecaucoes = "Nenhuma medicação prescrita neste momento.",
                     StatusDoSistema = true,
                     PacienteId = 2,
@@ -225,8 +255,8 @@ namespace MedicalCare.Infra
                 {
                     Id = 3,
                     MotivoDaConsulta = "Febre e tosse persistente",
-                    DataDaConsulta = DateTime.Now.AddDays(-5), // Data da consulta há 5 dias
-                    HorarioDaConsulta = new TimeSpan(11, 45, 45), // Horário da consulta às 11:45
+                    DataDaConsulta = DateTime.Now.AddDays(-5),
+                    HorarioDaConsulta = DateTime.Now.AddHours(-3),
                     DescricaoDoProblema = "O paciente relata febre alta e tosse constante há uma semana.",
                     MedicacaoReceitada = "Antibiótico",
                     DosagemEPrecaucoes = "Tomar o antibiótico de 8 em 8 horas com alimentos. Evitar o consumo de laticínios durante o tratamento.",
@@ -238,10 +268,10 @@ namespace MedicalCare.Infra
                 {
                     Id = 4,
                     MotivoDaConsulta = "Consulta de rotina anual",
-                    DataDaConsulta = DateTime.Now.AddDays(-365), // Consulta de rotina há um ano
-                    HorarioDaConsulta = new TimeSpan(9, 30, 0), // Horário da consulta às 9:30
+                    DataDaConsulta = DateTime.Now.AddDays(-365),
+                    HorarioDaConsulta = DateTime.Now.AddHours(-10),
                     DescricaoDoProblema = "O paciente não apresenta queixas específicas, apenas uma verificação anual de sua saúde.",
-                    MedicacaoReceitada = null, // Nenhuma medicação prescrita
+                    MedicacaoReceitada = null,
                     DosagemEPrecaucoes = "Nenhuma medicação prescrita para esta consulta de rotina.",
                     StatusDoSistema = true,
                     PacienteId = 1,
@@ -253,8 +283,8 @@ namespace MedicalCare.Infra
                 {
                     Id = 1,
                     NomeDoExame = "Hemograma Completo",
-                    DataDoExame = DateTime.Now.AddDays(-10), // Exame realizado há 10 dias
-                    HorarioDoExame = new TimeSpan(8, 30, 0), // Exame realizado às 8:30
+                    DataDoExame = DateTime.Now.AddDays(-10),
+                    HorarioDoExame = DateTime.Now.AddHours(-1),
                     TipoDoExame = "Exame de Sangue",
                     Laboratorio = "Laboratório ABC",
                     UrlDoDocumento = "http://www.laboratorioabc.com/exames/hemograma-completo",
@@ -267,8 +297,8 @@ namespace MedicalCare.Infra
                 {
                     Id = 2,
                     NomeDoExame = "Raios-X do Tórax",
-                    DataDoExame = DateTime.Now.AddDays(-30), // Exame realizado há 30 dias
-                    HorarioDoExame = new TimeSpan(14, 45, 32), // Exame realizado às 14:45
+                    DataDoExame = DateTime.Now.AddDays(-30),
+                    HorarioDoExame = DateTime.Now.AddHours(-7),
                     TipoDoExame = "Imagem",
                     Laboratorio = "Centro de Radiologia XYZ",
                     UrlDoDocumento = "http://www.centroradiologiaxyz.com/exames/raios-x-torax",
@@ -281,8 +311,8 @@ namespace MedicalCare.Infra
                 {
                     Id = 3,
                     NomeDoExame = "Ultrassonografia Abdominal",
-                    DataDoExame = DateTime.Now.AddDays(-45), // Exame realizado há 45 dias
-                    HorarioDoExame = new TimeSpan(11, 15, 0), // Exame realizado às 11:15
+                    DataDoExame = DateTime.Now.AddDays(-45),
+                    HorarioDoExame = DateTime.Now.AddHours(8),
                     TipoDoExame = "Imagem",
                     Laboratorio = "Clinica de Ultrassonografia ABC",
                     UrlDoDocumento = "http://www.ultrassonografiaabc.com/exames/ultrassonografia-abdominal",
@@ -344,6 +374,186 @@ namespace MedicalCare.Infra
                     Bairro = "Centro",
                     PontoDeReferencia = "Próximo à praça da cidade",
                     PacienteId = 4
+                }
+                );
+            modelBuilder.Entity<DietaModel>().HasData(
+                new DietaModel
+                {
+                    Id = 1,
+                    NomeDaDieta = "Dieta Low Carb",
+                    Descricao = "Dieta com baixa ingestão de carboidratos",
+                    Tipo = "lowCarb",
+                    DescricaoDaDietaExecutada = "Realizou a dieta conforme orientação",
+                    PacienteId = 1,
+                    UsuarioId = 4
+                },
+                new DietaModel
+                {
+                    Id = 2,
+                    NomeDaDieta = "Dieta DASH",
+                    Descricao = "Abordagem alimentar para controlar a pressão arterial",
+                    Tipo = "dash",
+                    DescricaoDaDietaExecutada = "Seguiu as diretrizes da dieta DASH",
+                    PacienteId = 2,
+                    UsuarioId = 2
+                },
+                new DietaModel
+                {
+                    Id = 3,
+                    NomeDaDieta = "Dieta Paleolítica",
+                    Descricao = "Baseada nos alimentos consumidos por nossos antepassados",
+                    Tipo = "paleolitica",
+                    DescricaoDaDietaExecutada = "Adotou a dieta paleolítica",
+                    PacienteId = 3,
+                    UsuarioId = 1
+                },
+                new DietaModel
+                {
+                    Id = 4,
+                    NomeDaDieta = "Dieta Cetogênica",
+                    Descricao = "Rica em gorduras e pobre em carboidratos",
+                    Tipo = "cetogenica",
+                    DescricaoDaDietaExecutada = "Iniciou a dieta cetogênica",
+                    PacienteId = 4,
+                    UsuarioId = 1
+                }
+                );
+            modelBuilder.Entity<ExercicioModel>().HasData(
+                new ExercicioModel
+                {
+                    Id = 1,
+                    NomeDaSerieDeExercicios = "Exercícios de Resistência Aeróbica",
+                    Data = DateTime.Now.AddDays(1),
+                    Horario = DateTime.Now.AddHours(8),
+                    Tipo = "Resistência_aerobica",
+                    QuantidadePorSemana = 3,
+                    Descricao = "Série de exercícios aeróbicos para melhorar resistência",
+                    StatusDoSistema = true,
+                    PacienteId = 1,
+                    UsuarioId = 2
+                },
+                new ExercicioModel
+                {
+                    Id = 2,
+                    NomeDaSerieDeExercicios = "Treino de Força",
+                    Data = DateTime.Now.AddDays(2),
+                    Horario = DateTime.Now.AddHours(17),
+                    Tipo = "Forca",
+                    QuantidadePorSemana = 4,
+                    Descricao = "Treino focado no aumento de força muscular",
+                    StatusDoSistema = true,
+                    PacienteId = 2,
+                    UsuarioId = 1
+                },
+                new ExercicioModel
+                {
+                    Id = 3,
+                    NomeDaSerieDeExercicios = "Rotina de Flexibilidade",
+                    Data = DateTime.Now.AddDays(3),
+                    Horario = DateTime.Now.AddHours(9),
+                    Tipo = "Flexibilidade",
+                    QuantidadePorSemana = 2,
+                    Descricao = "Exercícios para melhorar a flexibilidade muscular",
+                    StatusDoSistema = true,
+                    PacienteId = 3,
+                    UsuarioId = 4
+                },
+                new ExercicioModel
+                {
+                    Id = 4,
+                    NomeDaSerieDeExercicios = "Agilidade e Velocidade",
+                    Data = DateTime.Now.AddDays(4),
+                    Horario = DateTime.Now.AddHours(7),
+                    Tipo = "Agilidade",
+                    QuantidadePorSemana = 3,
+                    Descricao = "Treino para melhorar agilidade e velocidade",
+                    StatusDoSistema = true,
+                    PacienteId = 4,
+                    UsuarioId = 1
+                }
+                );
+            modelBuilder.Entity<MedicamentoModel>().HasData(
+                new MedicamentoModel
+                {
+                    Id = 1,
+                    NomeDoMedicamento = "Medicamento 1",
+                    Data = DateTime.Now.AddDays(1).AddHours(2),
+                    Tipo = "cápsula",
+                    Quantidade = 10,
+                    Observacoes = "Observações do medicamento 1",
+                    StatusDoSistema = true,
+                    Unidade = "mg",
+                    PacienteId = 1,
+                    UsuarioId = 1
+                },
+                new MedicamentoModel
+                {
+                    Id = 2,
+                    NomeDoMedicamento = "Medicamento 2",
+                    Data = DateTime.Now.AddDays(2).AddHours(4),
+                    Tipo = "comprimido",
+                    Quantidade = 20,
+                    Observacoes = "Observações do medicamento 2",
+                    StatusDoSistema = true,
+                    Unidade = "mcg",
+                    PacienteId = 2,
+                    UsuarioId = 2
+                },
+                new MedicamentoModel
+                {
+                    Id = 3,
+                    NomeDoMedicamento = "Medicamento 3",
+                    Data = DateTime.Now.AddDays(3).AddHours(6),
+                    Tipo = "líquido",
+                    Quantidade = 15,
+                    Observacoes = "Observações do medicamento 3",
+                    StatusDoSistema = true,
+                    Unidade = "mL",
+                    PacienteId = 3,
+                    UsuarioId = 3
+                },
+                new MedicamentoModel
+                {
+                    Id = 4,
+                    NomeDoMedicamento = "Medicamento 4",
+                    Data = DateTime.Now.AddDays(4).AddHours(8),
+                    Tipo = "creme",
+                    Quantidade = 30,
+                    Observacoes = "Observações do medicamento 4",
+                    StatusDoSistema = true,
+                    Unidade = "g",
+                    PacienteId = 4,
+                    UsuarioId = 4
+                }
+                );
+            modelBuilder.Entity<LogModel>().HasData(
+                new LogModel
+                {
+                    Id = 1,
+                    Data = DateTime.Now.AddDays(-5),
+                    Dominio = "Erro no servidor",
+                    Descricao = "Ocorreu um erro no servidor ao processar a requisição."
+                },
+                new LogModel
+                {
+                    Id = 2,
+                    Data = DateTime.Now.AddDays(-3),
+                    Dominio = "Erro de autenticação",
+                    Descricao = "Falha na autenticação do usuário."
+                },
+                new LogModel
+                {
+                    Id = 3,
+                    Data = DateTime.Now.AddDays(-1),
+                    Dominio = "Problema de conexão",
+                    Descricao = "Perda de conexão com o banco de dados."
+                },
+                new LogModel
+                {
+                    Id = 4,
+                    Data = DateTime.Now,
+                    Dominio = "Erro na interface",
+                    Descricao = "Problema de exibição na interface do usuário."
                 }
                 );
 

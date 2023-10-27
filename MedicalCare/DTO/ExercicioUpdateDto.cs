@@ -9,10 +9,10 @@ namespace MedicalCare.DTO
         public string NomeDaSerieDeExercicios { get; set; }
 
         [Required]
-        public string Data { get; set; }
+        public DateTime Data { get; set; }
 
         [Required]
-        public string Horario { get; set; }
+        public DateTime Horario { get; set; }
 
         [Required]
         public EtipoExercicio Tipo { get; set; }

@@ -64,7 +64,8 @@ namespace MedicalCare.Services
         {
             UsuarioModel usuarioModel = _usuarioRepository.GetById(id);
             usuarioModel = _mapper.Map(usuarioUpdate, usuarioModel);
-            Console.WriteLine(usuarioModel);
+            usuarioModel.Genero = Enum.GetName(typeof(Egenero), usuarioUpdate.Genero.GetHashCode());
+            usuarioModel.Tipo = Enum.GetName(typeof(ETipo), usuarioUpdate.Tipo.GetHashCode());
             _usuarioRepository.Update(usuarioModel);
             UsuarioModel usuarioModelAtualizado = _usuarioRepository.GetById(id);
             UsuarioGetDto usuarioGet = _mapper.Map<UsuarioGetDto>(usuarioModelAtualizado);

@@ -50,7 +50,7 @@ namespace MedicalCare.Controllers
 
                 LogModel logModel = new LogModel
                 {
-                    Descricao = $"{tipo} {nome}, de Id {id}, cadastrou o paciente {pacienteCreate.NomeCompleto} no sistema.",
+                    Descricao = $"{tipo} {nome}, de Id {id}, cadastrou o paciente de id {pacienteGet.Id}.",
                     Dominio = "Paciente-cadastro."
                 };
                 _logService.CreateLog(logModel);
@@ -87,7 +87,7 @@ namespace MedicalCare.Controllers
                 LogModel logModel = new LogModel
                 {
                     Descricao = $"{tipo} {nome}, de Id {_id}, listou todos os pacientes do sistema.",
-                    Dominio = "Paciente-getAll."
+                    Dominio = "Paciente-ObterTodos."
                 };
                 _logService.CreateLog(logModel);
 
@@ -125,8 +125,8 @@ namespace MedicalCare.Controllers
 
                 LogModel logModel = new LogModel
                 {
-                    Descricao = $"{tipo} {nome}, de Id {_id}, listou o paciente {pacienteGet.NomeCompleto} no sistema.",
-                    Dominio = "Paciente-getById."
+                    Descricao = $"{tipo} {nome}, de Id {_id}, listou o paciente de id {id}.",
+                    Dominio = "Paciente-obterPorId."
                 };
                 _logService.CreateLog(logModel);
                 return Ok(pacienteGet);
@@ -164,8 +164,8 @@ namespace MedicalCare.Controllers
 
                 LogModel logModel = new LogModel
                 {
-                    Descricao = $"{tipo} {nome}, de Id {_id}, atualizou o paciente {pacienteUpdate.NomeCompleto} no sistema.",
-                    Dominio = "Paciente-update."
+                    Descricao = $"{tipo} {nome}, de Id {_id}, atualizou o paciente de id {id}.",
+                    Dominio = "Paciente-atualizar."
                 };
                 _logService.CreateLog(logModel);
 
@@ -203,8 +203,8 @@ namespace MedicalCare.Controllers
                     _pacienteService.DeletePaciente(id);
                     LogModel logModel = new LogModel
                     {
-                        Descricao = $"{tipo} {nome}, de Id {_id}, excluiu o paciente {pacienteGet.NomeCompleto}.",
-                        Dominio = "Paciente-delete."
+                        Descricao = $"{tipo} {nome}, de Id {_id}, excluiu o paciente de id {id}.",
+                        Dominio = "Paciente-excluir."
                     };
                     _logService.CreateLog(logModel);
                     return Accepted();

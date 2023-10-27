@@ -13,11 +13,11 @@ namespace MedicalCare.Models
 
         public string NomeDaSerieDeExercicios { get; set; }
 
-        public string Data { get; set; }
+        public DateTime Data { get; set; }
 
-        public string Horario { get; set; }
+        public DateTime Horario { get; set; }
 
-        public EtipoExercicio Tipo { get; set; } 
+        public string Tipo { get; set; } 
 
         public int QuantidadePorSemana { get; set; }
 

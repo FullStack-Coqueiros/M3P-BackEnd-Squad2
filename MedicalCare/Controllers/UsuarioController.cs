@@ -1,10 +1,13 @@
 using MedicalCare.DTO;
+using MedicalCare.Enums;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
+using MedicalCare.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Cryptography;
 
 namespace MedicalCare.Controllers
 {
@@ -14,31 +17,35 @@ namespace MedicalCare.Controllers
     {
         private readonly IUsuarioService _usuarioService;
         private readonly ILoginService _loginService;
+        private readonly ILogService _logService;
 
-        public UsuarioController(IUsuarioService usuarioService, ILoginService loginService)
+
+        public UsuarioController(IUsuarioService usuarioService, ILoginService loginService, ILogService logService)
         {
             _usuarioService = usuarioService;
             _loginService = loginService;
+            _logService = logService;
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
         public ActionResult Login([FromBody] TentativaLoginDto tentativaLogin)
         {
-             try
+            try
             {
-                if (_loginService.Login(tentativaLogin) == false) {
+                if (_loginService.Login(tentativaLogin) == false)
+                {
                     return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), "Não foi possível logar.");
                 }
 
                 tentativaLogin.Logado = true;
 
-                string tokenJwt = _loginService.GeraTokenJWT(tentativaLogin);                
-                return StatusCode(HttpStatusCode.OK.GetHashCode(), tokenJwt);   
+                string tokenJwt = _loginService.GeraTokenJWT(tentativaLogin);
+                return StatusCode(HttpStatusCode.OK.GetHashCode(), tokenJwt);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -49,7 +56,8 @@ namespace MedicalCare.Controllers
             try
             {
                 string novaSenha = _loginService.GeraNovaSenha(tentativaTrocaDeSenha);
-                if (novaSenha == null) {
+                if (novaSenha == null)
+                {
                     return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), "email não cadastrado.");
                 }
 
@@ -57,10 +65,9 @@ namespace MedicalCare.Controllers
                 tentativaTrocaDeSenha.SenhaAntiga = null;
                 return StatusCode(HttpStatusCode.OK.GetHashCode(), tentativaTrocaDeSenha);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
 
         }
@@ -72,21 +79,39 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+
                 bool verificaCpfEmail = _usuarioService.GetAllUsuarios()
                                 .Any(a => a.Cpf == usuarioCreate.Cpf || a.Email == usuarioCreate.Email);
                 if (verificaCpfEmail)
                 {
                     return StatusCode(HttpStatusCode.Conflict.GetHashCode(), "Cpf e/ou email ja cadastrado(s).");
                 }
+
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
                 usuarioCreate.StatusDoSistema = true;
                 UsuarioGetDto usuarioGet = _usuarioService.CreateUsuario(usuarioCreate);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, cadastrou o usuário de id {usuarioGet.Id}.",
+                    Dominio = "Usuario-cadastro."
+                };
+                _logService.CreateLog(logModel);
+
                 return Created("Usuario salvo com sucesso.", usuarioGet);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -96,13 +121,29 @@ namespace MedicalCare.Controllers
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
                 IEnumerable<UsuarioGetDto> usuarios = _usuarioService.GetAllUsuarios();
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, listou todos os usuários.",
+                    Dominio = "Usuario-obter."
+                };
+                _logService.CreateLog(logModel);
+
                 return Ok(usuarios);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -112,17 +153,34 @@ namespace MedicalCare.Controllers
         {
             try
             {
+
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
                 UsuarioGetDto usuarioGet = _usuarioService.GetById(id);
                 if (usuarioGet == null)
                 {
-                    return NotFound("Id de usuário não encontrado.");
+                    return NoContent();
                 }
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, listou o usuário de id {id}.",
+                    Dominio = "Usuario-obter."
+                };
+                _logService.CreateLog(logModel);
+
                 return Ok(usuarioGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -130,22 +188,37 @@ namespace MedicalCare.Controllers
         [HttpPut("{id}")]
         public ActionResult<UsuarioGetDto> Update([FromRoute] int id, [FromBody] UsuarioUpdateDto usuarioUpdate)
         {
-            //Aqui criar var pegando o id do adm logado, e barrar caso queira inativar ele mesmo.
             try
             {
-                UsuarioGetDto? verificaSeExiste = _usuarioService.GetById(id);
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
+                UsuarioGetDto verificaSeExiste = _usuarioService.GetById(id);
                 if (verificaSeExiste == null)
                 {
-                    return NotFound("Id de usuário não encontrado.");
+                    return NoContent();
                 }
                 UsuarioGetDto usuarioGet = _usuarioService.UpdateUsuario(usuarioUpdate, id);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, atualizou o usuário de id {usuarioGet.Id}.",
+                    Dominio = "Usuario-atualizar."
+                };
+                _logService.CreateLog(logModel);
+
                 return Ok(usuarioGet);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
@@ -156,18 +229,39 @@ namespace MedicalCare.Controllers
             //Aqui criar var pegando o id do adm logado, e barrar caso queira excluir ele mesmo.
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+
+                if(_id == id)
+                {
+                    return NoContent();
+                }
+
                 bool remocao = _usuarioService.DeleteUsuario(id);
                 if (remocao)
                 {
-                return Accepted();
+                    var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                    var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {_id}, excluiu o usuário de id {id}.",
+                        Dominio = "Usuario-excluir."
+                    };
+                    _logService.CreateLog(logModel);
+
+                    return Accepted();
                 }
-                return NotFound("Id de usuário não encontrado.");
+                return NoContent();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
