@@ -59,5 +59,9 @@ namespace MedicalCare.Services
             return false;
         }
 
+        public IEnumerable<ExercicioGetDto> GetExerciciosByPaciente(int pacienteId, bool isSomeOtherFlagSet)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
