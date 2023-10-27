@@ -17,7 +17,7 @@ namespace MedicalCare.Models
 
         public string Horario { get; set; }
 
-        public EtipoExercicio Tipo { get; set; } 
+        public string Tipo { get; set; } 
 
         public int QuantidadePorSemana { get; set; }
 

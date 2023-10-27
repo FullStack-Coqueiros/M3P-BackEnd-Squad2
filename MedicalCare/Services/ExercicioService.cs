@@ -37,15 +37,16 @@ namespace MedicalCare.Services
         {
             ExercicioModel exercicioModel = _mapper.Map<ExercicioModel>(exercicio);
             _exercicioRepository.Create(exercicioModel);
-            ExercicioGetDto exercicioGet = _mapper.Map<ExercicioGetDto>(exercicio);
+            ExercicioGetDto exercicioGet = _mapper.Map<ExercicioGetDto>(exercicioModel);
             return exercicioGet;
         }
 
-        public ExercicioGetDto UpdateExercicio(ExercicioUpdateDto exercicio)
+        public ExercicioGetDto UpdateExercicio(ExercicioUpdateDto exercicio, int id)
         {
-            ExercicioModel exercicioModel = _mapper.Map<ExercicioModel>(exercicio);
+            ExercicioModel exercicioModel = _exercicioRepository.GetById(id);
+            exercicioModel = _mapper.Map(exercicio, exercicioModel);
             _exercicioRepository.Update(exercicioModel);
-            ExercicioGetDto exercicioGet = _mapper.Map<ExercicioGetDto>(exercicio);
+            ExercicioGetDto exercicioGet = _mapper.Map<ExercicioGetDto>(exercicioModel);
             return exercicioGet;
         }
 

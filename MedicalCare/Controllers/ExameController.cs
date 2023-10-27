@@ -88,7 +88,6 @@ namespace MedicalCare.Controllers
 
                 if (pacienteId.HasValue)
                 {
-                    // Retorna exames do paciente específico
                     var exame = _exameService.GetAllExames().Where(e => e.PacienteId == pacienteId.Value);
 
                     LogModel logModel = new LogModel
@@ -102,7 +101,6 @@ namespace MedicalCare.Controllers
                 }
                 else
                 {
-                    // Retorna todos os exames
                     var exames = _exameService.GetAllExames();
 
                     LogModel logModel = new LogModel
@@ -193,6 +191,8 @@ namespace MedicalCare.Controllers
                         Descricao = $"{tipo} {nome}, de Id {_id}, excluiu o exame de id {id}.",
                         Dominio = "Exame-excluir."
                     };
+                    _logService.CreateLog(logModel);
+
                     return Accepted();
                 }
                 return NoContent();
