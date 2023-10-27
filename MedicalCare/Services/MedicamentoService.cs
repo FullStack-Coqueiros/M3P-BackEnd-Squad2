@@ -45,7 +45,7 @@ namespace MedicalCare.Services
             return medicamentoGet;
         }
 
-        public MedicamentoGetDTO UpdateMedicamento(MedicamentoUpdateDTO medicamento)
+        public MedicamentoGetDTO UpdateMedicamento(MedicamentoUpdateDTO medicamento, int id)
         {
             MedicamentoModel medicamentoModel = _mapper.Map<MedicamentoModel>(medicamento);
             _medicamentoRepository.Update(medicamentoModel);

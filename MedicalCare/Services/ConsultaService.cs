@@ -2,15 +2,14 @@
 using MedicalCare.DTO;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace MedicalCare.Services
 {
     public class ConsultaService : IConsultaService
     {
-        private readonly IRepository<ConsultaModel> _consultaRepository;
         private readonly IMapper _mapper;
+        private readonly IRepository<ConsultaModel> _consultaRepository;
 
         public ConsultaService(IMapper mapper, IRepository<ConsultaModel> consultaRepository)
         {
@@ -18,7 +17,7 @@ namespace MedicalCare.Services
             _consultaRepository = consultaRepository;
         }
 
-        public IEnumerable<ConsultaGetDto> GetAllConsultas()
+        public IEnumerable<ConsultaGetDto> GetAllConsultas() 
         {
             IEnumerable<ConsultaModel> consultas = _consultaRepository.GetAll();
             IEnumerable<ConsultaGetDto> consultaGet = _mapper.Map<IEnumerable<ConsultaGetDto>>(consultas);
@@ -32,21 +31,19 @@ namespace MedicalCare.Services
             return consultaGetId;
         }
 
-        public ConsultaGetDto CreateConsulta(ConsultaCreateDTO consultaCreate)
+        public ConsultaGetDto CreateConsulta(ConsultaCreateDTO consulta)
         {
-            ConsultaModel consultaModel = _mapper.Map<ConsultaModel>(consultaCreate);
+            ConsultaModel consultaModel = _mapper.Map<ConsultaModel>(consulta);
             _consultaRepository.Create(consultaModel);
-            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consultaCreate);
+            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consulta);
             return consultaGet;
         }
 
-        public ConsultaGetDto UpdateConsulta(ConsultaUpdateDTO consultaUpdate, int id)
+        public ConsultaGetDto UpdateConsulta(ConsultaUpdateDTO consulta)
         {
-            ConsultaModel consultaModel = _consultaRepository.GetById(id);
-            consultaModel = _mapper.Map(consultaUpdate, consultaModel);
+            ConsultaModel consultaModel = _mapper.Map<ConsultaModel>(consulta);
             _consultaRepository.Update(consultaModel);
-            ConsultaModel consultaModelAtualizado = _consultaRepository.GetById(id);
-            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consultaModelAtualizado);
+            ConsultaGetDto consultaGet = _mapper.Map<ConsultaGetDto>(consulta);
             return consultaGet;
         }
 
@@ -58,6 +55,16 @@ namespace MedicalCare.Services
                 return true;
             }
             return false;
+        }
+
+
+
+
+
+
+        public IEnumerable<ConsultaGetDto> GetConsultasByPaciente(int pacienteId, bool isSomeFlagSet)
+        {
+            return _consultaRepository.GetAll().Where(e => e.PacienteId == pacienteId).Select(e => _mapper.Map<ConsultaGetDto>(e));
         }
     }
 }

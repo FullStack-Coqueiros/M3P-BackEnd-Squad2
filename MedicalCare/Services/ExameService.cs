@@ -37,7 +37,7 @@ namespace MedicalCare.Services
         {
             ExameModel exameModel = _mapper.Map<ExameModel>(exame);
             _exameRepository.Create(exameModel);
-            ExameGetDto exameGet = _mapper.Map<ExameGetDto>(exame);
+            ExameGetDto exameGet = _mapper.Map<ExameGetDto>(exameModel);
             return exameGet;
         }
 

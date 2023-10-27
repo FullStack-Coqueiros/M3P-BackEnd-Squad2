@@ -1,9 +1,11 @@
 ﻿using MedicalCare.DTO;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Cryptography;
 
 namespace MedicalCare.Controllers
 {
@@ -12,108 +14,208 @@ namespace MedicalCare.Controllers
     public class PacienteController : ControllerBase
     {
         private readonly IPacienteService _pacienteService;
+        private readonly ILogService _logService;
+        private readonly IRepository<PacienteModel> _repository;
 
-        public PacienteController(IPacienteService pacienteService)
+        public PacienteController(IPacienteService pacienteService, IRepository<PacienteModel> repository, ILogService logService)
         {
             _pacienteService = pacienteService;
+            _repository = repository;
+            _logService = logService;
         }
 
 
+
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPost]
         public ActionResult<PacienteGetDto> Post([FromBody] PacienteCreateDto pacienteCreate)
         {
             try
             {
-                bool verificaCpfEmail = _pacienteService.GetAllPacientes()
-                                .Any(a => a.Cpf == pacienteCreate.Cpf || a.Email == pacienteCreate.Email);
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                int id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                bool verificaCpfEmail = _repository.GetByCpfEmail(pacienteCreate.Cpf, pacienteCreate.Email);
                 if (verificaCpfEmail)
                 {
                     return StatusCode(HttpStatusCode.Conflict.GetHashCode(), "Cpf e/ou email ja cadastrado(s).");
                 }
                 pacienteCreate.StatusDoSistema = true;
                 PacienteGetDto pacienteGet = _pacienteService.CreatePaciente(pacienteCreate);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {id}, cadastrou o paciente {pacienteCreate.NomeCompleto} no sistema.",
+                    Dominio = "Paciente-cadastro."
+                };
+                _logService.CreateLog(logModel);
+
                 return Created("Paciente salvo com sucesso.", pacienteGet);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
+
+
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet]
         public ActionResult<IEnumerable<PacienteGetDto>> Get()
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+
                 IEnumerable<PacienteGetDto> pacientes = _pacienteService.GetAllPacientes();
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, listou todos os pacientes do sistema.",
+                    Dominio = "Paciente-getAll."
+                };
+                _logService.CreateLog(logModel);
+
                 return Ok(pacientes);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
+
+
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet("{id}")]
         public ActionResult<PacienteGetDto> Get([FromRoute] int id)
         {
             try
             {
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+
                 PacienteGetDto pacienteGet = _pacienteService.GetById(id);
                 if (pacienteGet == null)
                 {
-                    return NotFound("Id de paciente não encontrado.");
+                    return NoContent();
                 }
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, listou o paciente {pacienteGet.NomeCompleto} no sistema.",
+                    Dominio = "Paciente-getById."
+                };
+                _logService.CreateLog(logModel);
                 return Ok(pacienteGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
+
+
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPut("{id}")]
         public ActionResult<PacienteGetDto> Update([FromRoute] int id, [FromBody] PacienteUpdateDto pacienteUpdate)
         {
             try
             {
-                PacienteGetDto? verificaSeExiste = _pacienteService.GetById(id);
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
+                {
+                    return BadRequest("Usuário inativo no sistema");
+                }
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+
+                PacienteGetDto verificaSeExiste = _pacienteService.GetById(id);
                 if (verificaSeExiste == null)
                 {
-                    return NotFound("Id de paciente não encontrado.");
+                    return NoContent();
                 }
                 PacienteGetDto pacienteGet = _pacienteService.UpdatePaciente(pacienteUpdate, id);
+
+                LogModel logModel = new LogModel
+                {
+                    Descricao = $"{tipo} {nome}, de Id {_id}, atualizou o paciente {pacienteUpdate.NomeCompleto} no sistema.",
+                    Dominio = "Paciente-update."
+                };
+                _logService.CreateLog(logModel);
+
                 return Ok(pacienteGet);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 
+
+
+        [Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
             try
             {
-                bool remocao = _pacienteService.DeletePaciente(id);
-                if (remocao)
+                var ativo = bool.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "StatusDoSistema").Value);
+                if (!ativo)
                 {
-                return Accepted();
+                    return BadRequest("Usuário inativo no sistema");
                 }
-                return NotFound("Id de paciente não encontrado.");
+                var nome = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Nome").Value;
+                var tipo = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Tipo").Value;
+                int _id = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Id").Value);
+                PacienteGetDto pacienteGet = _pacienteService.GetById(id);
+
+                if (pacienteGet != null)
+                {
+
+                    _pacienteService.DeletePaciente(id);
+                    LogModel logModel = new LogModel
+                    {
+                        Descricao = $"{tipo} {nome}, de Id {_id}, excluiu o paciente {pacienteGet.NomeCompleto}.",
+                        Dominio = "Paciente-delete."
+                    };
+                    _logService.CreateLog(logModel);
+                    return Accepted();
+                }
+                return NoContent();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro interno.");
             }
         }
 

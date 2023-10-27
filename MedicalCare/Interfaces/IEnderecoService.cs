@@ -1,13 +1,15 @@
-﻿using MedicalCare.Models;
+﻿using MedicalCare.DTO;
+using MedicalCare.Models;
 
 namespace MedicalCare.Interfaces
 {
     public interface IEnderecoService
     {
         IEnumerable<EnderecoModel> GetAllEnderecos();
-        EnderecoModel CreateEndereco(EnderecoModel endereco);
+        EnderecoGetDto CreateEndereco(EnderecoCreateDto endereco);
         EnderecoModel GetById(int id);
-        EnderecoModel UpdateEndereco(EnderecoModel endereco);
+        EnderecoGetDto GetByRelationship(PacienteModel relationship);
+        EnderecoGetDto UpdateEndereco(EnderecoUpdateDto endereco, int id);
         bool DeleteEndereco(int id);
 
     }

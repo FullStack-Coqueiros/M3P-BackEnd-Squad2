@@ -1,5 +1,6 @@
 ﻿using MedicalCare.DTO;
 using MedicalCare.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,6 +20,7 @@ namespace MedicalCare.Controllers
             _exameService = exameService;
         }
 
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpPost]
         public IActionResult Post([FromBody] ExameCreateDto exameCreate)
         {
@@ -33,6 +35,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpGet]
         public ActionResult<IEnumerable<ExameGetDto>> Get([FromQuery] int? pacienteId)
         {
@@ -56,6 +59,8 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpPut("{id}")]
         public ActionResult<ExameGetDto> Update([FromRoute] int id, [FromBody] ExameUpdateDto exameUpdate)
         {
@@ -75,7 +80,7 @@ namespace MedicalCare.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpGet("{id}")]
         public ActionResult<ExameGetDto> GetExame([FromRoute] int id)
         {
@@ -94,6 +99,7 @@ namespace MedicalCare.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpGet("ByPaciente")]
         public ActionResult<IEnumerable<ExameGetDto>> GetExamesByPaciente([FromQuery] int? pacienteId, [FromBody] bool isSomeFlagSet)
         {
@@ -115,7 +121,7 @@ namespace MedicalCare.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Administrador, Médico")]
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {

@@ -8,6 +8,7 @@ using MedicalCare.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using MedicalCare.DTO;
 using MedicalCare.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicalCare.Controllers
 {
@@ -21,6 +22,7 @@ namespace MedicalCare.Controllers
             _medicamentoService = medicamentoService;
         }
 
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPost]
         public IActionResult Post([FromBody] MedicamentoCreateDTO medicamentoCreate)
         {
@@ -42,6 +44,7 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+
         [HttpGet("ByPaciente")]
         public ActionResult<IEnumerable<MedicamentoGetDTO>> Get([FromQuery] int? pacienteId)
         {
@@ -63,6 +66,10 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+
+
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
+
         [HttpGet("{id}")]
         public ActionResult<MedicamentoGetDTO> Get([FromRoute] int id)
         {
@@ -82,6 +89,8 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpPut("{id}")]
         public ActionResult<MedicamentoGetDTO> Update([FromRoute] int id, [FromBody] MedicamentoUpdateDTO medicamentoUpdate)
         {
@@ -100,6 +109,8 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpDelete("{id}")]
 
         public ActionResult Delete([FromRoute] int id)

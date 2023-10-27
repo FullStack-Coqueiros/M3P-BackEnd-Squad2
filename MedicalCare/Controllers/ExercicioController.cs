@@ -5,6 +5,8 @@ using System.Net;
 using System.Threading.Tasks;
 using MedicalCare.DTO;
 using MedicalCare.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalCare.Controllers
@@ -15,10 +17,14 @@ namespace MedicalCare.Controllers
     {
         private readonly IExercicioService _exercicioService;
 
+
         public ExercicioController(IExercicioService exercicioService)
         {
             _exercicioService = exercicioService;
         }
+
+
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
 
         [HttpPost]
         public IActionResult Post([FromBody] ExercicioCreateDto exercicioCreate)
@@ -34,35 +40,53 @@ namespace MedicalCare.Controllers
             }
 
         }
+
+
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
+
         [HttpPut("{id}")]
         public ActionResult<ExercicioGetDto> Update([FromRoute] int id, [FromBody] ExercicioUpdateDto exercicioUpdate)
         {
             try
             {
                 ExercicioGetDto? consultaNoSistema = _exercicioService.GetById(id);
+
                 if (consultaNoSistema == null)
                 {
                     return NotFound("Exercicio não encontrado");
+
+                if(consultaNoSistema == null)
+                {
+                    return NotFound("Exercicio não encontrado");
+                    
 
                 }
                 ExercicioGetDto exercicioGet = _exercicioService.UpdateExercicio(exercicioUpdate);
                 return Ok(exercicioGet);
             }
-            catch (Exception ex)
+
+
+            catch(Exception ex)
+
             {
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+
+
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
 
         [HttpGet]
         public ActionResult<IEnumerable<ExercicioGetDto>> Get([FromQuery] int? pacienteId)
         {
             try
             {
-                if (pacienteId.HasValue)
+
+                if(pacienteId.HasValue)
                 {
                     var exercicios = _exercicioService.GetAllExercicios().Where(e => e.PacienteId == pacienteId.Value);
-                    return Ok(exercicios);
+                    return Ok (exercicios);
+
                 }
                 else
                 {
@@ -75,24 +99,34 @@ namespace MedicalCare.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
+
+
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpGet("{id}")]
-        public ActionResult<ExercicioGetDto> GetExercicio([FromRoute] int id)
+        public ActionResult<ExercicioGetDto>GetExercicio([FromRoute] int id)
+
         {
             try
             {
                 ExercicioGetDto exercicioGet = _exercicioService.GetById(id);
-                if (exercicioGet == null)
+
+                if(exercicioGet == null)
+
                 {
                     return NotFound("Exercicio não encontrado");
                 }
                 return Ok(exercicioGet);
             }
-            catch (Exception ex)
+
+            catch(Exception ex)
+
             {
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
         }
-        [HttpGet("ByPaciente")]
+
+        /* [HttpGet("ByPaciente")]
+
         public ActionResult<IEnumerable<ExercicioGetDto>> GetExerciciosByPaciente([FromQuery] int? pacienteId, [FromBody] bool isSomeFlagSet)
         {
             try
@@ -111,9 +145,10 @@ namespace MedicalCare.Controllers
             {
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex);
             }
-        }
 
+        } */
 
+        //[Authorize(Roles = "Administrador, Médico, Enfermeiro")]
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
@@ -134,5 +169,6 @@ namespace MedicalCare.Controllers
     }
 }
 
+        
 
 

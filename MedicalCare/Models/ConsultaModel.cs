@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,10 +18,11 @@ namespace MedicalCare.Models
         public string MotivoDaConsulta { get; set; }
 
         [Required(ErrorMessage = "Favor inserir a data da consulta!")]
+        [Column(TypeName = "Date")]
         public DateTime DataDaConsulta { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "Favor inserir o horário da consulta!")]
-        public DateTime HorarioDaConsulta { get; set; } = DateTime.Now;
+        public TimeSpan HorarioDaConsulta { get; set; } = DateTime.Now.TimeOfDay;
 
         [Required(ErrorMessage = "Favor inserir a descrição do problema!")]
         [StringLength(1024, MinimumLength = 16, ErrorMessage = "Descrição do problema deve ter entre 16 e 1024 caracteres.")]
@@ -37,12 +39,12 @@ namespace MedicalCare.Models
         [Required(ErrorMessage = "Favor inserir o status do sistema!")]
         public bool StatusDoSistema { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O Id do Paciente é obrigatório.")]
         public int PacienteId { get; set; }
 
         public PacienteModel Paciente { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O Id do Usuário é obrigatório.")]
         public int UsuarioId { get; set; }
 
         public UsuarioModel Usuario { get; set; }

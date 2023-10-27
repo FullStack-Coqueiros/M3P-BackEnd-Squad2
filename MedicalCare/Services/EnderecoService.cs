@@ -1,4 +1,6 @@
-﻿using MedicalCare.Interfaces;
+﻿using AutoMapper;
+using MedicalCare.DTO;
+using MedicalCare.Interfaces;
 using MedicalCare.Models;
 
 namespace MedicalCare.Services
@@ -6,31 +8,49 @@ namespace MedicalCare.Services
     public class EnderecoService : IEnderecoService
     {
         private readonly IRepository<EnderecoModel> _enderecoRepository;
+        private readonly IMapper _mapper;
 
-        public EnderecoService(IRepository<EnderecoModel> enderecoRepository)
+        public EnderecoService(IRepository<EnderecoModel> enderecoRepository, IMapper mapper)
         {
             _enderecoRepository = enderecoRepository;
+            _mapper = mapper;
         }
 
-        public IEnumerable<EnderecoModel> GetAllEnderecos()
+        public IEnumerable<EnderecoModel> GetAllEnderecos() //Alterar retorno para GetDto
         {
             return _enderecoRepository.GetAll();
         }
 
-        public EnderecoModel GetById(int id)
+        public EnderecoModel GetById(int id) //Alterar retorno para GetDto
         {
             return _enderecoRepository.GetById(id);
         }
 
-        public EnderecoModel CreateEndereco(EnderecoModel endereco)
+        public EnderecoGetDto GetByRelationship (PacienteModel relationship)
         {
-            return _enderecoRepository.Create(endereco);
-            //fazer mapper antes de retornar
+            EnderecoModel enderecoModel = GetAllEnderecos()
+                .Where(a => a.PacienteId == relationship.Id).FirstOrDefault();
+            EnderecoGetDto enderecoGet = _mapper.Map<EnderecoGetDto>(enderecoModel);
+            return enderecoGet;
         }
 
-        public EnderecoModel UpdateEndereco(EnderecoModel endereco)
+        public EnderecoGetDto CreateEndereco(EnderecoCreateDto endereco)
         {
-            return _enderecoRepository.Update(endereco);
+            EnderecoModel enderecoModel = _mapper.Map<EnderecoModel>(endereco);
+             _enderecoRepository.Create(enderecoModel);
+            EnderecoGetDto enderecoGet = _mapper.Map<EnderecoGetDto>(enderecoModel);
+            return enderecoGet;
+        }
+
+        public EnderecoGetDto UpdateEndereco(EnderecoUpdateDto endereco, int id)
+        {
+            EnderecoModel enderecoModel = GetById(id);
+
+            enderecoModel = _mapper.Map<EnderecoModel>(endereco);
+             _enderecoRepository.Update(enderecoModel);
+
+            EnderecoGetDto enderecoGet = _mapper.Map<EnderecoGetDto>(enderecoModel);
+            return enderecoGet;
         }
 
         public bool DeleteEndereco(int id)
