@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MedicalCare.DTO;
+using MedicalCare.Enums;
 using MedicalCare.Interfaces;
 using MedicalCare.Models;
 using Microsoft.AspNetCore;
@@ -40,6 +41,8 @@ namespace MedicalCare.Services
         public MedicamentoGetDTO CreateMedicamento(MedicamentoCreateDTO medicamento)
         {
             MedicamentoModel medicamentoModel = _mapper.Map<MedicamentoModel>(medicamento);
+            medicamentoModel.Tipo = Enum.GetName(typeof(EOpcoesMedicamentos), medicamento.Tipo.GetHashCode());
+            medicamentoModel.Unidade = Enum.GetName(typeof(EUnidadeMedicamentos), medicamento.Unidade.GetHashCode());
             _medicamentoRepository.Create(medicamentoModel);
             MedicamentoGetDTO medicamentoGet = _mapper.Map<MedicamentoGetDTO>(medicamento);
             return medicamentoGet;
