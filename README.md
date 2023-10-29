@@ -26,6 +26,10 @@ A aplicação deverá ter as seguintes funcionalidades:
   -  Cadastro, edição, listagem e deleção de usuários tipo Adminstrador, Médico, Enfermeiro e Paciente.
   -  Cadastro, edição, listagem e deleção dos atributos vinculados ao paciente, como Consultas, Exames Médicos, Administração de medicação, Dietas e Exercicios.
 
+### Objetivo
+
+Esse projeto tem como objetivo a automatização e organização do sistema em âmbito hospitalar, na construção do mesmo foi seguido um documento de exigências qu e nos foi disponibilizado.
+
 
 <h2>Requisitos do Backend</h2>
 
