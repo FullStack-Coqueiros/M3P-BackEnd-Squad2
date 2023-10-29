@@ -64,7 +64,7 @@ A aplicação deverá ter as seguintes funcionalidades:
 
 
 
-### Rodando a API
+### Rodando o aplicativo
 #### Clone este repositório
 $ git clone <https://github.com/FullStack-Coqueiros/M3P-BackEnd-Squad2.git>
 
