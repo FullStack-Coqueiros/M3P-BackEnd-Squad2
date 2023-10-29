@@ -9,13 +9,24 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adicione essa linha para obter a string de conexão
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyAllowSpecificOrigins",
+            builder =>
+            {
+                builder.WithOrigins("http://localhost:5173")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+            });
+});
+
+// Adicione essa linha para obter a string de conexï¿½o
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<MedicalCareDbContext>(options => options.UseSqlServer(connectionString));
 
-// Configuração da Injeção de Dependência:
-// Registra as implementações concretas para as interfaces(Services) utilizadas nas APP.
+// Configuraï¿½ï¿½o da Injeï¿½ï¿½o de Dependï¿½ncia:
+// Registra as implementaï¿½ï¿½es concretas para as interfaces(Services) utilizadas nas APP.
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IPacienteService, PacienteService>();
@@ -42,11 +53,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Auth", Version = "v1" });
-    //Adição do header de autenticação no Swagger 
+    //Adiï¿½ï¿½o do header de autenticaï¿½ï¿½o no Swagger 
     c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
     {
         Description = @"JWT Authorization header using the Bearer scheme. 
-                                              Escreva 'Bearer' [espaço] e o token gerado no login na caixa abaixo.
+                                              Escreva 'Bearer' [espaï¿½o] e o token gerado no login na caixa abaixo.
                                               Exemplo: 'Bearer 12345abcdef'",
         Name = "Authorization",
         In = ParameterLocation.Header,
@@ -87,11 +98,11 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-// Certifique-se de que está dentro do escopo do builder.Services
+// Certifique-se de que estï¿½ dentro do escopo do builder.Services
 builder.Services.AddDbContext<MedicalCareDbContext>(options =>
     options.UseSqlServer(connectionString), ServiceLifetime.Transient);
 
-// Adicione a configuração do AutoMapper
+// Adicione a configuraï¿½ï¿½o do AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 
 
@@ -104,6 +115,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "auth v1"));
 }
+
+app.UseCors("MyAllowSpecificOrigins");
 
 app.UseHttpsRedirection();
 

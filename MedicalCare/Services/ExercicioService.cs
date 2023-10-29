@@ -18,6 +18,7 @@ namespace MedicalCare.Services
             _exercicioRepository = exercicioRepository;
         }
 
+       
 
         public IEnumerable<ExercicioGetDto> GetAllExercicios()
         {
