@@ -62,6 +62,7 @@ Esse projeto tem como objetivo a automatização e organização do sistema em �
 <p>- Microsoft.EntityFrameworkCore.Tools</p>
 <p>- AutoMapper</p>
 <p>- AutoMapper.Extensions.Microsoft.DependencyInjection</p>
+<p>- Swagger</p>
 <p>- Json</p>
 <p>- GitHub</p>
 
@@ -71,6 +72,10 @@ Esse projeto tem como objetivo a automatização e organização do sistema em �
 ### Rodando o aplicativo
 #### Clone este repositório
 $ git clone <https://github.com/FullStack-Coqueiros/M3P-BackEnd-Squad2.git>
+<p>Abra a solução MedicalCare.Sln no Microsoft Visual Studio.</p>
+<p>Execute a solução.</p>
+
+
 
 ### Melhorias que podem ser aplicadas
 <p> O sistema pode ser ampliado para outros recursos que devem ser administrados em postos de saúde ou clinicas. Podem ser melhor administrados os funcionários, controle de estoque, serviços terceirizados, pagamentos dos médicos, etc...</p>
