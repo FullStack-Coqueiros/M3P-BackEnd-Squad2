@@ -59,7 +59,7 @@ A aplicação deverá ter as seguintes funcionalidades:
 <p>- AutoMapper</p>
 <p>- AutoMapper.Extensions.Microsoft.DependencyInjection</p>
 <p>- Json</p>
-<p>- GitHun</p>
+<p>- GitHub</p>
 
 
 
