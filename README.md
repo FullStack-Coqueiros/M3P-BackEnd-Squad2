@@ -58,6 +58,8 @@ A aplicação deverá ter as seguintes funcionalidades:
 <p>- Microsoft.EntityFrameworkCore.Tools</p>
 <p>- AutoMapper</p>
 <p>- AutoMapper.Extensions.Microsoft.DependencyInjection</p>
+<p>- Json</p>
+<p>- GitHun</p>
 
 
 
