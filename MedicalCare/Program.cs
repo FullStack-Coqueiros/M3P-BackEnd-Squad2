@@ -14,13 +14,19 @@ builder.Services.AddCors(options =>
     options.AddPolicy("MyAllowSpecificOrigins",
             builder =>
             {
+                builder.WithOrigins("http://localhost:5174")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+
                 builder.WithOrigins("http://localhost:5173")
                        .AllowAnyHeader()
                        .AllowAnyMethod();
             });
+
 });
 
 // Adicione essa linha para obter a string de conex�o
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<MedicalCareDbContext>(options => options.UseSqlServer(connectionString));
@@ -30,6 +36,7 @@ builder.Services.AddDbContext<MedicalCareDbContext>(options => options.UseSqlSer
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IPacienteService, PacienteService>();
+builder.Services.AddScoped<IMedicamentoService, MedicamentoService>();
 builder.Services.AddScoped<IExameService, ExameService>();
 builder.Services.AddScoped<IExercicioService, ExercicioService>();
 builder.Services.AddScoped<IDietaService, DietaService>();
@@ -51,21 +58,21 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Auth", Version = "v1" });
-    //Adi��o do header de autentica��o no Swagger 
-    c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
     {
-        Description = @"JWT Authorization header using the Bearer scheme. 
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Auth", Version = "v1" });
+        //Adi��o do header de autentica��o no Swagger 
+        c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+        {
+            Description = @"JWT Authorization header using the Bearer scheme. 
                                               Escreva 'Bearer' [espa�o] e o token gerado no login na caixa abaixo.
                                               Exemplo: 'Bearer 12345abcdef'",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                                          {
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer"
+        });
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                                      {
                                             {
                                               new OpenApiSecurityScheme
                                               {
@@ -77,30 +84,30 @@ builder.Services.AddSwaggerGen(c =>
                                                 },
                                                 new List<string>()
                                               }
-                                            });
-});
+                                        });
+    });
 
 var jwtChave = builder.Configuration.GetSection("jwtTokenChave").Get<string>();
 builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x =>
-{
-    x.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtChave)),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        RequireExpirationTime = true
+        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(x =>
+    {
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtChave)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            RequireExpirationTime = true
 
-    };
-});
+        };
+    });
 
 // Certifique-se de que est� dentro do escopo do builder.Services
 builder.Services.AddDbContext<MedicalCareDbContext>(options =>
-    options.UseSqlServer(connectionString), ServiceLifetime.Transient);
+        options.UseSqlServer(connectionString), ServiceLifetime.Transient);
 
 // Adicione a configura��o do AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
@@ -115,7 +122,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "auth v1"));
 }
-
 app.UseCors("MyAllowSpecificOrigins");
 
 app.UseHttpsRedirection();

@@ -29,7 +29,8 @@ namespace MedicalCare.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public ActionResult <string> Login([FromBody] TentativaLoginDto tentativaLogin)
+        public ActionResult<string> Login([FromBody] TentativaLoginDto tentativaLogin)
+
         {
             try
             {
