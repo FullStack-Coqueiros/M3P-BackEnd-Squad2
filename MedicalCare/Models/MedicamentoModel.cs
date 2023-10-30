@@ -28,9 +28,6 @@ namespace MedicalCare.Models
         [Required(ErrorMessage = "O tipo de medicamento é obrigatório")]
         public string Tipo {get;set;}
 
-        [Column ("Opções")]
-        public string Opcoes {get; set;}
-
         [Column ("Quantidade")] 
         [Required(ErrorMessage = "A quantidade é obrigatória")]
         public int Quantidade {get; set;}
