@@ -29,7 +29,7 @@ namespace MedicalCare.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public ActionResult Login([FromBody] TentativaLoginDto tentativaLogin)
+        public ActionResult<string> Login([FromBody] TentativaLoginDto tentativaLogin)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace MedicalCare.Controllers
                 tentativaLogin.Logado = true;
 
                 string tokenJwt = _loginService.GeraTokenJWT(tentativaLogin);
-                return StatusCode(HttpStatusCode.OK.GetHashCode(), tokenJwt);
+                return Ok(new {Token = tokenJwt});
             }
             catch (Exception)
             {
